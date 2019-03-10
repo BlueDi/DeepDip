@@ -10,10 +10,10 @@ import es.csic.iiia.fabregues.dip.orders.SUPMTOOrder;
 import java.io.File;
 import java.util.*;
 
-public class RandomBot_Exercise extends RandomBot {
+public class RandomExe extends RandomBot {
     private Random random = new Random();
 
-    RandomBot_Exercise(String name, int finalYear, String logPath) {
+    private RandomExe(String name, int finalYear, String logPath) {
         super(name, finalYear, logPath);
         this.name = "RandomBotExercise";
     }
@@ -47,7 +47,7 @@ public class RandomBot_Exercise extends RandomBot {
         //Create the folder to store its log files.
         File logFolder = new File(logPath);
         logFolder.mkdirs();
-        RandomBot_Exercise randomBot = new RandomBot_Exercise(name, finalYear, logPath);
+        RandomExe randomBot = new RandomExe(name, finalYear, logPath);
 
         try {
             randomBot.start(randomBot.comm);

@@ -31,7 +31,7 @@ public class RandomBot extends Player {
      * @param finalYear After this year, the bot tries to call DRAW
      */
     RandomBot(String name, int finalYear, String logPath) {
-        //super(logPath);
+        super(logPath);
         this.name = "RandomBot";
         this.finalYear = finalYear;
 

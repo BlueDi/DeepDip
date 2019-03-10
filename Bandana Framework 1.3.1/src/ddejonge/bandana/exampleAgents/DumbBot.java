@@ -31,7 +31,7 @@ public class DumbBot extends Player {
     private IComm comm;
 
     private DumbBot(String name, int finalYear, String logPath) {
-        //super(logPath);
+        super(logPath);
         this.name = "DumbBot";
         this.finalYear = finalYear;
 

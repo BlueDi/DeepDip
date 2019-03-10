@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentRunner {
-    private final static int NUMBER_OF_GAMES = 10;                //The number of games this tournament consists of.
+    private final static int NUMBER_OF_GAMES = 1000000;                //The number of games this tournament consists of.
     //The year after which the agents in each game are supposed to propose a draw to each other.
     private final static String FINAL_YEAR = "2000";
 
     //Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
     // where the results of the tournament will be logged.
-    private final static String LOG_FOLDER = "log" + File.separator + "tournament";
-    private final static String LOG_FOLDER_AGENTS = ".." + File.separator + "log" + File.separator + "agents";
+    private final static String LOG_FOLDER = "log";
+    private final static String LOG_FOLDER_AGENTS = "PlaceHolder";
 
     //Command lines to start the various agents provided with the Bandana framework.
     // Add your own line here to run your own bot.
@@ -31,7 +31,7 @@ public class TournamentRunner {
     private final static String[] GamlBot_Command = {"java", "-jar", "agents/GamlBot.jar", "-log", LOG_FOLDER_AGENTS, "-name", "GamlBot", "-fy", FINAL_YEAR};
 
     private final static String[] RandomBot_Command = {"java", "-jar", "agents/RandomBot.jar", "-log", LOG_FOLDER_AGENTS, "-name", "RandomBot", "-fy", FINAL_YEAR};
-    private final static String[] RandomBot_Exe_Command = {"java", "-jar", "agents/RandomBot_Exercise.jar", "-log", LOG_FOLDER_AGENTS, "-name", "RandomExe", "-fy", FINAL_YEAR};
+    private final static String[] RandomBot_Exe_Command = {"java", "-jar", "agents/RandomExe.jar", "-log", LOG_FOLDER_AGENTS, "-name", "RandomExe", "-fy", FINAL_YEAR};
     private final static String[] DumbBot_Command = {"java", "-jar", "agents/DumbBot.jar", "-log", LOG_FOLDER_AGENTS, "-name", "DumbBot", "-fy", FINAL_YEAR};
 
     private static List<Process> players = new ArrayList<>();
@@ -132,7 +132,7 @@ public class TournamentRunner {
     private static void startJARplayers(String tournamentLogFolderPath, int finalYear, int gameNumber) {
         for (int i = 0; i < 7; i++) {
             //PlayerCommand pc = generateAllPlayers(i);
-            PlayerCommand pc = generateRandomPlayers(i);
+            PlayerCommand pc = generateDumbBots(i);
 
             String process = pc.getProcess();
             String[] command = pc.getCommand();
@@ -199,5 +199,10 @@ public class TournamentRunner {
             command = RandomBot_Exe_Command;
         }
         return new PlayerCommand(process, command);
+    }
+
+    private static PlayerCommand generateDumbBots(int i) {
+        String process = "DumbBot " + i;
+        return new PlayerCommand(process, DumbBot_Command);
     }
 }

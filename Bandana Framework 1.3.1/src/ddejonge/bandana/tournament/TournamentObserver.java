@@ -72,7 +72,7 @@ public class TournamentObserver extends Observer implements Runnable {
             throw new RuntimeException("TournamentObserver.TournamentObserver() Error! The number of participants must be greater than 0");
         }
 
-        this.scoreCalculators = new ArrayList<ScoreCalculator>(scoreCalculators);
+        this.scoreCalculators = new ArrayList<>(scoreCalculators);
 
         this.name = "TournamentObserver";
         this.gameResultsFile = new File(tournamentLogFolderPath, "gameResults.log");
@@ -94,7 +94,7 @@ public class TournamentObserver extends Observer implements Runnable {
         connectToServer();
     }
 
-    public void connectToServer() {
+    void connectToServer() {
         this.gameStatus = CONNECTED_WAITING_TO_START;
         this.game = null;
         this.ccd = false;
