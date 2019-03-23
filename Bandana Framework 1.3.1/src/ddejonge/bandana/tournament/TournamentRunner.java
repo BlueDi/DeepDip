@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentRunner {
-    private final static int NUMBER_OF_GAMES = 1000000;                //The number of games this tournament consists of.
+    private final static int NUMBER_OF_TOURNAMENTS = 5; //The number of games this tournament consists of.
+    private final static int NUMBER_OF_GAMES = 10; //The number of games this tournament consists of.
     //The year after which the agents in each game are supposed to propose a draw to each other.
     private final static String FINAL_YEAR = "2000";
 
@@ -35,6 +36,12 @@ public class TournamentRunner {
     private final static String[] DumbBot_Command = {"java", "-jar", "agents/DumbBot.jar", "-log", LOG_FOLDER_AGENTS, "-name", "DumbBot", "-fy", FINAL_YEAR};
 
     private static List<Process> players = new ArrayList<>();
+
+    public static void main2(String[] args) throws IOException {
+        for(int i = 0; i < NUMBER_OF_TOURNAMENTS; i++){
+            main2(args);
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         int deadlineForMovePhases = 60;    //60 seconds for each SPR and FAL phases
