@@ -1,0 +1,20 @@
+[console_scripts]
+parlance-config = parlance.config:run
+parlance-holdbot = parlance.player:run
+parlance-raw-client = parlance.main:run
+parlance-raw-server = parlance.network:run
+parlance-server = parlance.server:run
+
+[gui_scripts]
+
+
+[parlance.bots]
+HoldBot = parlance.player:HoldBot
+
+[parlance.judges]
+standard = parlance.judge:Judge
+
+[parlance.variants]
+small = parlance.xtended:small
+standard = parlance.xtended:standard
+

@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-public class ParlanceRunner {
-
+class ParlanceRunner {
     private static final String CONFIG_FILE_NAME = "parlance.cfg";
     //Change this path to the location where you have installed parlance-server.
     private static String PARLANCE_PATH = "D:\\Program Files\\Python\\Python27\\Scripts\\parlance-server.exe";
@@ -31,10 +29,8 @@ public class ParlanceRunner {
      * @param moveTimeLimit    Deadline in seconds for move phases.
      * @param retreatTimeLimit Deadline in seconds for retreat phases.
      * @param buildTimeLimit   Deadline in seconds for build phases.
-     * @throws IOException
      */
-    public static void runParlanceServer(int numGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit) {
-
+    static void runParlanceServer(String map, int numGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit) {
         //Create the configuration file in order to set the deadlines.
         createConfigFile(moveTimeLimit, retreatTimeLimit, buildTimeLimit);
 
@@ -47,7 +43,7 @@ public class ParlanceRunner {
         }
 
         //Run parlance-server
-        String[] cmd = {PARLANCE_PATH, "-g" + numGames, "standard"};
+        String[] cmd = {PARLANCE_PATH, "-g" + numGames, map};
         parlanceProcess = ProcessRunner.exec(cmd, "parlance");
 
         //Note: an exception is thrown if parlance is started CORRECTLY.
@@ -63,23 +59,19 @@ public class ParlanceRunner {
     }
 
 
-    public static void stop() {
-
+    static void stop() {
         File configFile = new File(CONFIG_FOLDER, CONFIG_FILE_NAME);
         configFile.delete();
 
         parlanceProcess.destroy();
-
     }
 
 
     private static void createConfigFile(int MTL, int RTL, int BTL) {
-
         //Generates the  ~/.config/parlance.cfg   file
         // which is necessary in order to change the deadlines.
         // Note that this file cannot be created in any other folder or with any other name,
         // because this is where parlance expects to find it.
-
 
         //Create the folder.
         File configFolder = new File(CONFIG_FOLDER);
@@ -87,17 +79,15 @@ public class ParlanceRunner {
 
         //Create the file.
         File configFile = new File(CONFIG_FOLDER, CONFIG_FILE_NAME);
-        if (configFile.exists()) {
-            configFile.delete();
-        }
+        configFile.delete();
         try {
             configFile.createNewFile();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         //Create its contents.
-        ArrayList<String> contents = new ArrayList<String>();
+        ArrayList<String> contents = new ArrayList<>();
         contents.add("[game]");
         contents.add("LVL = 0");
         contents.add("MTL = " + MTL);
@@ -113,8 +103,5 @@ public class ParlanceRunner {
         contents.add("[syntax]");
 
         FileIO.appendToFile(configFile, contents);
-
     }
-
-
 }

@@ -13,6 +13,7 @@ public class TournamentRunner {
     private final static int NUMBER_OF_GAMES = 10; //The number of games this tournament consists of.
     //The year after which the agents in each game are supposed to propose a draw to each other.
     private final static String FINAL_YEAR = "2000";
+    private final static String GAME_MAP = "standard";
 
     //Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
     // where the results of the tournament will be logged.
@@ -67,7 +68,7 @@ public class TournamentRunner {
         logFile.mkdirs();
 
         //1. Run the Parlance game server.
-        ParlanceRunner.runParlanceServer(NUMBER_OF_GAMES, moveTimeLimit, retreatTimeLimit, buildTimeLimit);
+        ParlanceRunner.runParlanceServer(GAME_MAP, NUMBER_OF_GAMES, moveTimeLimit, retreatTimeLimit, buildTimeLimit);
 
         //Create a list of ScoreCalculators to determine how the players should be ranked in the tournament.
         ArrayList<ScoreCalculator> scoreCalculators = new ArrayList<>();
@@ -78,7 +79,8 @@ public class TournamentRunner {
         scoreCalculators.add(new RankCalculator());
 
         //2. Create a TournamentObserver to monitor the games and accumulate the results.
-        TournamentObserver tournamentObserver = new TournamentObserver(tournamentLogFolderPath, scoreCalculators, NUMBER_OF_GAMES, 7);
+        int number_of_players = GAME_MAP == "standard" ? 7 : 2;
+        TournamentObserver tournamentObserver = new TournamentObserver(tournamentLogFolderPath, scoreCalculators, NUMBER_OF_GAMES, number_of_players);
 
         //3. Run the Negotiation Server.
         NegoServerRunner.run(tournamentObserver, tournamentLogFolderPath, NUMBER_OF_GAMES);
@@ -137,7 +139,8 @@ public class TournamentRunner {
     }
 
     private static void startJARplayers(String tournamentLogFolderPath, int finalYear, int gameNumber) {
-        for (int i = 0; i < 7; i++) {
+        int number_of_players = GAME_MAP == "standard" ? 7 : 2;
+        for (int i = 0; i < number_of_players; i++) {
             //PlayerCommand pc = generateAllPlayers(i);
             PlayerCommand pc = generateDumbBots(i);
 
