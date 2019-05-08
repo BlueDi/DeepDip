@@ -1,0 +1,39 @@
+NON-NEGOTIATING AGENTS:
+
+- DumbBot
+	A simple heuristic player developped by David Norman. Although a fairly straightforward implementation it still
+	plays reasonaby well and is widely used as a default 'baseline' bot for researchers to compare their own bots with.
+	
+	Note that the orginal DumbBot was implemented in C++ for the DAIDE framework. This is an alternative JAVA implementation
+	of that bot, implemented for the DipGame framework. There is no guarantee that it is exactly identical to the original 
+	DumbBot.
+	
+	Furthermore, we have made a slight adaptation to this bot specially for BANDANA, namely that for this version of the
+	DumbBot you can specify a 'final year' after which it will automatically propose a draw.
+	
+
+- D-Brane
+	This agent is the winner of the Computer Diplomacy Challenge, held at the ICGA Computer Games Olympiad 2015.
+	
+	This is version 1.1 of D-Brane, which does not negotiate. A negotiating version of this agent also exists but 
+	we have not included it in this framwork. We do hope to	add	it in the future.
+	
+	Version 1.0 of D-Brane was previously made available. The only difference between v1.0 and v1.1 is a number of small
+	bug fixes. 
+	
+NEGOTIATING AGENTS:
+
+- RandomNegotiator
+	This is the agent used in the manual to demonstrate how to implement a negotiating agent. 
+	
+	It just makes random moves, proposes random proposals, and randomly decides whether to accept incoming
+	proposals or not.
+	
+	The source code of this agent can be found in the folder src/ddejonge/bandana/exampleAgents
+	
+- DBraneExampleBot
+	This is the agent used in the manual to demonstrate how to implement a negotiation algorithm on top of the 
+	Tactical module of D-Brane.
+	
+	The source code of this agent can be found in the folder src/ddejonge/bandana/exampleAgents
+	

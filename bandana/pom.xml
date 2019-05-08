@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cruz.open-ai</groupId>
+    <artifactId>DeepDip</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1</version>
+
+    <name>DeepDip</name>
+    <url>https://github.com/BlueDi/DeepDip</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>bandana</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>dip</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>bot</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>jac</artifactId>
+            <version>0.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>NegotiationServer</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>tcpIpComm</artifactId>
+            <version>0.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>cruz.open-ai</groupId>
+            <artifactId>utilities</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>local-maven-repo</id>
+            <url>file:///${project.basedir}/local-maven-repo</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>cruz.agents.DeepDip</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

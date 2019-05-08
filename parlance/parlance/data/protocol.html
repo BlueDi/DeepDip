@@ -1,0 +1,851 @@
+<html>
+<head>
+	<meta name="author" content="Andrew Rose, David Norman, and Eric Wald"/>
+	<meta name="description" content="Defines the network protocol
+	  for communication between DAIDE clients and servers."/>
+	<meta name="keywords" content="Diplomacy artificial intelligence
+	  DAIDE Parlance network protocol">
+	<title>The Parlance Client-Server Protocol</title>
+	<!--
+	Copyright (C) 2003-2008  Andrew Rose, David Norman, and Eric Wald
+	
+	Parlance may be used, modified, and/or redistributed under the terms of
+	the Artistic License 2.0, as published by the Perl Foundation.
+	-->
+</head>
+<body>
+
+<h1>The Parlance Client-Server Protocol</h1>
+<p>Version 1</p>
+
+<h2>1  Introduction</h2>
+
+<p>This document specifies the protocol by which a DAIDE client should
+communicate with a DAIDE server.  It should be read in conjunction with the
+<a href="syntax.html">Parlance Message Syntax</a>.  The remainder of
+this document is structured as follows:</p>
+
+<ul>
+	<li>Chapter 2 defines the transport mechanism.</li>
+	<li>Chapter 3 defines the message structures.</li>
+	<li>Chapter 4 defines the language representation.</li>
+	<li>Chapter 5 describes modifications to this document.</li>
+</ul>
+
+
+
+<h3>1.1  Intended Audience</h3>
+
+<p>This document is aimed at people who wish to:</p>
+<ul>
+	<li>Review the design of the protocol.</li>
+	<li>Implement a DAIDE server.</li>
+	<li>Implement a client protocol wrapper.</li>
+	<li>Implement a DAIDE client where a client protocol wrapper
+	is not available.</li>
+</ul>
+
+<h3>1.2  Issues</h3>
+
+<p>The following issues have been identified with this protocol and
+are under investigation.</p>
+<ul>
+	<li>The language syntax is still undergoing modifications that
+	are likely to affect this document.</li>
+	<li>This document has not been signed off.</li>
+</ul>
+
+
+<h2>2  Transport mechanism</h2>
+<p>This section defines the transport mechanism to be used.</p>
+
+<h3>2.1  Basic Mechanism</h3>
+<p>Client-server communications will be carried out over a TCP
+connection.</p>
+
+<h3>2.2  Server Requirements</h3>
+
+<h4>Listening for Connections</h4>
+<p>The server will publish an address and TCP port on which the server
+can be contacted.  The method of publishing the address is outside the
+scope of this document.</p>
+
+<p>The server will open a listening connection on the published TCP
+port.  It is recommended that a backlog of at least 10 connections be
+used where available to prevent unnecessary client connection
+failure.</p>
+
+<p>Following a connection from a client, the server will continue to
+listen for further connections from clients on the original
+socket.</p>
+
+<h4>Connections</h4>
+<p>When a client connects to the server, the server will set the
+SO_KEEPALIVE socket option on the newly created socket.  This causes
+dead connections to be cleared by the server.</p>
+
+<p>The server will run a 30-second initial message timer.  If the
+server hasn't received any data when the timer pops, the server will
+send an error message (see below) and terminate the connection.</p>
+
+<p>If a client sends data over a connection with an invalid message
+structure (see chapter 3), the server will terminate the
+connection.</p>
+
+
+<h3>2.3  Client Requirements</h3>
+
+<h4>Establishing a Connection</h4>
+<p>To communicate with a server, a client shall first establish a TCP
+connection to the address and port published by the server.  The
+client may use any free local port.</p>
+
+<p>The client will set the SO_KEEPALIVE socket option on the socket
+connected to the server.</p>
+
+<p>Immediately following the establishment of a connection, the client
+shall send an Initial Message (see section 3.2).</p>
+
+
+<h2>3  Message Structures</h2>
+<p>Once a connection has been established, the two parties may
+transfer messages as described in this section.  Both parties may send
+messages at any time except as limited below.</p>
+
+<p>All message structures described in this section are shown in
+network byte order (big endian).  Implementers of clients or servers
+for little endian machines (for example, Intel) should take care to
+swap the octets of multi-octet fields.</p>
+
+<h3>3.1  General Message Structure</h3>
+<p>All messages sent between a client and a server will have the
+following message structure.</p>
+
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                         Optional Data                         |
+|                               .                               |
+|                               .                               |
+|                               .                               |
+
+</pre>
+
+<dl>
+	<dt>Message Type: 8 bits</dt>
+	<dd>The type of message that follows.  The messages and their
+	type are described in the subsequent sections of this
+	chapter.</dd>
+
+	<dt>Pad: 8 bits</dt>
+	<dd>This part of the message is not valid; that is, it may
+	contain any bit pattern.  It is included so that the length
+	field is naturally aligned.</dd>
+
+	<dt>Remaining Length: 16 bits</dt>
+	<dd>The number of octets in the message that follow the
+	Remaining Length field.  This may be zero if the message type
+	alone completely defines the message.</dd>
+
+	<dt>Optional Data:  Variable length</dt>
+	<dd>The data part of the message is described in the
+	definitions for the individual messages.  It is exactly the
+	length specified in the Remaining Length field and is not
+	padded.</dd>
+</dl>
+
+
+
+<h3>3.2  <a name="IM">The Initial Message</a> (IM)</h3>
+
+<p>This is a fixed-length message.</p>
+
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Version            |         Magic  Number         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+
+<ul>
+	<li>Message Type = 0</li>
+	<li>Remaining Length = 4</li>
+	<li>Version, as specified on the introductory page of this
+	document.</li>
+	<li>Magic Number = 0xDA10</li>
+</ul>
+
+<p>This message is sent from the client to the server as soon as the
+connection has been opened.  If the server discovers incompatible
+version numbers, it will send an error message and close the
+connection.  Note that a single instance of a server may be able to
+talk several different protocol versions over different
+connections.</p>
+
+<p>The message contains a magic number that is designed to quickly
+catch connections that have (inadvertently or deliberately) been made
+to the server by a program other than a DAIDE Client.  Because
+the magic number's bit pattern is not the same forwards and backwards,
+it will also catch clients who have failed to send in network byte
+order.  The message is only ever sent from the client to the server
+and it is only sent once.</p>
+
+
+
+<h3>3.3  <a name="RM">The Representation Message</a> (RM)</h3>
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Representation Message                    |
+|                               .                               |
+|                               .                               |
+|                               .                               |
+
+</pre>
+
+<ul>
+	<li>Message Type = 1</li>
+</ul>
+
+<p>This mandatory message is sent from the server to the client
+immediately on receipt of the IM.  It is used to define additional
+power and province tokens that will be valid for the variant of the
+game that the server is set up to adjudicate for.  It will also give a
+text representation of any such tokens.  If there are no such tokens,
+the remaining length will be zero.  If there are additional tokens,
+the remaining length will be a multiple of six.  Each six-octet block
+will consist of the following:</p>
+
+<ul>
+	<li>A two-octet token.  The high octet must be in either the
+	power category or one of the province categories.  See below
+	for limitations on the low octet.</li>
+	<li>A three-octet ASCII representation of the token using only
+	A-Z and 0-9.</li>
+	<li>An octet containing the value zero.</li>
+</ul>
+
+<p>If the RM has non-zero length then none of the powers or provinces
+defined in chapter 4 are valid.  Instead, the powers and provinces
+defined in the RM are the only valid powers and provinces.  Note that
+if a variant uses the standard powers on a variant board or variant
+powers on the standard board, both the provinces and the powers must
+be defined in the RM.</p>
+
+<p>The same token must not appear in the RM more than once.</p>
+
+<p>When defining provinces, the low-octet of the province tokens must
+be unique and form a sequence starting at 0 and incrementing by 1 up
+to the number of provinces less 1.</p>
+
+<p>When defining powers, the low-octet of the power tokens must be
+unique and form a sequence starting at 0 and incrementing by 1 up to
+the number of powers less 1.</p>
+
+<p>This message is only ever sent from the server to the client.
+It is sent immediately following the IM, and at other times under
+limited circumstances.<sup><a href="#RM_note">*</a></sup></p>
+
+
+<h3>3.4  <a name="DM">The Diplomacy Message</a> (DM)</h3>
+
+<p>This is a variable-length message.</p>
+
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        Language Message                       |
+|                               .                               |
+|                               .                               |
+|                               .                               |
+
+</pre>
+
+<ul>
+	<li>Message Type = 2</li>
+	<li>Remaining Length is at least 2.</li>
+</ul>
+
+<p>The optional data part contains a single &ldquo;language
+message&rdquo; as described in the <a href="syntax.html">Language
+Syntax</a>.  The language message is encoded as described in the
+chapter &ldquo;Language Representation&rdquo;.  It can be sent by
+either party following the RM.</p>
+
+
+<h3>3.5  <a name="FM">The Final Message</a> (FM)</h3>
+<p>This is a fixed-length message.</p>
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+
+<ul>
+	<li>Message Type = 3</li>
+	<li>Remaining Length = 0</li>
+</ul>
+
+<p>This message is sent immediately before the either party closes the
+TCP connection.  It is not sent if an error message has been sent.  On
+receipt, the receiving party will immediately close the connection
+without sending a final message or error message.</p>
+
+
+<h3>3.6  <a name="EM">The Error Message</a> (EM)</h3>
+<p>This is a fixed-length message.</p>
+<pre>
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Message Type |      Pad      |        Remaining Length       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Error code          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+
+<ul>
+	<li>Message Type = 4</li>
+	<li>Remaining Length = 2</li>
+</ul>
+
+<p>This message indicates that the sending party has detected a
+protocol error.  An EM may be sent at any time.  The party sending
+this message will terminate the connection immediately after sending
+it.  The error codes are defined in the following table.</p>
+
+<table border=1>
+	<tr><td>Code</td><td>Meaning</td></tr>
+	<!-- These code names are open to negotiation,
+		but Parlance uses them in their current form.  -->
+	<tr><td><a name="Timeout">0x01</a></td>
+		<td>IM timer popped</td></tr>
+	<tr><td><a name="NotIMError">0x02</a></td>
+		<td>IM was not the first message sent by the client</td></tr>
+	<tr><td><a name="EndianError">0x03</a></td>
+		<td>IM indicated the wrong endian</td></tr>
+	<tr><td><a name="MagicError">0x04</a></td>
+		<td>IM had an incorrect magic number</td></tr>
+	<tr><td><a name="VersionError">0x05</a></td>
+		<td>Version incompatibility</td></tr>
+	<tr><td><a name="DuplicateIMError">0x06</a></td>
+		<td>More than one IM sent</td></tr>
+	<tr><td><a name="ServerIMError">0x07</a></td>
+		<td>IM sent by server</td></tr>
+	<tr><td><a name="MessageTypeError">0x08</a></td>
+		<td>Unknown message received</td></tr>
+	<tr><td><a name="LengthError">0x09</a></td>
+		<td>Message shorter than expected</td></tr>
+	<tr><td><a name="EarlyDMError">0x0A</a></td>
+		<td>DM sent before RM</td></tr>
+	<tr><td><a name="NotRMError">0x0B</a></td>
+		<td>RM was not the first message sent by the server</td></tr>
+	<tr><td><a name="UnexpectedRM">0x0C</a></td>
+		<td>Unexpected RM sent<sup><a href="#RM_note">*</a></sup></td></tr>
+	<tr><td><a name="ClientRMError">0x0D</a></td>
+		<td>RM sent by client</td></tr>
+	<tr><td><a name="IllegalToken">0x0E</a></td>
+		<td>Invalid token in DM</td></tr>
+</table>
+
+<p>Note that this message will not be sent due to a language error.
+Language errors are handled in the language itself (see Chapter
+4).</p>
+
+<p>On receipt of an error message, the receiving party will
+immediately close the connection without sending an error message or
+final message.</p>
+
+
+<h2>4  Language Representation</h2>
+
+<p>This section describes how a language message is encoded into the
+data part of a Diplomacy Message (see above).</p>
+
+<h3>4.1  General Coding Scheme</h3>
+
+<p>Every language token will be represented by a 2-octet field.</p>
+
+<p>The tokens are split into categories.  Each category will have a
+1-octet value associated with it.  The tokens within each category
+will be numbered.  The token value can be calculated by multiplying
+the category by 256 and adding the token number within the
+category.</p>
+
+<p>This method means that the protocol is extensible and allows
+simple determination of a token category from the top octet.
+Tokens not listed here may be valid, and thus should not trigger
+<a href="#EM">Error Message 0x0E</a> unless they can be determined
+invalid for other reasons; for example, tokens in the
+<a href="#Reserved">Reserved</a> category are always
+invalid.<sup><a href="#invalid_note">*</a></sup></p>
+
+
+<h3>4.2  Category Space</h3>
+
+<p>The category space is divided as follows:</p>
+
+<ul>
+	<li>00xxxxxx ( 64) - Integers</li>
+	<li>0100xxxx ( 16) - Various individual categories</li>
+	<li>01010xxx (  8) - Provinces</li>
+	<li>01011xxx (  8) - Reserved for individual Client/Server use;
+	never transmitted</li>
+	<li>011xxxxx ( 32) - Unassigned</li>
+	<li>1xxxxxxx (128) - Unassigned</li>
+</ul>
+
+<p>Of the 256 possible categories, 88 are assigned and the remaining
+168 are reserved for future use.  In those 168, a full 128-category
+block remains as well as a 32-category block.  These blocks may be
+further subdivided in the future if appropriate.</p>
+
+
+<p>The remainder of this chapter defines the categories, their value
+and the token numbers within the category.</p>
+
+
+<h3>4.3  <a name="Integers">Integers (0x00 - 0x3F)</a></h3>
+
+<p>The representable range of integers is -8192 to +8191.  They are
+coded as a 14-bit two's-complement value.  The top two bits of the
+category are always zero.</p>
+
+<h3>4.4  <a name="Miscellaneous">Miscellaneous (0x40)</a></h3>
+
+<ul>
+	<li>BRA 0x00  - The open bracket &lsquo;(&rsquo;</li>
+	<li>KET 0x01  - The close bracket &lsquo;)&rsquo;</li>
+</ul>
+
+
+<h3>4.5  <a name="Powers">Powers (0x41)</a></h3>
+
+<ul>
+	<li>AUS 0x00</li>
+	<li>ENG 0x01</li>
+	<li>FRA 0x02</li>
+	<li>GER 0x03</li>
+	<li>ITA 0x04</li>
+	<li>RUS 0x05</li>
+	<li>TUR 0x06</li>
+</ul>
+
+
+<h3>4.6  <a name="Unit_Types">Unit Types (0x42)</a></h3>
+
+<ul>
+	<li>AMY 0x00</li>
+	<li>FLT 0x01</li>
+</ul>
+
+
+<h3>4.7  <a name="Orders">Orders (0x43)</a></h3>
+
+<ul>
+	<li>CTO 0x20</li>
+	<li>CVY 0x21</li>
+	<li>HLD 0x22</li>
+	<li>MTO 0x23</li>
+	<li>SUP 0x24</li>
+	<li>VIA 0x25</li>
+	<br>
+	<li>DSB 0x40</li>
+	<li>RTO 0x41</li>
+	<br>
+	<li>BLD 0x80</li>
+	<li>REM 0x81</li>
+	<li>WVE 0x82</li>
+</ul>
+
+<p>Note that the high three bits can be used to determine which phase
+the order is valid in.  The top bit is valid the adjustments phase,
+the next is valid in the retreats phase and the last is valid in the
+movement phase.</p>
+
+
+<h3>4.8  <a name="Order_Notes">Order Notes (0x44)</a></h3>
+
+<ul>
+	<li>MBV 0x00</li>
+	<li>BPR 0x01</li>
+	<li>CST 0x02</li>
+	<li>ESC 0x03</li>
+	<li>FAR 0x04</li>
+	<li>HSC 0x05</li>
+	<li>NAS 0x06</li>
+	<li>NMB 0x07</li>
+	<li>NMR 0x08</li>
+	<li>NRN 0x09</li>
+	<li>NRS 0x0A</li>
+	<li>NSA 0x0B</li>
+	<li>NSC 0x0C</li>
+	<li>NSF 0x0D</li>
+	<li>NSP 0x0E</li>
+	<!-- <li>NST 0x0F</li> Removed in revision 14. -->
+	<li>NSU 0x10</li>
+	<li>NVR 0x11</li>
+	<li>NYU 0x12</li>
+	<li>YSC 0x13</li>
+</ul>
+
+
+
+<h3>4.9  <a name="Results">Results (0x45)</a></h3>
+
+<ul>
+	<li>SUC 0x00</li>
+	<li>BNC 0x01</li>
+	<li>CUT 0x02</li>
+	<li>DSR 0x03</li>
+	<li>FLD 0x04</li>
+	<li>NSO 0x05</li>
+	<li>RET 0x06</li>
+</ul>
+
+<h3>4.10  <a name="Coasts">Coasts (0x46)</a></h3>
+
+<ul>
+	<li>NCS 0x00</li>
+	<li>NEC 0x02</li>
+	<li>ECS 0x04</li>
+	<li>SEC 0x06</li>
+	<li>SCS 0x08</li>
+	<li>SWC 0x0A</li>
+	<li>WCS 0x0C</li>
+	<li>NWC 0x0E</li>
+</ul>
+
+
+<h3>4.11  <a name="Phases">Phases (0x47)</a></h3>
+
+<ul>
+	<li>SPR 0x00</li>
+	<li>SUM 0x01</li>
+	<li>FAL 0x02</li>
+	<li>AUT 0x03</li>
+	<li>WIN 0x04</li>
+</ul>
+
+<h3>4.12  <a name="Commands">Commands (0x48)</a></h3>
+
+<ul>
+	<li>CCD 0x00</li>
+	<li>DRW 0x01</li>
+	<li>FRM 0x02</li>
+	<li>GOF 0x03</li>
+	<li>HLO 0x04</li>
+	<li>HST 0x05</li>
+	<li>HUH 0x06</li>
+	<li>IAM 0x07</li>
+	<li>LOD 0x08</li>
+	<li>MAP 0x09</li>
+	<li>MDF 0x0A</li>
+	<li>MIS 0x0B</li>
+	<li>NME 0x0C</li>
+	<li>NOT 0x0D</li>
+	<li>NOW 0x0E</li>
+	<li>OBS 0x0F</li>
+	<li>OFF 0x10</li>
+	<li>ORD 0x11</li>
+	<li>OUT 0x12</li>
+	<li>PRN 0x13</li>
+	<li>REJ 0x14</li>
+	<li>SCO 0x15</li>
+	<li>SLO 0x16</li>
+	<li>SND 0x17</li>
+	<li>SUB 0x18</li>
+	<li>SVE 0x19</li>
+	<li>THX 0x1A</li>
+	<li>TME 0x1B</li>
+	<li>YES 0x1C</li>
+	<li>ADM 0x1D</li>
+	<li>SMR 0x1E<sup><a href="#token_note" name="SMR">*</a></sup></li>
+</ul>
+
+<h3>4.13  <a name="Parameters">Parameters (0x49)</a></h3>
+
+<ul>
+	<li>AOA 0x00</li>
+	<li>BTL 0x01</li>
+	<li>ERR 0x02</li>
+	<li>LVL 0x03</li>
+	<li>MRT 0x04</li>
+	<li>MTL 0x05</li>
+	<li>NPB 0x06</li>
+	<li>NPR 0x07</li>
+	<li>PDA 0x08</li>
+	<li>PTL 0x09</li>
+	<li>RTL 0x0A</li>
+	<li>UNO 0x0B</li>
+	<!--<li>WRT 0x0C</li> Removed in revision 14.
+	Revision 13 listed this as 0x4A22, but only this number was used.
+	This number was originally used by EPP, which was removed long ago.
+	-->
+	<li>DSD 0x0D</li>
+</ul>
+
+<h3>4.14  <a name="Press">Press (0x4A)</a></h3>
+
+<ul>
+	<li>ALY 0x00</li>
+	<li>AND 0x01</li>
+	<li>BWX 0x02</li>
+	<li>DMZ 0x03</li>
+	<li>ELS 0x04</li>
+	<li>EXP 0x05</li>
+	<li>FWD 0x06</li>
+	<li>FCT 0x07</li>
+	<li>FOR 0x08</li>
+	<li>HOW 0x09</li>
+	<li>IDK 0x0A</li>
+	<li>IFF 0x0B</li>
+	<li>INS 0x0C</li>
+	<!-- <li>IOU 0x0D</li> Removed in revision 14. -->
+	<li>OCC 0x0E</li>
+	<li>ORR 0x0F</li>
+	<li>PCE 0x10</li>
+	<li>POB 0x11</li>
+	<!-- <li>PPT 0x12</li> Removed in revision 14. -->
+	<li>PRP 0x13</li>
+	<li>QRY 0x14</li>
+	<li>SCD 0x15</li>
+	<li>SRY 0x16</li>
+	<li>SUG 0x17</li>
+	<li>THK 0x18</li>
+	<li>THN 0x19</li>
+	<li>TRY 0x1A</li>
+	<!-- <li>UOM 0x1B</li> Removed in revision 14. -->
+	<li>VSS 0x1C</li>
+	<li>WHT 0x1D</li>
+	<li>WHY 0x1E</li>
+	<li>XDO 0x1F</li>
+	<li>XOY 0x20</li>
+	<li>YDO 0x21</li>
+	<li>CHO 0x22<sup><a href="#token_note" name="CHO">*</a></sup></li>
+	<li>BCC 0x23<sup><a href="#token_note" name="BCC">*</a></sup></li>
+	<li>UNT 0x24<sup><a href="#token_note" name="UNT">*</a></sup></li>
+</ul>
+
+<h3>4.15  <a name="Text">Text (0x4B)</a></h3>
+
+<p>The value is the ASCII code for a single letter.  Strings are not
+delimited with quotation marks or anything else.  There are no
+situations in the language where one string runs directly into
+another.  Therefore, the end of a string can be identified when the
+first non-text token is received.</p>
+
+<!--
+<h3>4.??  <a name="Parlance">Added by Parlance (0x4E)</a></h3>
+
+<p>These are tokens used and/or documented by Parlance, that have not yet been
+assigned official numbers.  Their numbers are likely to change in future
+revisions of this document.</p>
+
+<ul>
+	<li>SET 0x01</li>
+	<li>LST 0x02</li>
+	<li>SEL 0x03</li>
+	<li>PNG 0x04</li>
+	<li>PRB 0x05</li>
+	<li>PRF 0x06</li>
+	<li>VAR 0x07</li>
+</ul>
+-->
+
+<h3>4.16  <a name="Provinces">Provinces (0x50 - 0x57)</a></h3>
+
+<p>There are eight province categories as defined here.</p>
+
+<h4><a name="Inland_non-SC">Inland non-SC category = 0x50</a></h4>
+
+<ul>
+	<li>BOH 0x00</li>
+	<li>BUR 0x01</li>
+	<li>GAL 0x02</li>
+	<li>RUH 0x03</li>
+	<li>SIL 0x04</li>
+	<li>TYR 0x05</li>
+	<li>UKR 0x06</li>
+</ul>
+
+<h4><a name="Inland_SC">Inland SC category = 0x51</a></h4>
+
+<ul>
+	<li>BUD 0x07</li>
+	<li>MOS 0x08</li>
+	<li>MUN 0x09</li>
+	<li>PAR 0x0A</li>
+	<li>SER 0x0B</li>
+	<li>VIE 0x0C</li>
+	<li>WAR 0x0D</li>
+</ul>
+
+<h4><a name="Sea_non-SC">Sea non-SC category = 0x52</a></h4>
+
+<ul>
+	<li>ADR 0x0E</li>
+	<li>AEG 0x0F</li>
+	<li>BAL 0x10</li>
+	<li>BAR 0x11</li>
+	<li>BLA 0x12</li>
+	<li>EAS 0x13</li>
+	<li>ECH 0x14</li>
+	<li>GOB 0x15</li>
+	<li>GOL 0x16</li>
+	<li>HEL 0x17</li>
+	<li>ION 0x18</li>
+	<li>IRI 0x19</li>
+	<li>MAO 0x1A</li>
+	<li>NAO 0x1B</li>
+	<li>NTH 0x1C</li>
+	<li>NWG 0x1D</li>
+	<li>SKA 0x1E</li>
+	<li>TYS 0x1F</li>
+	<li>WES 0x20</li>
+</ul>
+
+<h4><a name="Sea_SC">Sea SC category = 0x53</a></h4>
+
+<p>On the standard map there are no sea SCs.</p>
+
+<h4><a name="Coastal_non-SC">Coastal non-SC category = 0x54</a></h4>
+
+<ul>
+	<li>ALB 0x21</li>
+	<li>APU 0x22</li>
+	<li>ARM 0x23</li>
+	<li>CLY 0x24</li>
+	<li>FIN 0x25</li>
+	<li>GAS 0x26</li>
+	<li>LVN 0x27</li>
+	<li>NAF 0x28</li>
+	<li>PIC 0x29</li>
+	<li>PIE 0x2A</li>
+	<li>PRU 0x2B</li>
+	<li>SYR 0x2C</li>
+	<li>TUS 0x2D</li>
+	<li>WAL 0x2E</li>
+	<li>YOR 0x2F</li>
+</ul>
+
+<h4><a name="Coastal_SC">Coastal SC category = 0x55</a></h4>
+
+<ul>
+	<li>ANK 0x30</li>
+	<li>BEL 0x31</li>
+	<li>BER 0x32</li>
+	<li>BRE 0x33</li>
+	<li>CON 0x34</li>
+	<li>DEN 0x35</li>
+	<li>EDI 0x36</li>
+	<li>GRE 0x37</li>
+	<li>HOL 0x38</li>
+	<li>KIE 0x39</li>
+	<li>LON 0x3A</li>
+	<li>LVP 0x3B</li>
+	<li>MAR 0x3C</li>
+	<li>NAP 0x3D</li>
+	<li>NWY 0x3E</li>
+	<li>POR 0x3F</li>
+	<li>ROM 0x40</li>
+	<li>RUM 0x41</li>
+	<li>SEV 0x42</li>
+	<li>SMY 0x43</li>
+	<li>SWE 0x44</li>
+	<li>TRI 0x45</li>
+	<li>TUN 0x46</li>
+	<li>VEN 0x47</li>
+</ul>
+
+<h4><a name="Bicoastal_non-SC">Bicoastal non-SC category = 0x56</a></h4>
+
+<p>On the standard map there are no non-SC bicoastal
+provinces.</p>
+
+<h4><a name="Bicoastal_SC">Bicoastal SC category = 0x57</a></h4>
+
+<ul>
+	<li>BUL 0x48</li>
+	<li>SPA 0x49</li>
+	<li>STP 0x4A</li>
+</ul>
+
+<p>Note that the province values form a sequence starting at zero and
+leading up to 74 (giving 75 provinces in total).  It will always be
+possible to use the bottom octet to index into a zero-based array.
+The low bit of the category determines whether the province is a supply
+centre or not.  The next two bits can be used to determine province
+type.</p>
+
+
+<h3>4.17  <a name="Reserved">Reserved for private use (0x58 - 0x5F)</a></h3>
+
+<p>These categories will never be assigned another use.  Software writers
+are free to use these categories as they see fit.  However, they must
+never be sent over the wire.</p>
+
+
+<h2>5  <a name="changes">Changes from the official document</a></h2>
+
+<p>This chapter lists the differences between this document and revision 14 of
+  <a href="http://www.daide.org.uk/external/comproto.html">The
+    Diplomacy Centralisation Project Client-Server Protocol</a>.</p>
+
+<h3>5.1  <a name="RM_note">Multiple Representation Messages</a></h3>
+
+<p>The official protocol only allows the
+  <a href="#RM">Representation Message</a> to be sent once; however, to
+  support game selection, Parlance allows the server to send a new RM in
+  response to specific Diplomacy Messages sent by the client.  In conjunction
+  with this, <a href="#EM">Error Message 0x0C</a> has a slightly different
+  description in this document.</p>
+
+<h3>5.2  <a name="invalid_note">Invalid Tokens</a></h3>
+
+<p>The official document is less specific about when to send
+  <a href="#EM">Error Message 0x0E</a>; some implementations of this protocol
+  have been known to send it upon receiving any unknown token, even in a DM
+  that could be safely ignored.  Now that clients are allowed to send HUH
+  messages to the server, there is no longer any need for such behavior.</p>
+
+<h3>5.3  <a name="token_note">New Tokens</a></h3>
+
+<p>The <a href="#SMR">SMR</a> token has been added to this document, with
+  its value as accepted by the DAIDE community.  The <a href="#CHO">CHO</a>,
+  <a href="#BCC">BCC</a>, and <a href="#UNT">UNT</a> were not originally in
+  revision 14, but have been added to at least one version of the document
+  claiming that number.  In fact, the original revision 14 document assigns
+  token number 0x4A22 to WRT, but no software ever used that number for it,
+  and its use is now officially discouraged.</p>
+
+<h3>5.4  <a name="grammar_note">Minor Edits</a></h3>
+
+<p>Punctuation, grammar, style, naming, and metadata have been changed in
+  several places, but do not affect the meaning of the document.</p>
+
+</body>
+</html>

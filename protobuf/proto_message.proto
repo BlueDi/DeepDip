@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package dip_q;
+
+option java_package = "cruz.agents";
+
+/**
+It's important that the communication between modules remains as simple as possible.
+
+In this particular case, all logic regarding converting observation and action into
+arrays is done on the side of BANDANA. Therefore most messages have fields which correspond to numbers.
+**/
+
+message BandanaRequest {
+  enum Type {
+    INVALID = 0;
+    GET_DEAL_REQUEST = 1; // specific to negotiation scenario
+    GET_ACCEPTANCE_REQUEST = 2; // specific to negotiation scenario
+    SEND_GAME_END = 3;
+  }
+
+  // Using "required" is often bad practice. Generally, the validation
+  // should be application-specific in order to make maintenance easier.
+  // In proto3 syntax, "optional" is the default field
+
+  Type type = 1;
+  ObservationData observation = 2;
+}
+
+message DiplomacyGymResponse {
+  enum Type {
+    INVALID = 0;
+    CONFIRM = 1;
+    SEND_DEAL = 2;
+    SEND_ACCEPTANCE = 3;
+  }
+
+  Type type = 1;
+
+  // deal will be null if we're sending an acceptance
+  DealData deal = 2;
+  
+  // acceptance will be null if we're sending a deal 
+  AcceptanceData acceptance = 3;
+}
+
+message DiplomacyGymOrdersResponse {
+  enum Type {
+    INVALID = 0;
+    VALID = 1;
+  }
+
+  Type type = 1;
+  OrdersData orders = 2;
+}
+
+message ProvinceData {
+  // The id of the province, which allows us to map a certain action to a province.
+  int32 id = 1;
+
+  // An integer which is the ID of the player owning the province.
+  int32 owner = 2;
+
+  // Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
+  int32 sc = 3;
+  
+  // An integer which is the ID of the player controlling the province, the owner of the unit in the province.
+  int32 unit = 4;
+}
+
+message ObservationData {
+  // A list of 0 or more provinces.
+  repeated ProvinceData provinces = 1;
+
+  // The value of the reward gained by the previous action.
+  float previousActionReward = 2;
+
+  // A boolean representing whether a game has finished or not.
+  bool done = 3;
+
+  // Arbritary information (mostly for debug purposes).
+  string info = 4;
+  int32 player = 5;
+}
+
+message AcceptanceData {
+  //TODO
+}
+
+message DealData {
+  message MTOOrderData {
+    // Province to move units FROM
+    int32 startProvince = 1;
+
+    // Province to move units TO
+    int32 destinationProvince = 2;
+  }
+
+  // Power we will propose our deal to
+  int32 powerToPropose = 1;
+  // The Move order we propose to execute
+  MTOOrderData ourMove = 2;
+
+  // The Move order we propose the other to execute
+  MTOOrderData theirMove = 3;
+}
+
+message OrderData {
+  int32 start = 1;
+  int32 action = 2;
+  int32 destination = 3;
+}
+
+message OrdersData {
+  repeated OrderData orders = 1;
+}
