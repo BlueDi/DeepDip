@@ -22,7 +22,7 @@ class Model(BaseAgent):
 
         self.static_policy = static_policy
         self.num_feats = env.observation_space.shape
-        self.num_actions = int(env.action_space.nvec[0])
+        self.num_actions = int(np.prod(env.observation_space.nvec))
         self.env = env
 
         self.declare_networks()
@@ -128,27 +128,16 @@ class Model(BaseAgent):
 
 
     def get_action(self, state, eps=0.1):
-        action = None
         with torch.no_grad():
             if np.random.random() <= eps or self.static_policy:
                 X = torch.tensor([state], device=self.device, dtype=torch.float)
-                action = self.model(X).max(1)[1].view(1, 1).item()
+                return self.model(X).max(1)[1].view(1, 1).item()
             else:
-                action = np.random.randint(0, self.num_actions)
-        return self.prepare_action(state[-1], action)
-
-
-    def prepare_action(self, unit, action):
-        if action == 0:
-            return [unit - 1, 0, -1]
-        else:
-            action = action - 1
-            order_type, destination = divmod(action, 8)
-            return [unit - 1, order_type + 1, destination]
+                return np.random.randint(0, self.num_actions)
 
 
     def update_target_model(self):
-        self.update_count+=1
+        self.update_count += 1
         self.update_count = self.update_count % self.target_net_update_freq
         if self.update_count == 0:
             self.target_model.load_state_dict(self.model.state_dict())

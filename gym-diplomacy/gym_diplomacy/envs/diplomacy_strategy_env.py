@@ -70,21 +70,21 @@ def action_to_orders_data(action, state) -> proto_message_pb2.OrdersData:
     :param action: The list of the agent action.
     :return: OrdersData object with the representation of the set of orders.
     """
-    #player_units = get_player_units(state)
+    player_units = get_player_units(state)
     orders_data: proto_message_pb2.OrdersData = proto_message_pb2.OrdersData()
-    for unit, order in enumerate(action):
-        #if unit in player_units:
+    for unit in player_units:
+        order = action[unit]
         if order == 0:
-            clean_order = [unit, 0, 0]
+            clean_order = [0, 0]
         else:
             order = order - 1
             order_type, destination = divmod(order, NUMBER_OF_PROVINCES)
-            clean_order = [unit, order_type + 1, destination]
+            clean_order = [order_type + 1, destination]
 
         new_order = orders_data.orders.add()
-        new_order.start = int(clean_order[0])
-        new_order.action = int(clean_order[1])
-        new_order.destination = int(clean_order[2])
+        new_order.start = unit
+        new_order.action = int(clean_order[0])
+        new_order.destination = int(clean_order[1])
     return orders_data
 
 
@@ -337,7 +337,7 @@ class DiplomacyStrategyEnv(gym.Env):
         '''
         action_space_description = []
         action_space_row = [1 + (NUMBER_OF_ACTIONS - 1) * NUMBER_OF_PROVINCES]
-        for i in range(NUMBER_OF_PROVINCES):
+        for _ in range(NUMBER_OF_PROVINCES):
             action_space_description.extend(action_space_row)
         self.action_space = spaces.MultiDiscrete(action_space_description)
 

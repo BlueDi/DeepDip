@@ -79,14 +79,6 @@ reward = 0
 done = False
 
 
-def get_player_units(state):
-    player = state[-1]
-    index = state[::4]
-    units = state[3::4]
-    player_units = [i for i, unit in zip(index, units) if unit == player]
-    return player_units
-
-
 observation = env.reset()
 for frame_idx in range(1, config.MAX_FRAMES + 1):
     epsilon = config.epsilon_by_frame(frame_idx)
@@ -95,7 +87,8 @@ for frame_idx in range(1, config.MAX_FRAMES + 1):
 
     prev_observation = observation
     observation, reward, done, _ = env.step(action)
-    #observation = None if done else observation
+    print(frame_idx, action, reward)
+    observation = None if done else observation
     episode_reward += reward
     
     model.update(prev_observation, action, reward, observation, frame_idx)

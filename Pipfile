@@ -7,7 +7,6 @@ verify_ssl = true
 
 [packages]
 gym = "*"
-gym-diplomacy = {editable = true,path = "./gym-diplomacy"}
 tensorflow = "*"
 matplotlib = "*"
 numpy = "*"
@@ -15,6 +14,7 @@ pandas = "*"
 baselines = {editable = true,path = "./baselines"}
 torch = "*"
 torchvision = "*"
+gym-diplomacy = {editable = true,path = "./gym-diplomacy"}
 
 [requires]
 python_version = "3.6"

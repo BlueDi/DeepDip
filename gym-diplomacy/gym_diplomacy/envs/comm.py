@@ -1,18 +1,21 @@
 # load additional Python module
 import socket
+import errno
 import sys
+import os
 import typing
 from threading import Thread
 
 import logging
 
-FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)20s()] %(message)s"
+FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)10s()] %(message)s"
 logging.basicConfig(format=FORMAT)
 
 logging_level = 'DEBUG'
 level = getattr(logging, logging_level)
-logging.basicConfig(stream=sys.stdout, level=level)
 logger = logging.getLogger(__name__)
+logger.setLevel(level)
+
 
 class LocalSocketServer:
     sock = None
@@ -21,15 +24,15 @@ class LocalSocketServer:
 
     terminate: bool = False
 
+
     def __init__(self, port, handle):
         self.handle = handle
 
         # create TCP (SOCK_STREAM) /IP socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # reuse the socket, meaning there should not be any errno98 address already in use
-        # self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         # retrieve local hostname
         local_hostname = socket.gethostname()
@@ -63,35 +66,25 @@ class LocalSocketServer:
         while not self.terminate:
             # wait for a connection
             logger.debug('Waiting for a connection...')
+            connection, client_address = self.sock.accept()
+            with connection:
+                # show who connected to us
+                logger.debug('Connection from {}'.format(client_address))
 
-            try:
-                connection, client_address = self.sock.accept()
+                data = connection.recv(1024 * 20)
 
-                try:
-                    # show who connected to us
-                    logger.debug('Connection from {}'.format(client_address))
+                logger.debug("Calling handler...")
+                connection.send(self.handle(data))
+            
+            logger.debug("Connection closed")
 
-                    data = connection.recv(1024 * 20)
-
-                    logger.debug("Calling handler...")
-                    connection.send(self.handle(data))
-
-                finally:
-                    # Clean up the connection
-                    logger.debug("Connection closed")
-                    connection.close()
-            except socket.error:
-                break
 
     def close(self) -> None:
         logger.info("Closing LocalSocketServer...")
 
         self.terminate = True
-        try:
-            self.sock.shutdown(socket.SHUT_RDWR)  # further sends and receives are disallowed
-            self.sock.close()
-        except OSError:
-            pass
+        #self.sock.shutdown(socket.SHUT_RDWR)  # further sends and receives are disallowed
+        self.sock.close()
 
         for thread in self.threads:
             thread.join()
@@ -110,3 +103,4 @@ def main_f():
 
 if __name__ == "__main__":
     main_f()
+

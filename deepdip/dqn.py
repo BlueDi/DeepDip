@@ -17,6 +17,8 @@ class DQN(nn.Module):
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
+        #return F.log_softmax(x, dim=1)
+        print(x)
         return x
 
 
