@@ -26,6 +26,7 @@ class LocalSocketServer:
 
 
     def __init__(self, port, handle):
+        self.port = port
         self.handle = handle
 
         # create TCP (SOCK_STREAM) /IP socket
@@ -57,6 +58,8 @@ class LocalSocketServer:
 
 
     def threaded_listen(self):
+        #self.sock.close()
+        #self.__init__(self.port, self.handle)
         thread = Thread(target=self._listen)
         self.threads.append(thread)
         thread.start()

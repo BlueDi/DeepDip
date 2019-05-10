@@ -17,52 +17,43 @@ public class TournamentRunner {
     private final static String GAME_MAP = "small"; // Game map can be 'standard' or 'small'
     private final static String FINAL_YEAR = "2000";
 
-    // JC: Using a custom map to define how many players are there on each custom map
+    // Using a custom map to define how many players are there on each custom map
     private final static Map<String, Integer> mapToNumberOfPlayers  = new HashMap<String, Integer>() {{
         put("standard", 7);
         put("small", 2);
     }};
 
-	// JC: CUSTOM SETTINGS END
+	// Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
+	// where the results of the tournament will be logged.
+	final static String LOG_FOLDER = "log";
 
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	final static String[] randomBotCommand = {"java", "-jar", "agents/RandomBot.jar", "-log", "log", "-name", "RandomBot", "-fy", FINAL_YEAR};
-	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", FINAL_YEAR};
-	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", FINAL_YEAR};
-	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", FINAL_YEAR};
-	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", };
-	final static String[] openAIBotNegotiatorCommand = {"java", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", "log", "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
-	final static String[] deepDipCommand = {"java", "-jar", "target/DeepDip-0.1-shaded.jar", "-log", "log", "-name", "DeepDip", "-fy", FINAL_YEAR};
-	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", FINAL_YEAR};
+	final static String[] randomBotCommand = {"java", "-jar", "agents/RandomBot.jar", "-log", LOG_FOLDER, "-name", "RandomBot", "-fy", FINAL_YEAR};
+	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", LOG_FOLDER, "-name", "RandomNegotiator", "-fy", FINAL_YEAR};
+	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", LOG_FOLDER, "-name", "DumbBot", "-fy", FINAL_YEAR};
+	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", LOG_FOLDER, "-name", "D-Brane", "-fy", FINAL_YEAR};
+	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", LOG_FOLDER, "-name", "DBraneExampleBot", "-fy", };
+	final static String[] openAIBotNegotiatorCommand = {"java", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", LOG_FOLDER, "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
+	final static String[] deepDipCommand = {"java", "-jar", "target/DeepDip-0.1-shaded.jar", "-log", LOG_FOLDER, "-name", "DeepDip", "-fy", FINAL_YEAR};
+	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", LOG_FOLDER, "-name", "AnacExampleNegotiator", "-fy", FINAL_YEAR};
 
 
-    // JC: This command allows a remote debugger to connect to the .jar file JVM, allowing debugging in runtime
+    // This command allows a remote debugger to connect to the .jar file JVM, allowing debugging in runtime
     final static String[] openAIBotNegotiatorCommandDebug = {"java", "-agentlib:jdwp=transport=dt_socket,server=n,address=5005,suspend=y", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", "log", "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
-
-
-
-	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
-	// where the results of the tournament will be logged.
-	final static String LOG_FOLDER = "log";
-	
 	
 	public static void main(String[] args) throws IOException {
 		
 		int numberOfGames = 1;				//The number of games this tournament consists of.
 		
-		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
-		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
-		int deadlineForBuildPhases = 30;  	//30 seconds for each WIN phase
+		int deadlineForMovePhases = 1; 	//60 seconds for each SPR and FAL phases
+		int deadlineForRetreatPhases = 3;  //30 seconds for each SUM and AUT phases
+		int deadlineForBuildPhases = 3;  	//30 seconds for each WIN phase
 		
 		String finalYear = FINAL_YEAR; 	//The year after which the agents in each game are supposed to propose a draw to each other. 
 		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            //NOTE: unfortunately, Shutdownhooks don't work on windows if the program was started in eclipse and
-            // you stop it by clicking the red button (on MAC it seems to work fine).
-
             @Override
             public void run() {
                 if (MODE) {
@@ -73,7 +64,6 @@ public class TournamentRunner {
         });
 
 		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
-		
 	}
 	
 	
@@ -121,10 +111,6 @@ public class TournamentRunner {
             }
 
             for (int gameNumber = 1; gameNumber <= numberOfGames; gameNumber++) {
-
-                System.out.println();
-                System.out.println("GAME " + gameNumber);
-
                 if (MODE) {
                     NegoServerRunner.notifyNewGame(gameNumber);
                 }
@@ -166,50 +152,32 @@ public class TournamentRunner {
                     // This name does not have to be the same as the name given to the agent, but it would be confusing
                     // to do otherwise.
 
-
                     //store the Process object in a list.
                     players.add(playerProcess);
-
-
                 }
 
                 //5. Let the tournament observer (re-)connect to the game server.
                 tournamentObserver.connectToServer();
 
-
                 //NOW WAIT TILL THE GAME IS FINISHED
                 while (tournamentObserver.getGameStatus() == TournamentObserver.GAME_ACTIVE || tournamentObserver.getGameStatus() == TournamentObserver.CONNECTED_WAITING_TO_START) {
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(499);
                     } catch (InterruptedException e) {
+                        System.err.println("Failed sleep" + e);
                     }
 
                     if (tournamentObserver.playerFailed()) {
                         // One or more players did not send its orders in in time.
-                        //
+                        System.err.println("A player failed to send its orders in time.");
                     }
                 }
             }
-
-            System.out.println("TOURNAMENT FINISHED");
-
-            //Get the results of all the games played in this tournament.
-            // Each GameResult object contains the results of one game.
-            // The tournamentObserver already automatically prints these results to a text file,
-            //  as well as the processed overall results of the tournament.
-            // However, you may want to do your own processing of the results, for which
-            // you can use this list.
-            ArrayList<GameResult> results = tournamentObserver.getGameResults();
-
-            //Kill the player processes.
-            // (if everything is implemented okay this isn't necessary because the players should kill themselves. But just to be sure..)
-            for (Process playerProcess : players) {
-                playerProcess.destroy();
-            }
         }
 	    finally {
-            // JC: Added in case exception are thrown during development
+            //Kill the player processes.
+            // (if everything is implemented okay this isn't necessary because the players should kill themselves. But just to be sure..)
             for (Process playerProcess : players) {
                 playerProcess.destroy();
             }

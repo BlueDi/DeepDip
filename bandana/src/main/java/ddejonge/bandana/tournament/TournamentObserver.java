@@ -222,12 +222,10 @@ public class TournamentObserver extends Observer implements Runnable{
 	
 	/**
 	 * Is called when a player has lost connection or hasn't sent its orders.
-	 * 
 	 */
 	@Override
 	public void handleCCD(String powerName) {
-		
-		System.out.println("TournamentObserver.handleCCD() "  + powerName + " did not manage to submit its orders in time.");
+		System.err.println("TournamentObserver.handleCCD() "  + powerName + " did not manage to submit its orders in time.");
 		ccd = true;
 	}
 	
