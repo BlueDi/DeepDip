@@ -159,6 +159,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self._init_observation_space()
         self._init_action_space()
+        self._init_socket_server()
 
 
     def step(self, action):
@@ -189,8 +190,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     def reset(self):
         """Resets the state of the environment and returns an initial observation.
-        Returns: observation (object): the initial observation of the
-            space.
+        Returns: observation (object): the initial observation of the space.
         """
         # Set or reset current observation to None
         self.observation = None
@@ -201,9 +201,6 @@ class DiplomacyStrategyEnv(gym.Env):
             self._init_bandana()
         else:
             self._init_bandana()
-
-        if self.server is None:
-            self._init_socket_server()
 
         # Wait until the observation field has been set, by receiving the observation from Bandana
         while self.observation is None:
@@ -225,8 +222,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self.terminate = True
 
-        if self.server is not None:
-            self.server.shutdown()
+        self.server.shutdown()
 
         if self.bandana_subprocess is not None:
             self._kill_bandana()

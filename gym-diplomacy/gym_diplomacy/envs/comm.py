@@ -29,8 +29,8 @@ class DiplomacyThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPSe
 
 
     def shutdown(self):
-        super().shutdown()
         logger.info("Shutting down server.")
+        super().shutdown()
 
 
 class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
@@ -43,37 +43,38 @@ class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
     """
 
     def recv_all(self, n):
-        # Helper function to recv n bytes or return None if EOF is hit
+        """Helper function to recv n bytes or return None if EOF is hit"""
         data = b''
+
         while len(data) < n:
             packet = self.request.recv(n - len(data))
             if not packet:
                 return None
             data += packet
+
         return data
 
 
     def handle(self):
+        """Handles the received data.
+        If receives an empty request, then the client closed the connection.
+        """
         while True:
-            data_length_bytes: bytes = self.recv_all(4)
+            data_length_bytes = self.recv_all(4)
 
-            # If recv read an empty request b'', then client has closed the connection
             if not data_length_bytes:
                 break
 
-            # DON'T DO strip() ON THE DATA_LENGTH PACKET. It might delete what Python thinks is whitespace but
-            # it actually is a byte that makes part of the integer.
-            data_length: int = int.from_bytes(data_length_bytes, byteorder='big')
+            data_length = int.from_bytes(data_length_bytes, byteorder='big')
 
-            # Don't do strip() on data either (be sure to check if there is some error if you do use)
-            data: bytes = self.recv_all(data_length)
+            data = self.recv_all(data_length)
 
             if self.server.handler is not None:
-                response: bytes = self.server.handler(bytearray(data))
+                response = self.server.handler(bytearray(data))
             else:
-                logger.warning("The handler for the message received is None in DiplomacyTCPHandler. Assuming it's for debug reasons. "
-                               "Otherwise, fix.")
-                response: bytes = data.upper()
+                logger.warning("The handler for the message received is None in DiplomacyTCPHandler. "
+                               "Assuming it's for debug reasons. Otherwise, fix.")
+                response = data.upper()
 
             self.request.sendall(len(response).to_bytes(4, byteorder='big'))
             self.request.sendall(response)
