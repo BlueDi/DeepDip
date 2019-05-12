@@ -136,7 +136,7 @@ class DiplomacyStrategyEnv(gym.Env):
     bandana_subprocess = None
 
     # Communication
-    socket_server = None
+    server: 'DiplomacyThreadedTCPServer' = None
 
     # Env
     received_first_observation: bool = False
@@ -202,11 +202,8 @@ class DiplomacyStrategyEnv(gym.Env):
         else:
             self._init_bandana()
 
-        if self.socket_server is None:
+        if self.server is None:
             self._init_socket_server()
-
-        self.socket_server.terminate = False
-        self.socket_server.threaded_listen()
 
         # Wait until the observation field has been set, by receiving the observation from Bandana
         while self.observation is None:
@@ -216,35 +213,6 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def render(self, mode='human'):
-        """Renders the environment.
-        The set of supported modes varies per environment. (And some
-        environments do not support rendering at all.) By convention,
-        if mode is:
-        - human: render to the current display or terminal and
-          return nothing. Usually for human consumption.
-        - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
-          representing RGB values for an x-by-y pixel image, suitable
-          for turning into a video.
-        - ansi: Return a string (str) or StringIO.StringIO containing a
-          terminal-style text representation. The text can include newlines
-          and ANSI escape sequences (e.g. for colors).
-        Note:
-            Make sure that your class's metadata 'render.modes' key includes
-              the list of supported modes. It's recommended to call super()
-              in implementations to use the functionality of this method.
-        Args:
-            mode (str): the mode to render with
-        Example:
-        class MyEnv(Env):
-            metadata = {'render.modes': ['human', 'rgb_array']}
-            def render(self, mode='human'):
-                if mode == 'rgb_array':
-                    return np.array(...) # return RGB frame suitable for video
-                elif mode is 'human':
-                    ... # pop up a window and render
-                else:
-                    super(MyEnv, self).render(mode=mode) # just raise an exception
-        """
         raise NotImplementedError
 
 
@@ -257,8 +225,8 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self.terminate = True
 
-        if self.socket_server is not None:
-            self.socket_server.close()
+        if self.server is not None:
+            self.server.shutdown()
 
         if self.bandana_subprocess is not None:
             self._kill_bandana()
@@ -274,19 +242,6 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def seed(self, seed=None):
-        """Sets the seed for this env's random number generator(s).
-        Note:
-            Some environments use multiple pseudorandom number generators.
-            We want to capture all such seeds used in order to ensure that
-            there aren't accidental correlations between multiple generators.
-        Returns:
-            list<bigint>: Returns the list of seeds used in this env's random
-              number generators. The first value in the list should be the
-              "main" seed, or the value which a reproducer should pass to
-              'seed'. Often, the main seed equals the provided 'seed', but
-              this won't be true if seed=None, for example.
-        """
-        logger.warning("Could not seed environment %s", self)
         return
 
 
@@ -296,7 +251,7 @@ class DiplomacyStrategyEnv(gym.Env):
                      .format(self.bandana_init_command, self.bandana_root_path))
 
         self.bandana_subprocess = subprocess.Popen(self.bandana_init_command, cwd=self.bandana_root_path, shell=True, preexec_fn=os.setsid)
-        logger.info("Started BANDANA tournament.")
+        logger.info("Initialized BANDANA tournament.")
 
 
     def _kill_bandana(self):
@@ -343,10 +298,25 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def _init_socket_server(self):
-        self.socket_server = comm.LocalSocketServer(5000, self._handle)
+        self.server = comm.DiplomacyThreadedTCPServer(5000)
+        self.server.handler = self.handle_request
+
+        self.server_thread = threading.Thread(target=self.server.serve_forever)
+
+        # Exit the server thread when the main thread terminates
+        self.server_thread.daemon = True
+        self.server_thread.start()
+        logger.info("Started ThreadedTCPServer daemon thread.")
 
 
-    def _handle(self, request: bytearray) -> None:
+    def _terminate_socket_server(self):
+        with self.server:
+            self.server.shutdown()
+            self.server.server_close()
+            logger.info("Shut down ThreadedTCPServer.")
+
+
+    def handle_request(self, request: bytearray) -> None:
         request_data: proto_message_pb2.BandanaRequest = proto_message_pb2.BandanaRequest()
         request_data.ParseFromString(request)
 
@@ -364,8 +334,6 @@ class DiplomacyStrategyEnv(gym.Env):
             if self.done or self.terminate:
                 # Return empty deal just to finalize program
                 logger.debug("Sending empty deal to finalize program.")
-                # TODO: Terminate should not be here. Refactor all of this!
-                self.socket_server.terminate = True
                 return response_data.SerializeToString()
 
         self.received_first_observation = True

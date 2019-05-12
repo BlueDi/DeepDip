@@ -82,6 +82,9 @@ public class OpenAIAdapter {
      */
     public OpenAIObserver openAIObserver;
 
+    /** The SocketClient instance used to send requests to the OpenAI Gym environment. */
+    protected SocketClient socketClient;
+
     /**
      * @param agent The OpenAINegotiator instance that will receive actions from the OpenAI environment.
      */
@@ -101,6 +104,7 @@ public class OpenAIAdapter {
 
         this.done = false;
         this.info = null;
+        this.socketClient = new SocketClient(5000);
     }
 
     /**
@@ -138,8 +142,7 @@ public class OpenAIAdapter {
 
             byte[] message = bandanaRequestBuilder.build().toByteArray();
 
-            SocketClient socketClient = new SocketClient("127.0.1.1", 5000, this.agent.getLogger());
-            byte[] response = socketClient.sendMessageAndReceiveResponse(message);
+            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
 
             // If something went wrong with getting the response from Python module
             if (response == null) {
@@ -184,8 +187,7 @@ public class OpenAIAdapter {
 
             byte[] message = bandanaRequestBuilder.build().toByteArray();
 
-            SocketClient socketClient = new SocketClient("127.0.1.1", 5000, this.agent2.getLogger());
-            byte[] response = socketClient.sendMessageAndReceiveResponse(message);
+            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
 
             // If something went wrong with getting the response from Python module
             if (response == null) {
@@ -217,10 +219,7 @@ public class OpenAIAdapter {
 
             byte[] message = bandanaRequestBuilder.build().toByteArray();
 
-            
-
-            SocketClient socketClient = new SocketClient("127.0.1.1", 5000, this.agent2 == null? this.agent.getLogger():this.agent2.getLogger());
-            byte[] response = socketClient.sendMessageAndReceiveResponse(message);
+            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
 
             if (response == null) {
                 return;
@@ -276,6 +275,7 @@ public class OpenAIAdapter {
 
         // Terminate observer so it does not hang and cause exceptions.
         this.openAIObserver.exit();
+        this.socketClient.close();
     }
 
     /**
@@ -454,8 +454,8 @@ public class OpenAIAdapter {
                     support_orders.add(order);
                 }
             } else {
-                System.err.println("WRONG BORDER: For order of type " + order.getAction() + ", the destination " + destination + " is not a border with current province " + start);
-                this.addReward(INVALID_DEAL_REWARD);
+                //System.err.println("WRONG BORDER: For order of type " + order.getAction() + ", the destination " + destination + " is not a border with current province " + start);
+                //this.addReward(INVALID_DEAL_REWARD);
                 orders.add(new HLDOrder(this.agent2.getMe(), start));
             }
         }
@@ -468,8 +468,8 @@ public class OpenAIAdapter {
                 .findAny()
                 .orElse(null);
             if (order_to_support == null) {
-                System.err.println("ORDER TO SUPPORT NOT FOUND");
-                this.addReward(INVALID_DEAL_REWARD);
+                //System.err.println("ORDER TO SUPPORT NOT FOUND");
+                //this.addReward(INVALID_DEAL_REWARD);
                 orders.add(new HLDOrder(this.agent2.getMe(), start));
             } else if (order_to_support instanceof MTOOrder) {
                 orders.add(new SUPMTOOrder(this.agent2.getMe(), start, (MTOOrder) order_to_support));

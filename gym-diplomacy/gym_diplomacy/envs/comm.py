@@ -1,109 +1,80 @@
 # load additional Python module
-import socket
 import errno
-import sys
+import logging
 import os
+import socket
+import socketserver
+import sys
 import typing
 from threading import Thread
 
-import logging
 
-FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)10s()] %(message)s"
-logging.basicConfig(format=FORMAT)
-
-logging_level = 'DEBUG'
-level = getattr(logging, logging_level)
 logger = logging.getLogger(__name__)
-logger.setLevel(level)
 
 
-class LocalSocketServer:
-    sock = None
-    handle: typing.Callable = None
-    threads: typing.List[Thread] = []
-
-    terminate: bool = False
-
-
-    def __init__(self, port, handle):
+class DiplomacyThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    def __init__(self, port, host='localhost'):
         self.port = port
-        self.handle = handle
+        self.host = host
+        self.address = (self.host, self.port)
 
-        # create TCP (SOCK_STREAM) /IP socket
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # reuse the socket, meaning there should not be any errno98 address already in use
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-        # retrieve local hostname
-        local_hostname = socket.gethostname()
-
-        # get fully qualified hostname
-        local_fqdn = socket.getfqdn()
-
-        # get the according IP address
-        ip_address = socket.gethostbyname(local_hostname)
-
-        # output hostname, domain name and IP address
-        logger.debug("Socket working on %s (%s) with %s" % (local_hostname, local_fqdn, ip_address))
-
-        # bind the socket to the port given
-        server_address = (ip_address, port)
-
-        logger.debug('Socket starting up on %s port %s' % server_address)
-        self.sock.bind(server_address)
-
-        # listen for incoming connections (server mode) with one connection at a time
-        self.sock.listen(1)
+        # bind_and_activate means that the constructor will bind and activate the server right away
+        # Because we want to set up the reuse address flag, this should not be the case, and we bind and activate
+        # manually
+        super(DiplomacyThreadedTCPServer, self).__init__(self.address, DiplomacyTCPHandler, bind_and_activate=False)
+        self.allow_reuse_address = True
+        self.server_bind()
+        self.server_activate()
+        logger.info("Server bound and activated at address: {}".format(self.server_address))
 
 
-    def threaded_listen(self):
-        #self.sock.close()
-        #self.__init__(self.port, self.handle)
-        thread = Thread(target=self._listen)
-        self.threads.append(thread)
-        thread.start()
+    def shutdown(self):
+        super().shutdown()
+        logger.info("Shutting down server.")
 
 
-    def _listen(self):
-        while not self.terminate:
-            # wait for a connection
-            logger.debug('Waiting for a connection...')
-            connection, client_address = self.sock.accept()
-            with connection:
-                # show who connected to us
-                logger.debug('Connection from {}'.format(client_address))
+class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
+    """
+    The request handler class for our server.
 
-                data = connection.recv(1024 * 20)
+    It is instantiated once per connection to the server, and must
+    override the handle() method to implement communication to the
+    client.
+    """
 
-                logger.debug("Calling handler...")
-                connection.send(self.handle(data))
-            
-            logger.debug("Connection closed")
-
-
-    def close(self) -> None:
-        logger.info("Closing LocalSocketServer...")
-
-        self.terminate = True
-        #self.sock.shutdown(socket.SHUT_RDWR)  # further sends and receives are disallowed
-        self.sock.close()
-
-        for thread in self.threads:
-            thread.join()
-
-        logger.info("LocalSocketServer terminated.")
+    def recv_all(self, n):
+        # Helper function to recv n bytes or return None if EOF is hit
+        data = b''
+        while len(data) < n:
+            packet = self.request.recv(n - len(data))
+            if not packet:
+                return None
+            data += packet
+        return data
 
 
-def handle_f(request: bytearray):
-    return request
+    def handle(self):
+        while True:
+            data_length_bytes: bytes = self.recv_all(4)
 
+            # If recv read an empty request b'', then client has closed the connection
+            if not data_length_bytes:
+                break
 
-def main_f():
-    sock = LocalSocketServer(5000, handle_f)
-    sock.listen()
+            # DON'T DO strip() ON THE DATA_LENGTH PACKET. It might delete what Python thinks is whitespace but
+            # it actually is a byte that makes part of the integer.
+            data_length: int = int.from_bytes(data_length_bytes, byteorder='big')
 
+            # Don't do strip() on data either (be sure to check if there is some error if you do use)
+            data: bytes = self.recv_all(data_length)
 
-if __name__ == "__main__":
-    main_f()
+            if self.server.handler is not None:
+                response: bytes = self.server.handler(bytearray(data))
+            else:
+                logger.warning("The handler for the message received is None in DiplomacyTCPHandler. Assuming it's for debug reasons. "
+                               "Otherwise, fix.")
+                response: bytes = data.upper()
+
+            self.request.sendall(len(response).to_bytes(4, byteorder='big'))
+            self.request.sendall(response)
 
