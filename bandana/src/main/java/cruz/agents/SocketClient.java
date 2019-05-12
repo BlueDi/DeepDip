@@ -67,9 +67,17 @@ class SocketClient {
 
     void close() {
         try {
-            this.in.close();
-            this.out.close();
-            this.socket.close();
+            if (this.in != null) {
+                this.in.close();
+            }
+
+            if (this.out != null) {
+                this.out.close();
+            }
+
+            if (this.socket != null) {
+                this.socket.close();
+            }
         } catch(Exception e) {
             System.err.println("ATTENTION! Java socket not properly closed.");
             e.printStackTrace();

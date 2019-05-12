@@ -258,9 +258,8 @@ public class OpenAIAdapter {
 
         if(nameOfWinner == null) {
             System.out.println("GAME RESULT: No one won with a solo victory.");
-        }
-        else {
-            System.out.printf("GAME RESULT: Player " + nameOfWinner + " win with a solo victory.");
+        } else {
+            System.out.printf("GAME RESULT: " + nameOfWinner + " won with a solo victory.");
         }
 
         // if (nameOfPlayer.equals(nameOfWinner)) // winner
