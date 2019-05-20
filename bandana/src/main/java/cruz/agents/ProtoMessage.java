@@ -19,24 +19,24 @@ public final class ProtoMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+     * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
      */
     int getTypeValue();
     /**
-     * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+     * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
      */
     cruz.agents.ProtoMessage.BandanaRequest.Type getType();
 
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     boolean hasObservation();
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     cruz.agents.ProtoMessage.ObservationData getObservation();
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     cruz.agents.ProtoMessage.ObservationDataOrBuilder getObservationOrBuilder();
   }
@@ -47,7 +47,6 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.BandanaRequest)
       BandanaRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use BandanaRequest.newBuilder() to construct.
     private BandanaRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -59,19 +58,14 @@ public final class ProtoMessage {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private BandanaRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -80,6 +74,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
               int rawValue = input.readEnum();
 
@@ -99,13 +99,6 @@ public final class ProtoMessage {
 
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -114,7 +107,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -123,7 +115,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_BandanaRequest_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_BandanaRequest_fieldAccessorTable
@@ -160,6 +151,10 @@ public final class ProtoMessage {
        * <code>SEND_GAME_END = 3;</code>
        */
       SEND_GAME_END(3),
+      /**
+       * <code>SEND_GAME_WINNER = 4;</code>
+       */
+      SEND_GAME_WINNER(4),
       UNRECOGNIZED(-1),
       ;
 
@@ -187,6 +182,10 @@ public final class ProtoMessage {
        * <code>SEND_GAME_END = 3;</code>
        */
       public static final int SEND_GAME_END_VALUE = 3;
+      /**
+       * <code>SEND_GAME_WINNER = 4;</code>
+       */
+      public static final int SEND_GAME_WINNER_VALUE = 4;
 
 
       public final int getNumber() {
@@ -211,6 +210,7 @@ public final class ProtoMessage {
           case 1: return GET_DEAL_REQUEST;
           case 2: return GET_ACCEPTANCE_REQUEST;
           case 3: return SEND_GAME_END;
+          case 4: return SEND_GAME_WINNER;
           default: return null;
         }
       }
@@ -266,16 +266,15 @@ public final class ProtoMessage {
     public static final int TYPE_FIELD_NUMBER = 1;
     private int type_;
     /**
-     * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+     * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
      */
     public int getTypeValue() {
       return type_;
     }
     /**
-     * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+     * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
      */
     public cruz.agents.ProtoMessage.BandanaRequest.Type getType() {
-      @SuppressWarnings("deprecation")
       cruz.agents.ProtoMessage.BandanaRequest.Type result = cruz.agents.ProtoMessage.BandanaRequest.Type.valueOf(type_);
       return result == null ? cruz.agents.ProtoMessage.BandanaRequest.Type.UNRECOGNIZED : result;
     }
@@ -283,26 +282,25 @@ public final class ProtoMessage {
     public static final int OBSERVATION_FIELD_NUMBER = 2;
     private cruz.agents.ProtoMessage.ObservationData observation_;
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     public boolean hasObservation() {
       return observation_ != null;
     }
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     public cruz.agents.ProtoMessage.ObservationData getObservation() {
       return observation_ == null ? cruz.agents.ProtoMessage.ObservationData.getDefaultInstance() : observation_;
     }
     /**
-     * <code>.dip_q.ObservationData observation = 2;</code>
+     * <code>optional .dip_q.ObservationData observation = 2;</code>
      */
     public cruz.agents.ProtoMessage.ObservationDataOrBuilder getObservationOrBuilder() {
       return getObservation();
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -312,7 +310,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (type_ != cruz.agents.ProtoMessage.BandanaRequest.Type.INVALID.getNumber()) {
@@ -321,10 +318,8 @@ public final class ProtoMessage {
       if (observation_ != null) {
         output.writeMessage(2, getObservation());
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -338,11 +333,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getObservation());
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -353,14 +348,14 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.BandanaRequest other = (cruz.agents.ProtoMessage.BandanaRequest) obj;
 
-      if (type_ != other.type_) return false;
-      if (hasObservation() != other.hasObservation()) return false;
+      boolean result = true;
+      result = result && type_ == other.type_;
+      result = result && (hasObservation() == other.hasObservation());
       if (hasObservation()) {
-        if (!getObservation()
-            .equals(other.getObservation())) return false;
+        result = result && getObservation()
+            .equals(other.getObservation());
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return result;
     }
 
     @java.lang.Override
@@ -369,7 +364,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + type_;
       if (hasObservation()) {
@@ -381,17 +376,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.BandanaRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.BandanaRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.BandanaRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -451,7 +435,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -459,7 +442,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.BandanaRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -483,7 +465,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_BandanaRequest_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_BandanaRequest_fieldAccessorTable
@@ -506,7 +487,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         type_ = 0;
@@ -520,18 +500,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_BandanaRequest_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.BandanaRequest getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.BandanaRequest.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.BandanaRequest build() {
         cruz.agents.ProtoMessage.BandanaRequest result = buildPartial();
         if (!result.isInitialized()) {
@@ -540,7 +517,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.BandanaRequest buildPartial() {
         cruz.agents.ProtoMessage.BandanaRequest result = new cruz.agents.ProtoMessage.BandanaRequest(this);
         result.type_ = type_;
@@ -553,39 +529,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.BandanaRequest) {
           return mergeFrom((cruz.agents.ProtoMessage.BandanaRequest)other);
@@ -603,17 +572,14 @@ public final class ProtoMessage {
         if (other.hasObservation()) {
           mergeObservation(other.getObservation());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -634,13 +600,13 @@ public final class ProtoMessage {
 
       private int type_ = 0;
       /**
-       * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+       * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
        */
       public int getTypeValue() {
         return type_;
       }
       /**
-       * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+       * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
        */
       public Builder setTypeValue(int value) {
         type_ = value;
@@ -648,15 +614,14 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+       * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
        */
       public cruz.agents.ProtoMessage.BandanaRequest.Type getType() {
-        @SuppressWarnings("deprecation")
         cruz.agents.ProtoMessage.BandanaRequest.Type result = cruz.agents.ProtoMessage.BandanaRequest.Type.valueOf(type_);
         return result == null ? cruz.agents.ProtoMessage.BandanaRequest.Type.UNRECOGNIZED : result;
       }
       /**
-       * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+       * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
        */
       public Builder setType(cruz.agents.ProtoMessage.BandanaRequest.Type value) {
         if (value == null) {
@@ -668,7 +633,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.BandanaRequest.Type type = 1;</code>
+       * <code>optional .dip_q.BandanaRequest.Type type = 1;</code>
        */
       public Builder clearType() {
         
@@ -677,17 +642,17 @@ public final class ProtoMessage {
         return this;
       }
 
-      private cruz.agents.ProtoMessage.ObservationData observation_;
+      private cruz.agents.ProtoMessage.ObservationData observation_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.ObservationData, cruz.agents.ProtoMessage.ObservationData.Builder, cruz.agents.ProtoMessage.ObservationDataOrBuilder> observationBuilder_;
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public boolean hasObservation() {
         return observationBuilder_ != null || observation_ != null;
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public cruz.agents.ProtoMessage.ObservationData getObservation() {
         if (observationBuilder_ == null) {
@@ -697,7 +662,7 @@ public final class ProtoMessage {
         }
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public Builder setObservation(cruz.agents.ProtoMessage.ObservationData value) {
         if (observationBuilder_ == null) {
@@ -713,7 +678,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public Builder setObservation(
           cruz.agents.ProtoMessage.ObservationData.Builder builderForValue) {
@@ -727,7 +692,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public Builder mergeObservation(cruz.agents.ProtoMessage.ObservationData value) {
         if (observationBuilder_ == null) {
@@ -745,7 +710,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public Builder clearObservation() {
         if (observationBuilder_ == null) {
@@ -759,7 +724,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public cruz.agents.ProtoMessage.ObservationData.Builder getObservationBuilder() {
         
@@ -767,7 +732,7 @@ public final class ProtoMessage {
         return getObservationFieldBuilder().getBuilder();
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       public cruz.agents.ProtoMessage.ObservationDataOrBuilder getObservationOrBuilder() {
         if (observationBuilder_ != null) {
@@ -778,7 +743,7 @@ public final class ProtoMessage {
         }
       }
       /**
-       * <code>.dip_q.ObservationData observation = 2;</code>
+       * <code>optional .dip_q.ObservationData observation = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.ObservationData, cruz.agents.ProtoMessage.ObservationData.Builder, cruz.agents.ProtoMessage.ObservationDataOrBuilder> 
@@ -793,16 +758,14 @@ public final class ProtoMessage {
         }
         return observationBuilder_;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -821,12 +784,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<BandanaRequest>
         PARSER = new com.google.protobuf.AbstractParser<BandanaRequest>() {
-      @java.lang.Override
       public BandanaRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new BandanaRequest(input, extensionRegistry);
+          return new BandanaRequest(input, extensionRegistry);
       }
     };
 
@@ -839,7 +801,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.BandanaRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -851,11 +812,11 @@ public final class ProtoMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
      */
     int getTypeValue();
     /**
-     * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
      */
     cruz.agents.ProtoMessage.DiplomacyGymResponse.Type getType();
 
@@ -864,7 +825,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     boolean hasDeal();
     /**
@@ -872,7 +833,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     cruz.agents.ProtoMessage.DealData getDeal();
     /**
@@ -880,7 +841,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     cruz.agents.ProtoMessage.DealDataOrBuilder getDealOrBuilder();
 
@@ -889,7 +850,7 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     boolean hasAcceptance();
     /**
@@ -897,7 +858,7 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     cruz.agents.ProtoMessage.AcceptanceData getAcceptance();
     /**
@@ -905,7 +866,7 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     cruz.agents.ProtoMessage.AcceptanceDataOrBuilder getAcceptanceOrBuilder();
   }
@@ -916,7 +877,6 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.DiplomacyGymResponse)
       DiplomacyGymResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use DiplomacyGymResponse.newBuilder() to construct.
     private DiplomacyGymResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -928,19 +888,14 @@ public final class ProtoMessage {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private DiplomacyGymResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -949,6 +904,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
               int rawValue = input.readEnum();
 
@@ -981,13 +942,6 @@ public final class ProtoMessage {
 
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -996,7 +950,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -1005,7 +958,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymResponse_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymResponse_fieldAccessorTable
@@ -1132,16 +1084,15 @@ public final class ProtoMessage {
     public static final int TYPE_FIELD_NUMBER = 1;
     private int type_;
     /**
-     * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
      */
     public int getTypeValue() {
       return type_;
     }
     /**
-     * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
      */
     public cruz.agents.ProtoMessage.DiplomacyGymResponse.Type getType() {
-      @SuppressWarnings("deprecation")
       cruz.agents.ProtoMessage.DiplomacyGymResponse.Type result = cruz.agents.ProtoMessage.DiplomacyGymResponse.Type.valueOf(type_);
       return result == null ? cruz.agents.ProtoMessage.DiplomacyGymResponse.Type.UNRECOGNIZED : result;
     }
@@ -1153,7 +1104,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     public boolean hasDeal() {
       return deal_ != null;
@@ -1163,7 +1114,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     public cruz.agents.ProtoMessage.DealData getDeal() {
       return deal_ == null ? cruz.agents.ProtoMessage.DealData.getDefaultInstance() : deal_;
@@ -1173,7 +1124,7 @@ public final class ProtoMessage {
      * deal will be null if we're sending an acceptance
      * </pre>
      *
-     * <code>.dip_q.DealData deal = 2;</code>
+     * <code>optional .dip_q.DealData deal = 2;</code>
      */
     public cruz.agents.ProtoMessage.DealDataOrBuilder getDealOrBuilder() {
       return getDeal();
@@ -1186,7 +1137,7 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     public boolean hasAcceptance() {
       return acceptance_ != null;
@@ -1196,7 +1147,7 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     public cruz.agents.ProtoMessage.AcceptanceData getAcceptance() {
       return acceptance_ == null ? cruz.agents.ProtoMessage.AcceptanceData.getDefaultInstance() : acceptance_;
@@ -1206,14 +1157,13 @@ public final class ProtoMessage {
      * acceptance will be null if we're sending a deal 
      * </pre>
      *
-     * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+     * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
      */
     public cruz.agents.ProtoMessage.AcceptanceDataOrBuilder getAcceptanceOrBuilder() {
       return getAcceptance();
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1223,7 +1173,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (type_ != cruz.agents.ProtoMessage.DiplomacyGymResponse.Type.INVALID.getNumber()) {
@@ -1235,10 +1184,8 @@ public final class ProtoMessage {
       if (acceptance_ != null) {
         output.writeMessage(3, getAcceptance());
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -1256,11 +1203,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getAcceptance());
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1271,19 +1218,19 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.DiplomacyGymResponse other = (cruz.agents.ProtoMessage.DiplomacyGymResponse) obj;
 
-      if (type_ != other.type_) return false;
-      if (hasDeal() != other.hasDeal()) return false;
+      boolean result = true;
+      result = result && type_ == other.type_;
+      result = result && (hasDeal() == other.hasDeal());
       if (hasDeal()) {
-        if (!getDeal()
-            .equals(other.getDeal())) return false;
+        result = result && getDeal()
+            .equals(other.getDeal());
       }
-      if (hasAcceptance() != other.hasAcceptance()) return false;
+      result = result && (hasAcceptance() == other.hasAcceptance());
       if (hasAcceptance()) {
-        if (!getAcceptance()
-            .equals(other.getAcceptance())) return false;
+        result = result && getAcceptance()
+            .equals(other.getAcceptance());
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return result;
     }
 
     @java.lang.Override
@@ -1292,7 +1239,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + type_;
       if (hasDeal()) {
@@ -1308,17 +1255,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.DiplomacyGymResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.DiplomacyGymResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.DiplomacyGymResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1378,7 +1314,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -1386,7 +1321,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.DiplomacyGymResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -1410,7 +1344,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymResponse_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymResponse_fieldAccessorTable
@@ -1433,7 +1366,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         type_ = 0;
@@ -1453,18 +1385,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymResponse_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymResponse getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.DiplomacyGymResponse.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymResponse build() {
         cruz.agents.ProtoMessage.DiplomacyGymResponse result = buildPartial();
         if (!result.isInitialized()) {
@@ -1473,7 +1402,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymResponse buildPartial() {
         cruz.agents.ProtoMessage.DiplomacyGymResponse result = new cruz.agents.ProtoMessage.DiplomacyGymResponse(this);
         result.type_ = type_;
@@ -1491,39 +1419,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.DiplomacyGymResponse) {
           return mergeFrom((cruz.agents.ProtoMessage.DiplomacyGymResponse)other);
@@ -1544,17 +1465,14 @@ public final class ProtoMessage {
         if (other.hasAcceptance()) {
           mergeAcceptance(other.getAcceptance());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1575,13 +1493,13 @@ public final class ProtoMessage {
 
       private int type_ = 0;
       /**
-       * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
        */
       public int getTypeValue() {
         return type_;
       }
       /**
-       * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
        */
       public Builder setTypeValue(int value) {
         type_ = value;
@@ -1589,15 +1507,14 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
        */
       public cruz.agents.ProtoMessage.DiplomacyGymResponse.Type getType() {
-        @SuppressWarnings("deprecation")
         cruz.agents.ProtoMessage.DiplomacyGymResponse.Type result = cruz.agents.ProtoMessage.DiplomacyGymResponse.Type.valueOf(type_);
         return result == null ? cruz.agents.ProtoMessage.DiplomacyGymResponse.Type.UNRECOGNIZED : result;
       }
       /**
-       * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
        */
       public Builder setType(cruz.agents.ProtoMessage.DiplomacyGymResponse.Type value) {
         if (value == null) {
@@ -1609,7 +1526,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.DiplomacyGymResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymResponse.Type type = 1;</code>
        */
       public Builder clearType() {
         
@@ -1618,7 +1535,7 @@ public final class ProtoMessage {
         return this;
       }
 
-      private cruz.agents.ProtoMessage.DealData deal_;
+      private cruz.agents.ProtoMessage.DealData deal_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData, cruz.agents.ProtoMessage.DealData.Builder, cruz.agents.ProtoMessage.DealDataOrBuilder> dealBuilder_;
       /**
@@ -1626,7 +1543,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public boolean hasDeal() {
         return dealBuilder_ != null || deal_ != null;
@@ -1636,7 +1553,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealData getDeal() {
         if (dealBuilder_ == null) {
@@ -1650,7 +1567,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public Builder setDeal(cruz.agents.ProtoMessage.DealData value) {
         if (dealBuilder_ == null) {
@@ -1670,7 +1587,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public Builder setDeal(
           cruz.agents.ProtoMessage.DealData.Builder builderForValue) {
@@ -1688,7 +1605,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public Builder mergeDeal(cruz.agents.ProtoMessage.DealData value) {
         if (dealBuilder_ == null) {
@@ -1710,7 +1627,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public Builder clearDeal() {
         if (dealBuilder_ == null) {
@@ -1728,7 +1645,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealData.Builder getDealBuilder() {
         
@@ -1740,7 +1657,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealDataOrBuilder getDealOrBuilder() {
         if (dealBuilder_ != null) {
@@ -1755,7 +1672,7 @@ public final class ProtoMessage {
        * deal will be null if we're sending an acceptance
        * </pre>
        *
-       * <code>.dip_q.DealData deal = 2;</code>
+       * <code>optional .dip_q.DealData deal = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData, cruz.agents.ProtoMessage.DealData.Builder, cruz.agents.ProtoMessage.DealDataOrBuilder> 
@@ -1771,7 +1688,7 @@ public final class ProtoMessage {
         return dealBuilder_;
       }
 
-      private cruz.agents.ProtoMessage.AcceptanceData acceptance_;
+      private cruz.agents.ProtoMessage.AcceptanceData acceptance_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.AcceptanceData, cruz.agents.ProtoMessage.AcceptanceData.Builder, cruz.agents.ProtoMessage.AcceptanceDataOrBuilder> acceptanceBuilder_;
       /**
@@ -1779,7 +1696,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public boolean hasAcceptance() {
         return acceptanceBuilder_ != null || acceptance_ != null;
@@ -1789,7 +1706,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public cruz.agents.ProtoMessage.AcceptanceData getAcceptance() {
         if (acceptanceBuilder_ == null) {
@@ -1803,7 +1720,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public Builder setAcceptance(cruz.agents.ProtoMessage.AcceptanceData value) {
         if (acceptanceBuilder_ == null) {
@@ -1823,7 +1740,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public Builder setAcceptance(
           cruz.agents.ProtoMessage.AcceptanceData.Builder builderForValue) {
@@ -1841,7 +1758,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public Builder mergeAcceptance(cruz.agents.ProtoMessage.AcceptanceData value) {
         if (acceptanceBuilder_ == null) {
@@ -1863,7 +1780,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public Builder clearAcceptance() {
         if (acceptanceBuilder_ == null) {
@@ -1881,7 +1798,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public cruz.agents.ProtoMessage.AcceptanceData.Builder getAcceptanceBuilder() {
         
@@ -1893,7 +1810,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       public cruz.agents.ProtoMessage.AcceptanceDataOrBuilder getAcceptanceOrBuilder() {
         if (acceptanceBuilder_ != null) {
@@ -1908,7 +1825,7 @@ public final class ProtoMessage {
        * acceptance will be null if we're sending a deal 
        * </pre>
        *
-       * <code>.dip_q.AcceptanceData acceptance = 3;</code>
+       * <code>optional .dip_q.AcceptanceData acceptance = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.AcceptanceData, cruz.agents.ProtoMessage.AcceptanceData.Builder, cruz.agents.ProtoMessage.AcceptanceDataOrBuilder> 
@@ -1923,16 +1840,14 @@ public final class ProtoMessage {
         }
         return acceptanceBuilder_;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -1951,12 +1866,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<DiplomacyGymResponse>
         PARSER = new com.google.protobuf.AbstractParser<DiplomacyGymResponse>() {
-      @java.lang.Override
       public DiplomacyGymResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DiplomacyGymResponse(input, extensionRegistry);
+          return new DiplomacyGymResponse(input, extensionRegistry);
       }
     };
 
@@ -1969,7 +1883,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.DiplomacyGymResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -1981,24 +1894,24 @@ public final class ProtoMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
      */
     int getTypeValue();
     /**
-     * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
      */
     cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type getType();
 
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     boolean hasOrders();
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     cruz.agents.ProtoMessage.OrdersData getOrders();
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     cruz.agents.ProtoMessage.OrdersDataOrBuilder getOrdersOrBuilder();
   }
@@ -2009,7 +1922,6 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.DiplomacyGymOrdersResponse)
       DiplomacyGymOrdersResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use DiplomacyGymOrdersResponse.newBuilder() to construct.
     private DiplomacyGymOrdersResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2021,19 +1933,14 @@ public final class ProtoMessage {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private DiplomacyGymOrdersResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2042,6 +1949,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
               int rawValue = input.readEnum();
 
@@ -2061,13 +1974,6 @@ public final class ProtoMessage {
 
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2076,7 +1982,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -2085,7 +1990,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymOrdersResponse_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymOrdersResponse_fieldAccessorTable
@@ -2194,16 +2098,15 @@ public final class ProtoMessage {
     public static final int TYPE_FIELD_NUMBER = 1;
     private int type_;
     /**
-     * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
      */
     public int getTypeValue() {
       return type_;
     }
     /**
-     * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+     * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
      */
     public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type getType() {
-      @SuppressWarnings("deprecation")
       cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type result = cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type.valueOf(type_);
       return result == null ? cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type.UNRECOGNIZED : result;
     }
@@ -2211,26 +2114,25 @@ public final class ProtoMessage {
     public static final int ORDERS_FIELD_NUMBER = 2;
     private cruz.agents.ProtoMessage.OrdersData orders_;
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     public boolean hasOrders() {
       return orders_ != null;
     }
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     public cruz.agents.ProtoMessage.OrdersData getOrders() {
       return orders_ == null ? cruz.agents.ProtoMessage.OrdersData.getDefaultInstance() : orders_;
     }
     /**
-     * <code>.dip_q.OrdersData orders = 2;</code>
+     * <code>optional .dip_q.OrdersData orders = 2;</code>
      */
     public cruz.agents.ProtoMessage.OrdersDataOrBuilder getOrdersOrBuilder() {
       return getOrders();
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -2240,7 +2142,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (type_ != cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type.INVALID.getNumber()) {
@@ -2249,10 +2150,8 @@ public final class ProtoMessage {
       if (orders_ != null) {
         output.writeMessage(2, getOrders());
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -2266,11 +2165,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getOrders());
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2281,14 +2180,14 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse other = (cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse) obj;
 
-      if (type_ != other.type_) return false;
-      if (hasOrders() != other.hasOrders()) return false;
+      boolean result = true;
+      result = result && type_ == other.type_;
+      result = result && (hasOrders() == other.hasOrders());
       if (hasOrders()) {
-        if (!getOrders()
-            .equals(other.getOrders())) return false;
+        result = result && getOrders()
+            .equals(other.getOrders());
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return result;
     }
 
     @java.lang.Override
@@ -2297,7 +2196,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + type_;
       if (hasOrders()) {
@@ -2309,17 +2208,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -2379,7 +2267,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -2387,7 +2274,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -2411,7 +2297,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymOrdersResponse_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymOrdersResponse_fieldAccessorTable
@@ -2434,7 +2319,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         type_ = 0;
@@ -2448,18 +2332,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DiplomacyGymOrdersResponse_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse build() {
         cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse result = buildPartial();
         if (!result.isInitialized()) {
@@ -2468,7 +2349,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse buildPartial() {
         cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse result = new cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse(this);
         result.type_ = type_;
@@ -2481,39 +2361,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse) {
           return mergeFrom((cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse)other);
@@ -2531,17 +2404,14 @@ public final class ProtoMessage {
         if (other.hasOrders()) {
           mergeOrders(other.getOrders());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2562,13 +2432,13 @@ public final class ProtoMessage {
 
       private int type_ = 0;
       /**
-       * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
        */
       public int getTypeValue() {
         return type_;
       }
       /**
-       * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
        */
       public Builder setTypeValue(int value) {
         type_ = value;
@@ -2576,15 +2446,14 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
        */
       public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type getType() {
-        @SuppressWarnings("deprecation")
         cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type result = cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type.valueOf(type_);
         return result == null ? cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type.UNRECOGNIZED : result;
       }
       /**
-       * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
        */
       public Builder setType(cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse.Type value) {
         if (value == null) {
@@ -2596,7 +2465,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
+       * <code>optional .dip_q.DiplomacyGymOrdersResponse.Type type = 1;</code>
        */
       public Builder clearType() {
         
@@ -2605,17 +2474,17 @@ public final class ProtoMessage {
         return this;
       }
 
-      private cruz.agents.ProtoMessage.OrdersData orders_;
+      private cruz.agents.ProtoMessage.OrdersData orders_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.OrdersData, cruz.agents.ProtoMessage.OrdersData.Builder, cruz.agents.ProtoMessage.OrdersDataOrBuilder> ordersBuilder_;
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public boolean hasOrders() {
         return ordersBuilder_ != null || orders_ != null;
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public cruz.agents.ProtoMessage.OrdersData getOrders() {
         if (ordersBuilder_ == null) {
@@ -2625,7 +2494,7 @@ public final class ProtoMessage {
         }
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public Builder setOrders(cruz.agents.ProtoMessage.OrdersData value) {
         if (ordersBuilder_ == null) {
@@ -2641,7 +2510,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public Builder setOrders(
           cruz.agents.ProtoMessage.OrdersData.Builder builderForValue) {
@@ -2655,7 +2524,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public Builder mergeOrders(cruz.agents.ProtoMessage.OrdersData value) {
         if (ordersBuilder_ == null) {
@@ -2673,7 +2542,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public Builder clearOrders() {
         if (ordersBuilder_ == null) {
@@ -2687,7 +2556,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public cruz.agents.ProtoMessage.OrdersData.Builder getOrdersBuilder() {
         
@@ -2695,7 +2564,7 @@ public final class ProtoMessage {
         return getOrdersFieldBuilder().getBuilder();
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       public cruz.agents.ProtoMessage.OrdersDataOrBuilder getOrdersOrBuilder() {
         if (ordersBuilder_ != null) {
@@ -2706,7 +2575,7 @@ public final class ProtoMessage {
         }
       }
       /**
-       * <code>.dip_q.OrdersData orders = 2;</code>
+       * <code>optional .dip_q.OrdersData orders = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.OrdersData, cruz.agents.ProtoMessage.OrdersData.Builder, cruz.agents.ProtoMessage.OrdersDataOrBuilder> 
@@ -2721,16 +2590,14 @@ public final class ProtoMessage {
         }
         return ordersBuilder_;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -2749,12 +2616,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<DiplomacyGymOrdersResponse>
         PARSER = new com.google.protobuf.AbstractParser<DiplomacyGymOrdersResponse>() {
-      @java.lang.Override
       public DiplomacyGymOrdersResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DiplomacyGymOrdersResponse(input, extensionRegistry);
+          return new DiplomacyGymOrdersResponse(input, extensionRegistry);
       }
     };
 
@@ -2767,7 +2633,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.DiplomacyGymOrdersResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -2783,7 +2648,7 @@ public final class ProtoMessage {
      * The id of the province, which allows us to map a certain action to a province.
      * </pre>
      *
-     * <code>int32 id = 1;</code>
+     * <code>optional int32 id = 1;</code>
      */
     int getId();
 
@@ -2792,7 +2657,7 @@ public final class ProtoMessage {
      * An integer which is the ID of the player owning the province.
      * </pre>
      *
-     * <code>int32 owner = 2;</code>
+     * <code>optional int32 owner = 2;</code>
      */
     int getOwner();
 
@@ -2801,7 +2666,7 @@ public final class ProtoMessage {
      * Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
      * </pre>
      *
-     * <code>int32 sc = 3;</code>
+     * <code>optional int32 sc = 3;</code>
      */
     int getSc();
 
@@ -2810,7 +2675,7 @@ public final class ProtoMessage {
      * An integer which is the ID of the player controlling the province, the owner of the unit in the province.
      * </pre>
      *
-     * <code>int32 unit = 4;</code>
+     * <code>optional int32 unit = 4;</code>
      */
     int getUnit();
   }
@@ -2821,30 +2686,28 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.ProvinceData)
       ProvinceDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use ProvinceData.newBuilder() to construct.
     private ProvinceData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private ProvinceData() {
+      id_ = 0;
+      owner_ = 0;
+      sc_ = 0;
+      unit_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private ProvinceData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2853,6 +2716,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
 
               id_ = input.readInt32();
@@ -2873,13 +2742,6 @@ public final class ProtoMessage {
               unit_ = input.readInt32();
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2888,7 +2750,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -2897,7 +2758,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_ProvinceData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_ProvinceData_fieldAccessorTable
@@ -2912,7 +2772,7 @@ public final class ProtoMessage {
      * The id of the province, which allows us to map a certain action to a province.
      * </pre>
      *
-     * <code>int32 id = 1;</code>
+     * <code>optional int32 id = 1;</code>
      */
     public int getId() {
       return id_;
@@ -2925,7 +2785,7 @@ public final class ProtoMessage {
      * An integer which is the ID of the player owning the province.
      * </pre>
      *
-     * <code>int32 owner = 2;</code>
+     * <code>optional int32 owner = 2;</code>
      */
     public int getOwner() {
       return owner_;
@@ -2938,7 +2798,7 @@ public final class ProtoMessage {
      * Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
      * </pre>
      *
-     * <code>int32 sc = 3;</code>
+     * <code>optional int32 sc = 3;</code>
      */
     public int getSc() {
       return sc_;
@@ -2951,14 +2811,13 @@ public final class ProtoMessage {
      * An integer which is the ID of the player controlling the province, the owner of the unit in the province.
      * </pre>
      *
-     * <code>int32 unit = 4;</code>
+     * <code>optional int32 unit = 4;</code>
      */
     public int getUnit() {
       return unit_;
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -2968,7 +2827,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (id_ != 0) {
@@ -2983,10 +2841,8 @@ public final class ProtoMessage {
       if (unit_ != 0) {
         output.writeInt32(4, unit_);
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -3008,11 +2864,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, unit_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -3023,16 +2879,16 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.ProvinceData other = (cruz.agents.ProtoMessage.ProvinceData) obj;
 
-      if (getId()
-          != other.getId()) return false;
-      if (getOwner()
-          != other.getOwner()) return false;
-      if (getSc()
-          != other.getSc()) return false;
-      if (getUnit()
-          != other.getUnit()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      boolean result = true;
+      result = result && (getId()
+          == other.getId());
+      result = result && (getOwner()
+          == other.getOwner());
+      result = result && (getSc()
+          == other.getSc());
+      result = result && (getUnit()
+          == other.getUnit());
+      return result;
     }
 
     @java.lang.Override
@@ -3041,7 +2897,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + ID_FIELD_NUMBER;
       hash = (53 * hash) + getId();
       hash = (37 * hash) + OWNER_FIELD_NUMBER;
@@ -3055,17 +2911,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.ProvinceData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.ProvinceData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.ProvinceData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -3125,7 +2970,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -3133,7 +2977,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.ProvinceData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -3157,7 +3000,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ProvinceData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ProvinceData_fieldAccessorTable
@@ -3180,7 +3022,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         id_ = 0;
@@ -3194,18 +3035,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ProvinceData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ProvinceData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.ProvinceData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ProvinceData build() {
         cruz.agents.ProtoMessage.ProvinceData result = buildPartial();
         if (!result.isInitialized()) {
@@ -3214,7 +3052,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ProvinceData buildPartial() {
         cruz.agents.ProtoMessage.ProvinceData result = new cruz.agents.ProtoMessage.ProvinceData(this);
         result.id_ = id_;
@@ -3225,39 +3062,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.ProvinceData) {
           return mergeFrom((cruz.agents.ProtoMessage.ProvinceData)other);
@@ -3281,17 +3111,14 @@ public final class ProtoMessage {
         if (other.getUnit() != 0) {
           setUnit(other.getUnit());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3316,7 +3143,7 @@ public final class ProtoMessage {
        * The id of the province, which allows us to map a certain action to a province.
        * </pre>
        *
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
        */
       public int getId() {
         return id_;
@@ -3326,7 +3153,7 @@ public final class ProtoMessage {
        * The id of the province, which allows us to map a certain action to a province.
        * </pre>
        *
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
        */
       public Builder setId(int value) {
         
@@ -3339,7 +3166,7 @@ public final class ProtoMessage {
        * The id of the province, which allows us to map a certain action to a province.
        * </pre>
        *
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
        */
       public Builder clearId() {
         
@@ -3354,7 +3181,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player owning the province.
        * </pre>
        *
-       * <code>int32 owner = 2;</code>
+       * <code>optional int32 owner = 2;</code>
        */
       public int getOwner() {
         return owner_;
@@ -3364,7 +3191,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player owning the province.
        * </pre>
        *
-       * <code>int32 owner = 2;</code>
+       * <code>optional int32 owner = 2;</code>
        */
       public Builder setOwner(int value) {
         
@@ -3377,7 +3204,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player owning the province.
        * </pre>
        *
-       * <code>int32 owner = 2;</code>
+       * <code>optional int32 owner = 2;</code>
        */
       public Builder clearOwner() {
         
@@ -3392,7 +3219,7 @@ public final class ProtoMessage {
        * Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
        * </pre>
        *
-       * <code>int32 sc = 3;</code>
+       * <code>optional int32 sc = 3;</code>
        */
       public int getSc() {
         return sc_;
@@ -3402,7 +3229,7 @@ public final class ProtoMessage {
        * Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
        * </pre>
        *
-       * <code>int32 sc = 3;</code>
+       * <code>optional int32 sc = 3;</code>
        */
       public Builder setSc(int value) {
         
@@ -3415,7 +3242,7 @@ public final class ProtoMessage {
        * Works like a boolean. 0 if province does not have a supply center (sc). 1 if it does.
        * </pre>
        *
-       * <code>int32 sc = 3;</code>
+       * <code>optional int32 sc = 3;</code>
        */
       public Builder clearSc() {
         
@@ -3430,7 +3257,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player controlling the province, the owner of the unit in the province.
        * </pre>
        *
-       * <code>int32 unit = 4;</code>
+       * <code>optional int32 unit = 4;</code>
        */
       public int getUnit() {
         return unit_;
@@ -3440,7 +3267,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player controlling the province, the owner of the unit in the province.
        * </pre>
        *
-       * <code>int32 unit = 4;</code>
+       * <code>optional int32 unit = 4;</code>
        */
       public Builder setUnit(int value) {
         
@@ -3453,7 +3280,7 @@ public final class ProtoMessage {
        * An integer which is the ID of the player controlling the province, the owner of the unit in the province.
        * </pre>
        *
-       * <code>int32 unit = 4;</code>
+       * <code>optional int32 unit = 4;</code>
        */
       public Builder clearUnit() {
         
@@ -3461,16 +3288,14 @@ public final class ProtoMessage {
         onChanged();
         return this;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -3489,12 +3314,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<ProvinceData>
         PARSER = new com.google.protobuf.AbstractParser<ProvinceData>() {
-      @java.lang.Override
       public ProvinceData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ProvinceData(input, extensionRegistry);
+          return new ProvinceData(input, extensionRegistry);
       }
     };
 
@@ -3507,7 +3331,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.ProvinceData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -3567,7 +3390,7 @@ public final class ProtoMessage {
      * The value of the reward gained by the previous action.
      * </pre>
      *
-     * <code>float previousActionReward = 2;</code>
+     * <code>optional float previousActionReward = 2;</code>
      */
     float getPreviousActionReward();
 
@@ -3576,7 +3399,7 @@ public final class ProtoMessage {
      * A boolean representing whether a game has finished or not.
      * </pre>
      *
-     * <code>bool done = 3;</code>
+     * <code>optional bool done = 3;</code>
      */
     boolean getDone();
 
@@ -3585,7 +3408,7 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>string info = 4;</code>
+     * <code>optional string info = 4;</code>
      */
     java.lang.String getInfo();
     /**
@@ -3593,13 +3416,13 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>string info = 4;</code>
+     * <code>optional string info = 4;</code>
      */
     com.google.protobuf.ByteString
         getInfoBytes();
 
     /**
-     * <code>int32 player = 5;</code>
+     * <code>optional int32 player = 5;</code>
      */
     int getPlayer();
   }
@@ -3610,32 +3433,29 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.ObservationData)
       ObservationDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use ObservationData.newBuilder() to construct.
     private ObservationData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private ObservationData() {
       provinces_ = java.util.Collections.emptyList();
+      previousActionReward_ = 0F;
+      done_ = false;
       info_ = "";
+      player_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private ObservationData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -3644,8 +3464,14 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 provinces_ = new java.util.ArrayList<cruz.agents.ProtoMessage.ProvinceData>();
                 mutable_bitField0_ |= 0x00000001;
               }
@@ -3674,13 +3500,6 @@ public final class ProtoMessage {
               player_ = input.readInt32();
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3689,10 +3508,9 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           provinces_ = java.util.Collections.unmodifiableList(provinces_);
         }
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -3701,7 +3519,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_ObservationData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_ObservationData_fieldAccessorTable
@@ -3772,7 +3589,7 @@ public final class ProtoMessage {
      * The value of the reward gained by the previous action.
      * </pre>
      *
-     * <code>float previousActionReward = 2;</code>
+     * <code>optional float previousActionReward = 2;</code>
      */
     public float getPreviousActionReward() {
       return previousActionReward_;
@@ -3785,7 +3602,7 @@ public final class ProtoMessage {
      * A boolean representing whether a game has finished or not.
      * </pre>
      *
-     * <code>bool done = 3;</code>
+     * <code>optional bool done = 3;</code>
      */
     public boolean getDone() {
       return done_;
@@ -3798,7 +3615,7 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>string info = 4;</code>
+     * <code>optional string info = 4;</code>
      */
     public java.lang.String getInfo() {
       java.lang.Object ref = info_;
@@ -3817,7 +3634,7 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>string info = 4;</code>
+     * <code>optional string info = 4;</code>
      */
     public com.google.protobuf.ByteString
         getInfoBytes() {
@@ -3836,14 +3653,13 @@ public final class ProtoMessage {
     public static final int PLAYER_FIELD_NUMBER = 5;
     private int player_;
     /**
-     * <code>int32 player = 5;</code>
+     * <code>optional int32 player = 5;</code>
      */
     public int getPlayer() {
       return player_;
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -3853,7 +3669,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < provinces_.size(); i++) {
@@ -3871,10 +3686,8 @@ public final class ProtoMessage {
       if (player_ != 0) {
         output.writeInt32(5, player_);
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -3899,11 +3712,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, player_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -3914,19 +3727,20 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.ObservationData other = (cruz.agents.ProtoMessage.ObservationData) obj;
 
-      if (!getProvincesList()
-          .equals(other.getProvincesList())) return false;
-      if (java.lang.Float.floatToIntBits(getPreviousActionReward())
-          != java.lang.Float.floatToIntBits(
-              other.getPreviousActionReward())) return false;
-      if (getDone()
-          != other.getDone()) return false;
-      if (!getInfo()
-          .equals(other.getInfo())) return false;
-      if (getPlayer()
-          != other.getPlayer()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      boolean result = true;
+      result = result && getProvincesList()
+          .equals(other.getProvincesList());
+      result = result && (
+          java.lang.Float.floatToIntBits(getPreviousActionReward())
+          == java.lang.Float.floatToIntBits(
+              other.getPreviousActionReward()));
+      result = result && (getDone()
+          == other.getDone());
+      result = result && getInfo()
+          .equals(other.getInfo());
+      result = result && (getPlayer()
+          == other.getPlayer());
+      return result;
     }
 
     @java.lang.Override
@@ -3935,7 +3749,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       if (getProvincesCount() > 0) {
         hash = (37 * hash) + PROVINCES_FIELD_NUMBER;
         hash = (53 * hash) + getProvincesList().hashCode();
@@ -3955,17 +3769,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.ObservationData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.ObservationData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.ObservationData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -4025,7 +3828,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -4033,7 +3835,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.ObservationData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -4057,7 +3858,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ObservationData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ObservationData_fieldAccessorTable
@@ -4081,7 +3881,6 @@ public final class ProtoMessage {
           getProvincesFieldBuilder();
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (provincesBuilder_ == null) {
@@ -4101,18 +3900,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_ObservationData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ObservationData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.ObservationData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ObservationData build() {
         cruz.agents.ProtoMessage.ObservationData result = buildPartial();
         if (!result.isInitialized()) {
@@ -4121,13 +3917,12 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.ObservationData buildPartial() {
         cruz.agents.ProtoMessage.ObservationData result = new cruz.agents.ProtoMessage.ObservationData(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (provincesBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
             provinces_ = java.util.Collections.unmodifiableList(provinces_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
@@ -4144,39 +3939,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.ObservationData) {
           return mergeFrom((cruz.agents.ProtoMessage.ObservationData)other);
@@ -4227,17 +4015,14 @@ public final class ProtoMessage {
         if (other.getPlayer() != 0) {
           setPlayer(other.getPlayer());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4260,7 +4045,7 @@ public final class ProtoMessage {
       private java.util.List<cruz.agents.ProtoMessage.ProvinceData> provinces_ =
         java.util.Collections.emptyList();
       private void ensureProvincesIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           provinces_ = new java.util.ArrayList<cruz.agents.ProtoMessage.ProvinceData>(provinces_);
           bitField0_ |= 0x00000001;
          }
@@ -4561,7 +4346,7 @@ public final class ProtoMessage {
           provincesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               cruz.agents.ProtoMessage.ProvinceData, cruz.agents.ProtoMessage.ProvinceData.Builder, cruz.agents.ProtoMessage.ProvinceDataOrBuilder>(
                   provinces_,
-                  ((bitField0_ & 0x00000001) != 0),
+                  ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
           provinces_ = null;
@@ -4575,7 +4360,7 @@ public final class ProtoMessage {
        * The value of the reward gained by the previous action.
        * </pre>
        *
-       * <code>float previousActionReward = 2;</code>
+       * <code>optional float previousActionReward = 2;</code>
        */
       public float getPreviousActionReward() {
         return previousActionReward_;
@@ -4585,7 +4370,7 @@ public final class ProtoMessage {
        * The value of the reward gained by the previous action.
        * </pre>
        *
-       * <code>float previousActionReward = 2;</code>
+       * <code>optional float previousActionReward = 2;</code>
        */
       public Builder setPreviousActionReward(float value) {
         
@@ -4598,7 +4383,7 @@ public final class ProtoMessage {
        * The value of the reward gained by the previous action.
        * </pre>
        *
-       * <code>float previousActionReward = 2;</code>
+       * <code>optional float previousActionReward = 2;</code>
        */
       public Builder clearPreviousActionReward() {
         
@@ -4613,7 +4398,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>bool done = 3;</code>
+       * <code>optional bool done = 3;</code>
        */
       public boolean getDone() {
         return done_;
@@ -4623,7 +4408,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>bool done = 3;</code>
+       * <code>optional bool done = 3;</code>
        */
       public Builder setDone(boolean value) {
         
@@ -4636,7 +4421,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>bool done = 3;</code>
+       * <code>optional bool done = 3;</code>
        */
       public Builder clearDone() {
         
@@ -4651,7 +4436,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>string info = 4;</code>
+       * <code>optional string info = 4;</code>
        */
       public java.lang.String getInfo() {
         java.lang.Object ref = info_;
@@ -4670,7 +4455,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>string info = 4;</code>
+       * <code>optional string info = 4;</code>
        */
       public com.google.protobuf.ByteString
           getInfoBytes() {
@@ -4690,7 +4475,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>string info = 4;</code>
+       * <code>optional string info = 4;</code>
        */
       public Builder setInfo(
           java.lang.String value) {
@@ -4707,7 +4492,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>string info = 4;</code>
+       * <code>optional string info = 4;</code>
        */
       public Builder clearInfo() {
         
@@ -4720,7 +4505,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>string info = 4;</code>
+       * <code>optional string info = 4;</code>
        */
       public Builder setInfoBytes(
           com.google.protobuf.ByteString value) {
@@ -4736,13 +4521,13 @@ public final class ProtoMessage {
 
       private int player_ ;
       /**
-       * <code>int32 player = 5;</code>
+       * <code>optional int32 player = 5;</code>
        */
       public int getPlayer() {
         return player_;
       }
       /**
-       * <code>int32 player = 5;</code>
+       * <code>optional int32 player = 5;</code>
        */
       public Builder setPlayer(int value) {
         
@@ -4751,7 +4536,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>int32 player = 5;</code>
+       * <code>optional int32 player = 5;</code>
        */
       public Builder clearPlayer() {
         
@@ -4759,16 +4544,14 @@ public final class ProtoMessage {
         onChanged();
         return this;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -4787,12 +4570,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<ObservationData>
         PARSER = new com.google.protobuf.AbstractParser<ObservationData>() {
-      @java.lang.Override
       public ObservationData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ObservationData(input, extensionRegistry);
+          return new ObservationData(input, extensionRegistry);
       }
     };
 
@@ -4805,7 +4587,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.ObservationData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -4827,7 +4608,6 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.AcceptanceData)
       AcceptanceDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use AcceptanceData.newBuilder() to construct.
     private AcceptanceData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -4838,18 +4618,13 @@ public final class ProtoMessage {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private AcceptanceData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -4859,8 +4634,7 @@ public final class ProtoMessage {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!input.skipField(tag)) {
                 done = true;
               }
               break;
@@ -4873,7 +4647,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -4882,7 +4655,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_AcceptanceData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_AcceptanceData_fieldAccessorTable
@@ -4891,7 +4663,6 @@ public final class ProtoMessage {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -4901,23 +4672,20 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -4928,8 +4696,8 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.AcceptanceData other = (cruz.agents.ProtoMessage.AcceptanceData) obj;
 
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      boolean result = true;
+      return result;
     }
 
     @java.lang.Override
@@ -4938,23 +4706,12 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.AcceptanceData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.AcceptanceData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.AcceptanceData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -5014,7 +4771,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -5022,7 +4778,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.AcceptanceData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -5050,7 +4805,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_AcceptanceData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_AcceptanceData_fieldAccessorTable
@@ -5073,24 +4827,20 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_AcceptanceData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.AcceptanceData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.AcceptanceData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.AcceptanceData build() {
         cruz.agents.ProtoMessage.AcceptanceData result = buildPartial();
         if (!result.isInitialized()) {
@@ -5099,46 +4849,38 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.AcceptanceData buildPartial() {
         cruz.agents.ProtoMessage.AcceptanceData result = new cruz.agents.ProtoMessage.AcceptanceData(this);
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.AcceptanceData) {
           return mergeFrom((cruz.agents.ProtoMessage.AcceptanceData)other);
@@ -5150,17 +4892,14 @@ public final class ProtoMessage {
 
       public Builder mergeFrom(cruz.agents.ProtoMessage.AcceptanceData other) {
         if (other == cruz.agents.ProtoMessage.AcceptanceData.getDefaultInstance()) return this;
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5178,16 +4917,14 @@ public final class ProtoMessage {
         }
         return this;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -5206,12 +4943,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<AcceptanceData>
         PARSER = new com.google.protobuf.AbstractParser<AcceptanceData>() {
-      @java.lang.Override
       public AcceptanceData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AcceptanceData(input, extensionRegistry);
+          return new AcceptanceData(input, extensionRegistry);
       }
     };
 
@@ -5224,7 +4960,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.AcceptanceData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -5240,7 +4975,7 @@ public final class ProtoMessage {
      * Power we will propose our deal to
      * </pre>
      *
-     * <code>int32 powerToPropose = 1;</code>
+     * <code>optional int32 powerToPropose = 1;</code>
      */
     int getPowerToPropose();
 
@@ -5249,7 +4984,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     boolean hasOurMove();
     /**
@@ -5257,7 +4992,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     cruz.agents.ProtoMessage.DealData.MTOOrderData getOurMove();
     /**
@@ -5265,7 +5000,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getOurMoveOrBuilder();
 
@@ -5274,7 +5009,7 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     boolean hasTheirMove();
     /**
@@ -5282,7 +5017,7 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     cruz.agents.ProtoMessage.DealData.MTOOrderData getTheirMove();
     /**
@@ -5290,7 +5025,7 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getTheirMoveOrBuilder();
   }
@@ -5301,30 +5036,25 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.DealData)
       DealDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use DealData.newBuilder() to construct.
     private DealData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private DealData() {
+      powerToPropose_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private DealData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -5333,6 +5063,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
 
               powerToPropose_ = input.readInt32();
@@ -5364,13 +5100,6 @@ public final class ProtoMessage {
 
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -5379,7 +5108,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -5388,7 +5116,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_fieldAccessorTable
@@ -5405,7 +5132,7 @@ public final class ProtoMessage {
        * Province to move units FROM
        * </pre>
        *
-       * <code>int32 startProvince = 1;</code>
+       * <code>optional int32 startProvince = 1;</code>
        */
       int getStartProvince();
 
@@ -5414,7 +5141,7 @@ public final class ProtoMessage {
        * Province to move units TO
        * </pre>
        *
-       * <code>int32 destinationProvince = 2;</code>
+       * <code>optional int32 destinationProvince = 2;</code>
        */
       int getDestinationProvince();
     }
@@ -5425,30 +5152,26 @@ public final class ProtoMessage {
         com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:dip_q.DealData.MTOOrderData)
         MTOOrderDataOrBuilder {
-    private static final long serialVersionUID = 0L;
       // Use MTOOrderData.newBuilder() to construct.
       private MTOOrderData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
       private MTOOrderData() {
+        startProvince_ = 0;
+        destinationProvince_ = 0;
       }
 
       @java.lang.Override
       public final com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
-        return this.unknownFields;
+        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
       private MTOOrderData(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
         int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
         try {
           boolean done = false;
           while (!done) {
@@ -5457,6 +5180,12 @@ public final class ProtoMessage {
               case 0:
                 done = true;
                 break;
+              default: {
+                if (!input.skipField(tag)) {
+                  done = true;
+                }
+                break;
+              }
               case 8: {
 
                 startProvince_ = input.readInt32();
@@ -5467,13 +5196,6 @@ public final class ProtoMessage {
                 destinationProvince_ = input.readInt32();
                 break;
               }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -5482,7 +5204,6 @@ public final class ProtoMessage {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
-          this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
       }
@@ -5491,7 +5212,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_MTOOrderData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_MTOOrderData_fieldAccessorTable
@@ -5506,7 +5226,7 @@ public final class ProtoMessage {
        * Province to move units FROM
        * </pre>
        *
-       * <code>int32 startProvince = 1;</code>
+       * <code>optional int32 startProvince = 1;</code>
        */
       public int getStartProvince() {
         return startProvince_;
@@ -5519,14 +5239,13 @@ public final class ProtoMessage {
        * Province to move units TO
        * </pre>
        *
-       * <code>int32 destinationProvince = 2;</code>
+       * <code>optional int32 destinationProvince = 2;</code>
        */
       public int getDestinationProvince() {
         return destinationProvince_;
       }
 
       private byte memoizedIsInitialized = -1;
-      @java.lang.Override
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
@@ -5536,7 +5255,6 @@ public final class ProtoMessage {
         return true;
       }
 
-      @java.lang.Override
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (startProvince_ != 0) {
@@ -5545,10 +5263,8 @@ public final class ProtoMessage {
         if (destinationProvince_ != 0) {
           output.writeInt32(2, destinationProvince_);
         }
-        unknownFields.writeTo(output);
       }
 
-      @java.lang.Override
       public int getSerializedSize() {
         int size = memoizedSize;
         if (size != -1) return size;
@@ -5562,11 +5278,11 @@ public final class ProtoMessage {
           size += com.google.protobuf.CodedOutputStream
             .computeInt32Size(2, destinationProvince_);
         }
-        size += unknownFields.getSerializedSize();
         memoizedSize = size;
         return size;
       }
 
+      private static final long serialVersionUID = 0L;
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
@@ -5577,12 +5293,12 @@ public final class ProtoMessage {
         }
         cruz.agents.ProtoMessage.DealData.MTOOrderData other = (cruz.agents.ProtoMessage.DealData.MTOOrderData) obj;
 
-        if (getStartProvince()
-            != other.getStartProvince()) return false;
-        if (getDestinationProvince()
-            != other.getDestinationProvince()) return false;
-        if (!unknownFields.equals(other.unknownFields)) return false;
-        return true;
+        boolean result = true;
+        result = result && (getStartProvince()
+            == other.getStartProvince());
+        result = result && (getDestinationProvince()
+            == other.getDestinationProvince());
+        return result;
       }
 
       @java.lang.Override
@@ -5591,7 +5307,7 @@ public final class ProtoMessage {
           return memoizedHashCode;
         }
         int hash = 41;
-        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (19 * hash) + getDescriptorForType().hashCode();
         hash = (37 * hash) + STARTPROVINCE_FIELD_NUMBER;
         hash = (53 * hash) + getStartProvince();
         hash = (37 * hash) + DESTINATIONPROVINCE_FIELD_NUMBER;
@@ -5601,17 +5317,6 @@ public final class ProtoMessage {
         return hash;
       }
 
-      public static cruz.agents.ProtoMessage.DealData.MTOOrderData parseFrom(
-          java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static cruz.agents.ProtoMessage.DealData.MTOOrderData parseFrom(
-          java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
       public static cruz.agents.ProtoMessage.DealData.MTOOrderData parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -5671,7 +5376,6 @@ public final class ProtoMessage {
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
-      @java.lang.Override
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
@@ -5679,7 +5383,6 @@ public final class ProtoMessage {
       public static Builder newBuilder(cruz.agents.ProtoMessage.DealData.MTOOrderData prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
-      @java.lang.Override
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE
             ? new Builder() : new Builder().mergeFrom(this);
@@ -5703,7 +5406,6 @@ public final class ProtoMessage {
           return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_MTOOrderData_descriptor;
         }
 
-        @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_MTOOrderData_fieldAccessorTable
@@ -5726,7 +5428,6 @@ public final class ProtoMessage {
                   .alwaysUseFieldBuilders) {
           }
         }
-        @java.lang.Override
         public Builder clear() {
           super.clear();
           startProvince_ = 0;
@@ -5736,18 +5437,15 @@ public final class ProtoMessage {
           return this;
         }
 
-        @java.lang.Override
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_MTOOrderData_descriptor;
         }
 
-        @java.lang.Override
         public cruz.agents.ProtoMessage.DealData.MTOOrderData getDefaultInstanceForType() {
           return cruz.agents.ProtoMessage.DealData.MTOOrderData.getDefaultInstance();
         }
 
-        @java.lang.Override
         public cruz.agents.ProtoMessage.DealData.MTOOrderData build() {
           cruz.agents.ProtoMessage.DealData.MTOOrderData result = buildPartial();
           if (!result.isInitialized()) {
@@ -5756,7 +5454,6 @@ public final class ProtoMessage {
           return result;
         }
 
-        @java.lang.Override
         public cruz.agents.ProtoMessage.DealData.MTOOrderData buildPartial() {
           cruz.agents.ProtoMessage.DealData.MTOOrderData result = new cruz.agents.ProtoMessage.DealData.MTOOrderData(this);
           result.startProvince_ = startProvince_;
@@ -5765,39 +5462,32 @@ public final class ProtoMessage {
           return result;
         }
 
-        @java.lang.Override
         public Builder clone() {
-          return super.clone();
+          return (Builder) super.clone();
         }
-        @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
-          return super.setField(field, value);
+            Object value) {
+          return (Builder) super.setField(field, value);
         }
-        @java.lang.Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return super.clearField(field);
+          return (Builder) super.clearField(field);
         }
-        @java.lang.Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return super.clearOneof(oneof);
+          return (Builder) super.clearOneof(oneof);
         }
-        @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
-            int index, java.lang.Object value) {
-          return super.setRepeatedField(field, index, value);
+            int index, Object value) {
+          return (Builder) super.setRepeatedField(field, index, value);
         }
-        @java.lang.Override
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
-          return super.addRepeatedField(field, value);
+            Object value) {
+          return (Builder) super.addRepeatedField(field, value);
         }
-        @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof cruz.agents.ProtoMessage.DealData.MTOOrderData) {
             return mergeFrom((cruz.agents.ProtoMessage.DealData.MTOOrderData)other);
@@ -5815,17 +5505,14 @@ public final class ProtoMessage {
           if (other.getDestinationProvince() != 0) {
             setDestinationProvince(other.getDestinationProvince());
           }
-          this.mergeUnknownFields(other.unknownFields);
           onChanged();
           return this;
         }
 
-        @java.lang.Override
         public final boolean isInitialized() {
           return true;
         }
 
-        @java.lang.Override
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5850,7 +5537,7 @@ public final class ProtoMessage {
          * Province to move units FROM
          * </pre>
          *
-         * <code>int32 startProvince = 1;</code>
+         * <code>optional int32 startProvince = 1;</code>
          */
         public int getStartProvince() {
           return startProvince_;
@@ -5860,7 +5547,7 @@ public final class ProtoMessage {
          * Province to move units FROM
          * </pre>
          *
-         * <code>int32 startProvince = 1;</code>
+         * <code>optional int32 startProvince = 1;</code>
          */
         public Builder setStartProvince(int value) {
           
@@ -5873,7 +5560,7 @@ public final class ProtoMessage {
          * Province to move units FROM
          * </pre>
          *
-         * <code>int32 startProvince = 1;</code>
+         * <code>optional int32 startProvince = 1;</code>
          */
         public Builder clearStartProvince() {
           
@@ -5888,7 +5575,7 @@ public final class ProtoMessage {
          * Province to move units TO
          * </pre>
          *
-         * <code>int32 destinationProvince = 2;</code>
+         * <code>optional int32 destinationProvince = 2;</code>
          */
         public int getDestinationProvince() {
           return destinationProvince_;
@@ -5898,7 +5585,7 @@ public final class ProtoMessage {
          * Province to move units TO
          * </pre>
          *
-         * <code>int32 destinationProvince = 2;</code>
+         * <code>optional int32 destinationProvince = 2;</code>
          */
         public Builder setDestinationProvince(int value) {
           
@@ -5911,7 +5598,7 @@ public final class ProtoMessage {
          * Province to move units TO
          * </pre>
          *
-         * <code>int32 destinationProvince = 2;</code>
+         * <code>optional int32 destinationProvince = 2;</code>
          */
         public Builder clearDestinationProvince() {
           
@@ -5919,16 +5606,14 @@ public final class ProtoMessage {
           onChanged();
           return this;
         }
-        @java.lang.Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.setUnknownFields(unknownFields);
+          return this;
         }
 
-        @java.lang.Override
         public final Builder mergeUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.mergeUnknownFields(unknownFields);
+          return this;
         }
 
 
@@ -5947,12 +5632,11 @@ public final class ProtoMessage {
 
       private static final com.google.protobuf.Parser<MTOOrderData>
           PARSER = new com.google.protobuf.AbstractParser<MTOOrderData>() {
-        @java.lang.Override
         public MTOOrderData parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new MTOOrderData(input, extensionRegistry);
+            return new MTOOrderData(input, extensionRegistry);
         }
       };
 
@@ -5965,7 +5649,6 @@ public final class ProtoMessage {
         return PARSER;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DealData.MTOOrderData getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
@@ -5979,7 +5662,7 @@ public final class ProtoMessage {
      * Power we will propose our deal to
      * </pre>
      *
-     * <code>int32 powerToPropose = 1;</code>
+     * <code>optional int32 powerToPropose = 1;</code>
      */
     public int getPowerToPropose() {
       return powerToPropose_;
@@ -5992,7 +5675,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     public boolean hasOurMove() {
       return ourMove_ != null;
@@ -6002,7 +5685,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     public cruz.agents.ProtoMessage.DealData.MTOOrderData getOurMove() {
       return ourMove_ == null ? cruz.agents.ProtoMessage.DealData.MTOOrderData.getDefaultInstance() : ourMove_;
@@ -6012,7 +5695,7 @@ public final class ProtoMessage {
      * The Move order we propose to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
      */
     public cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getOurMoveOrBuilder() {
       return getOurMove();
@@ -6025,7 +5708,7 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     public boolean hasTheirMove() {
       return theirMove_ != null;
@@ -6035,7 +5718,7 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     public cruz.agents.ProtoMessage.DealData.MTOOrderData getTheirMove() {
       return theirMove_ == null ? cruz.agents.ProtoMessage.DealData.MTOOrderData.getDefaultInstance() : theirMove_;
@@ -6045,14 +5728,13 @@ public final class ProtoMessage {
      * The Move order we propose the other to execute
      * </pre>
      *
-     * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+     * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
      */
     public cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getTheirMoveOrBuilder() {
       return getTheirMove();
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -6062,7 +5744,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (powerToPropose_ != 0) {
@@ -6074,10 +5755,8 @@ public final class ProtoMessage {
       if (theirMove_ != null) {
         output.writeMessage(3, getTheirMove());
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -6095,11 +5774,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getTheirMove());
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -6110,20 +5789,20 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.DealData other = (cruz.agents.ProtoMessage.DealData) obj;
 
-      if (getPowerToPropose()
-          != other.getPowerToPropose()) return false;
-      if (hasOurMove() != other.hasOurMove()) return false;
+      boolean result = true;
+      result = result && (getPowerToPropose()
+          == other.getPowerToPropose());
+      result = result && (hasOurMove() == other.hasOurMove());
       if (hasOurMove()) {
-        if (!getOurMove()
-            .equals(other.getOurMove())) return false;
+        result = result && getOurMove()
+            .equals(other.getOurMove());
       }
-      if (hasTheirMove() != other.hasTheirMove()) return false;
+      result = result && (hasTheirMove() == other.hasTheirMove());
       if (hasTheirMove()) {
-        if (!getTheirMove()
-            .equals(other.getTheirMove())) return false;
+        result = result && getTheirMove()
+            .equals(other.getTheirMove());
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return result;
     }
 
     @java.lang.Override
@@ -6132,7 +5811,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + POWERTOPROPOSE_FIELD_NUMBER;
       hash = (53 * hash) + getPowerToPropose();
       if (hasOurMove()) {
@@ -6148,17 +5827,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.DealData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.DealData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.DealData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -6218,7 +5886,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -6226,7 +5893,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.DealData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -6250,7 +5916,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_fieldAccessorTable
@@ -6273,7 +5938,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         powerToPropose_ = 0;
@@ -6293,18 +5957,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_DealData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DealData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.DealData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DealData build() {
         cruz.agents.ProtoMessage.DealData result = buildPartial();
         if (!result.isInitialized()) {
@@ -6313,7 +5974,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.DealData buildPartial() {
         cruz.agents.ProtoMessage.DealData result = new cruz.agents.ProtoMessage.DealData(this);
         result.powerToPropose_ = powerToPropose_;
@@ -6331,39 +5991,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.DealData) {
           return mergeFrom((cruz.agents.ProtoMessage.DealData)other);
@@ -6384,17 +6037,14 @@ public final class ProtoMessage {
         if (other.hasTheirMove()) {
           mergeTheirMove(other.getTheirMove());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -6419,7 +6069,7 @@ public final class ProtoMessage {
        * Power we will propose our deal to
        * </pre>
        *
-       * <code>int32 powerToPropose = 1;</code>
+       * <code>optional int32 powerToPropose = 1;</code>
        */
       public int getPowerToPropose() {
         return powerToPropose_;
@@ -6429,7 +6079,7 @@ public final class ProtoMessage {
        * Power we will propose our deal to
        * </pre>
        *
-       * <code>int32 powerToPropose = 1;</code>
+       * <code>optional int32 powerToPropose = 1;</code>
        */
       public Builder setPowerToPropose(int value) {
         
@@ -6442,7 +6092,7 @@ public final class ProtoMessage {
        * Power we will propose our deal to
        * </pre>
        *
-       * <code>int32 powerToPropose = 1;</code>
+       * <code>optional int32 powerToPropose = 1;</code>
        */
       public Builder clearPowerToPropose() {
         
@@ -6451,7 +6101,7 @@ public final class ProtoMessage {
         return this;
       }
 
-      private cruz.agents.ProtoMessage.DealData.MTOOrderData ourMove_;
+      private cruz.agents.ProtoMessage.DealData.MTOOrderData ourMove_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData.MTOOrderData, cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder, cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder> ourMoveBuilder_;
       /**
@@ -6459,7 +6109,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public boolean hasOurMove() {
         return ourMoveBuilder_ != null || ourMove_ != null;
@@ -6469,7 +6119,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderData getOurMove() {
         if (ourMoveBuilder_ == null) {
@@ -6483,7 +6133,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public Builder setOurMove(cruz.agents.ProtoMessage.DealData.MTOOrderData value) {
         if (ourMoveBuilder_ == null) {
@@ -6503,7 +6153,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public Builder setOurMove(
           cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder builderForValue) {
@@ -6521,7 +6171,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public Builder mergeOurMove(cruz.agents.ProtoMessage.DealData.MTOOrderData value) {
         if (ourMoveBuilder_ == null) {
@@ -6543,7 +6193,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public Builder clearOurMove() {
         if (ourMoveBuilder_ == null) {
@@ -6561,7 +6211,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder getOurMoveBuilder() {
         
@@ -6573,7 +6223,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getOurMoveOrBuilder() {
         if (ourMoveBuilder_ != null) {
@@ -6588,7 +6238,7 @@ public final class ProtoMessage {
        * The Move order we propose to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData ourMove = 2;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData ourMove = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData.MTOOrderData, cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder, cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder> 
@@ -6604,7 +6254,7 @@ public final class ProtoMessage {
         return ourMoveBuilder_;
       }
 
-      private cruz.agents.ProtoMessage.DealData.MTOOrderData theirMove_;
+      private cruz.agents.ProtoMessage.DealData.MTOOrderData theirMove_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData.MTOOrderData, cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder, cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder> theirMoveBuilder_;
       /**
@@ -6612,7 +6262,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public boolean hasTheirMove() {
         return theirMoveBuilder_ != null || theirMove_ != null;
@@ -6622,7 +6272,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderData getTheirMove() {
         if (theirMoveBuilder_ == null) {
@@ -6636,7 +6286,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public Builder setTheirMove(cruz.agents.ProtoMessage.DealData.MTOOrderData value) {
         if (theirMoveBuilder_ == null) {
@@ -6656,7 +6306,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public Builder setTheirMove(
           cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder builderForValue) {
@@ -6674,7 +6324,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public Builder mergeTheirMove(cruz.agents.ProtoMessage.DealData.MTOOrderData value) {
         if (theirMoveBuilder_ == null) {
@@ -6696,7 +6346,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public Builder clearTheirMove() {
         if (theirMoveBuilder_ == null) {
@@ -6714,7 +6364,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder getTheirMoveBuilder() {
         
@@ -6726,7 +6376,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       public cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder getTheirMoveOrBuilder() {
         if (theirMoveBuilder_ != null) {
@@ -6741,7 +6391,7 @@ public final class ProtoMessage {
        * The Move order we propose the other to execute
        * </pre>
        *
-       * <code>.dip_q.DealData.MTOOrderData theirMove = 3;</code>
+       * <code>optional .dip_q.DealData.MTOOrderData theirMove = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           cruz.agents.ProtoMessage.DealData.MTOOrderData, cruz.agents.ProtoMessage.DealData.MTOOrderData.Builder, cruz.agents.ProtoMessage.DealData.MTOOrderDataOrBuilder> 
@@ -6756,16 +6406,14 @@ public final class ProtoMessage {
         }
         return theirMoveBuilder_;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -6784,12 +6432,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<DealData>
         PARSER = new com.google.protobuf.AbstractParser<DealData>() {
-      @java.lang.Override
       public DealData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DealData(input, extensionRegistry);
+          return new DealData(input, extensionRegistry);
       }
     };
 
@@ -6802,7 +6449,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.DealData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -6814,17 +6460,17 @@ public final class ProtoMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 start = 1;</code>
+     * <code>optional int32 start = 1;</code>
      */
     int getStart();
 
     /**
-     * <code>int32 action = 2;</code>
+     * <code>optional int32 action = 2;</code>
      */
     int getAction();
 
     /**
-     * <code>int32 destination = 3;</code>
+     * <code>optional int32 destination = 3;</code>
      */
     int getDestination();
   }
@@ -6835,30 +6481,27 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.OrderData)
       OrderDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use OrderData.newBuilder() to construct.
     private OrderData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private OrderData() {
+      start_ = 0;
+      action_ = 0;
+      destination_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private OrderData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -6867,6 +6510,12 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 8: {
 
               start_ = input.readInt32();
@@ -6882,13 +6531,6 @@ public final class ProtoMessage {
               destination_ = input.readInt32();
               break;
             }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -6897,7 +6539,6 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -6906,7 +6547,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_OrderData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_OrderData_fieldAccessorTable
@@ -6917,7 +6557,7 @@ public final class ProtoMessage {
     public static final int START_FIELD_NUMBER = 1;
     private int start_;
     /**
-     * <code>int32 start = 1;</code>
+     * <code>optional int32 start = 1;</code>
      */
     public int getStart() {
       return start_;
@@ -6926,7 +6566,7 @@ public final class ProtoMessage {
     public static final int ACTION_FIELD_NUMBER = 2;
     private int action_;
     /**
-     * <code>int32 action = 2;</code>
+     * <code>optional int32 action = 2;</code>
      */
     public int getAction() {
       return action_;
@@ -6935,14 +6575,13 @@ public final class ProtoMessage {
     public static final int DESTINATION_FIELD_NUMBER = 3;
     private int destination_;
     /**
-     * <code>int32 destination = 3;</code>
+     * <code>optional int32 destination = 3;</code>
      */
     public int getDestination() {
       return destination_;
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -6952,7 +6591,6 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (start_ != 0) {
@@ -6964,10 +6602,8 @@ public final class ProtoMessage {
       if (destination_ != 0) {
         output.writeInt32(3, destination_);
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -6985,11 +6621,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, destination_);
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -7000,14 +6636,14 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.OrderData other = (cruz.agents.ProtoMessage.OrderData) obj;
 
-      if (getStart()
-          != other.getStart()) return false;
-      if (getAction()
-          != other.getAction()) return false;
-      if (getDestination()
-          != other.getDestination()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      boolean result = true;
+      result = result && (getStart()
+          == other.getStart());
+      result = result && (getAction()
+          == other.getAction());
+      result = result && (getDestination()
+          == other.getDestination());
+      return result;
     }
 
     @java.lang.Override
@@ -7016,7 +6652,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + START_FIELD_NUMBER;
       hash = (53 * hash) + getStart();
       hash = (37 * hash) + ACTION_FIELD_NUMBER;
@@ -7028,17 +6664,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.OrderData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.OrderData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.OrderData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -7098,7 +6723,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -7106,7 +6730,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.OrderData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -7130,7 +6753,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrderData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrderData_fieldAccessorTable
@@ -7153,7 +6775,6 @@ public final class ProtoMessage {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         start_ = 0;
@@ -7165,18 +6786,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrderData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrderData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.OrderData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrderData build() {
         cruz.agents.ProtoMessage.OrderData result = buildPartial();
         if (!result.isInitialized()) {
@@ -7185,7 +6803,6 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrderData buildPartial() {
         cruz.agents.ProtoMessage.OrderData result = new cruz.agents.ProtoMessage.OrderData(this);
         result.start_ = start_;
@@ -7195,39 +6812,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.OrderData) {
           return mergeFrom((cruz.agents.ProtoMessage.OrderData)other);
@@ -7248,17 +6858,14 @@ public final class ProtoMessage {
         if (other.getDestination() != 0) {
           setDestination(other.getDestination());
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -7279,13 +6886,13 @@ public final class ProtoMessage {
 
       private int start_ ;
       /**
-       * <code>int32 start = 1;</code>
+       * <code>optional int32 start = 1;</code>
        */
       public int getStart() {
         return start_;
       }
       /**
-       * <code>int32 start = 1;</code>
+       * <code>optional int32 start = 1;</code>
        */
       public Builder setStart(int value) {
         
@@ -7294,7 +6901,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>int32 start = 1;</code>
+       * <code>optional int32 start = 1;</code>
        */
       public Builder clearStart() {
         
@@ -7305,13 +6912,13 @@ public final class ProtoMessage {
 
       private int action_ ;
       /**
-       * <code>int32 action = 2;</code>
+       * <code>optional int32 action = 2;</code>
        */
       public int getAction() {
         return action_;
       }
       /**
-       * <code>int32 action = 2;</code>
+       * <code>optional int32 action = 2;</code>
        */
       public Builder setAction(int value) {
         
@@ -7320,7 +6927,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>int32 action = 2;</code>
+       * <code>optional int32 action = 2;</code>
        */
       public Builder clearAction() {
         
@@ -7331,13 +6938,13 @@ public final class ProtoMessage {
 
       private int destination_ ;
       /**
-       * <code>int32 destination = 3;</code>
+       * <code>optional int32 destination = 3;</code>
        */
       public int getDestination() {
         return destination_;
       }
       /**
-       * <code>int32 destination = 3;</code>
+       * <code>optional int32 destination = 3;</code>
        */
       public Builder setDestination(int value) {
         
@@ -7346,7 +6953,7 @@ public final class ProtoMessage {
         return this;
       }
       /**
-       * <code>int32 destination = 3;</code>
+       * <code>optional int32 destination = 3;</code>
        */
       public Builder clearDestination() {
         
@@ -7354,16 +6961,14 @@ public final class ProtoMessage {
         onChanged();
         return this;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -7382,12 +6987,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<OrderData>
         PARSER = new com.google.protobuf.AbstractParser<OrderData>() {
-      @java.lang.Override
       public OrderData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new OrderData(input, extensionRegistry);
+          return new OrderData(input, extensionRegistry);
       }
     };
 
@@ -7400,7 +7004,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.OrderData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -7442,7 +7045,6 @@ public final class ProtoMessage {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:dip_q.OrdersData)
       OrdersDataOrBuilder {
-  private static final long serialVersionUID = 0L;
     // Use OrdersData.newBuilder() to construct.
     private OrdersData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -7454,19 +7056,14 @@ public final class ProtoMessage {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return this.unknownFields;
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private OrdersData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -7475,20 +7072,19 @@ public final class ProtoMessage {
             case 0:
               done = true;
               break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
             case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 orders_ = new java.util.ArrayList<cruz.agents.ProtoMessage.OrderData>();
                 mutable_bitField0_ |= 0x00000001;
               }
               orders_.add(
                   input.readMessage(cruz.agents.ProtoMessage.OrderData.parser(), extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
               break;
             }
           }
@@ -7499,10 +7095,9 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           orders_ = java.util.Collections.unmodifiableList(orders_);
         }
-        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -7511,7 +7106,6 @@ public final class ProtoMessage {
       return cruz.agents.ProtoMessage.internal_static_dip_q_OrdersData_descriptor;
     }
 
-    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return cruz.agents.ProtoMessage.internal_static_dip_q_OrdersData_fieldAccessorTable
@@ -7555,7 +7149,6 @@ public final class ProtoMessage {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -7565,16 +7158,13 @@ public final class ProtoMessage {
       return true;
     }
 
-    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < orders_.size(); i++) {
         output.writeMessage(1, orders_.get(i));
       }
-      unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -7584,11 +7174,11 @@ public final class ProtoMessage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, orders_.get(i));
       }
-      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
+    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -7599,10 +7189,10 @@ public final class ProtoMessage {
       }
       cruz.agents.ProtoMessage.OrdersData other = (cruz.agents.ProtoMessage.OrdersData) obj;
 
-      if (!getOrdersList()
-          .equals(other.getOrdersList())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      boolean result = true;
+      result = result && getOrdersList()
+          .equals(other.getOrdersList());
+      return result;
     }
 
     @java.lang.Override
@@ -7611,7 +7201,7 @@ public final class ProtoMessage {
         return memoizedHashCode;
       }
       int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (19 * hash) + getDescriptorForType().hashCode();
       if (getOrdersCount() > 0) {
         hash = (37 * hash) + ORDERS_FIELD_NUMBER;
         hash = (53 * hash) + getOrdersList().hashCode();
@@ -7621,17 +7211,6 @@ public final class ProtoMessage {
       return hash;
     }
 
-    public static cruz.agents.ProtoMessage.OrdersData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static cruz.agents.ProtoMessage.OrdersData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
     public static cruz.agents.ProtoMessage.OrdersData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -7691,7 +7270,6 @@ public final class ProtoMessage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -7699,7 +7277,6 @@ public final class ProtoMessage {
     public static Builder newBuilder(cruz.agents.ProtoMessage.OrdersData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -7723,7 +7300,6 @@ public final class ProtoMessage {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrdersData_descriptor;
       }
 
-      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrdersData_fieldAccessorTable
@@ -7747,7 +7323,6 @@ public final class ProtoMessage {
           getOrdersFieldBuilder();
         }
       }
-      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (ordersBuilder_ == null) {
@@ -7759,18 +7334,15 @@ public final class ProtoMessage {
         return this;
       }
 
-      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return cruz.agents.ProtoMessage.internal_static_dip_q_OrdersData_descriptor;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrdersData getDefaultInstanceForType() {
         return cruz.agents.ProtoMessage.OrdersData.getDefaultInstance();
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrdersData build() {
         cruz.agents.ProtoMessage.OrdersData result = buildPartial();
         if (!result.isInitialized()) {
@@ -7779,12 +7351,11 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public cruz.agents.ProtoMessage.OrdersData buildPartial() {
         cruz.agents.ProtoMessage.OrdersData result = new cruz.agents.ProtoMessage.OrdersData(this);
         int from_bitField0_ = bitField0_;
         if (ordersBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
             orders_ = java.util.Collections.unmodifiableList(orders_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
@@ -7796,39 +7367,32 @@ public final class ProtoMessage {
         return result;
       }
 
-      @java.lang.Override
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
-      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
+          Object value) {
+        return (Builder) super.setField(field, value);
       }
-      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
-      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
-      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
       }
-      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof cruz.agents.ProtoMessage.OrdersData) {
           return mergeFrom((cruz.agents.ProtoMessage.OrdersData)other);
@@ -7866,17 +7430,14 @@ public final class ProtoMessage {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -7899,7 +7460,7 @@ public final class ProtoMessage {
       private java.util.List<cruz.agents.ProtoMessage.OrderData> orders_ =
         java.util.Collections.emptyList();
       private void ensureOrdersIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           orders_ = new java.util.ArrayList<cruz.agents.ProtoMessage.OrderData>(orders_);
           bitField0_ |= 0x00000001;
          }
@@ -8128,23 +7689,21 @@ public final class ProtoMessage {
           ordersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               cruz.agents.ProtoMessage.OrderData, cruz.agents.ProtoMessage.OrderData.Builder, cruz.agents.ProtoMessage.OrderDataOrBuilder>(
                   orders_,
-                  ((bitField0_ & 0x00000001) != 0),
+                  ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
           orders_ = null;
         }
         return ordersBuilder_;
       }
-      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return this;
       }
 
-      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+        return this;
       }
 
 
@@ -8163,12 +7722,11 @@ public final class ProtoMessage {
 
     private static final com.google.protobuf.Parser<OrdersData>
         PARSER = new com.google.protobuf.AbstractParser<OrdersData>() {
-      @java.lang.Override
       public OrdersData parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new OrdersData(input, extensionRegistry);
+          return new OrdersData(input, extensionRegistry);
       }
     };
 
@@ -8181,7 +7739,6 @@ public final class ProtoMessage {
       return PARSER;
     }
 
-    @java.lang.Override
     public cruz.agents.ProtoMessage.OrdersData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -8247,35 +7804,36 @@ public final class ProtoMessage {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023proto_message.proto\022\005dip_q\"\301\001\n\016Bandana" +
+      "\n\023proto_message.proto\022\005dip_q\"\327\001\n\016Bandana" +
       "Request\022(\n\004type\030\001 \001(\0162\032.dip_q.BandanaReq" +
       "uest.Type\022+\n\013observation\030\002 \001(\0132\026.dip_q.O" +
-      "bservationData\"X\n\004Type\022\013\n\007INVALID\020\000\022\024\n\020G" +
+      "bservationData\"n\n\004Type\022\013\n\007INVALID\020\000\022\024\n\020G" +
       "ET_DEAL_REQUEST\020\001\022\032\n\026GET_ACCEPTANCE_REQU" +
-      "EST\020\002\022\021\n\rSEND_GAME_END\020\003\"\326\001\n\024DiplomacyGy" +
-      "mResponse\022.\n\004type\030\001 \001(\0162 .dip_q.Diplomac" +
-      "yGymResponse.Type\022\035\n\004deal\030\002 \001(\0132\017.dip_q." +
-      "DealData\022)\n\nacceptance\030\003 \001(\0132\025.dip_q.Acc" +
-      "eptanceData\"D\n\004Type\022\013\n\007INVALID\020\000\022\013\n\007CONF" +
-      "IRM\020\001\022\r\n\tSEND_DEAL\020\002\022\023\n\017SEND_ACCEPTANCE\020" +
-      "\003\"\225\001\n\032DiplomacyGymOrdersResponse\0224\n\004type" +
-      "\030\001 \001(\0162&.dip_q.DiplomacyGymOrdersRespons" +
-      "e.Type\022!\n\006orders\030\002 \001(\0132\021.dip_q.OrdersDat" +
-      "a\"\036\n\004Type\022\013\n\007INVALID\020\000\022\t\n\005VALID\020\001\"C\n\014Pro" +
-      "vinceData\022\n\n\002id\030\001 \001(\005\022\r\n\005owner\030\002 \001(\005\022\n\n\002" +
-      "sc\030\003 \001(\005\022\014\n\004unit\030\004 \001(\005\"\203\001\n\017ObservationDa" +
-      "ta\022&\n\tprovinces\030\001 \003(\0132\023.dip_q.ProvinceDa" +
-      "ta\022\034\n\024previousActionReward\030\002 \001(\002\022\014\n\004done" +
-      "\030\003 \001(\010\022\014\n\004info\030\004 \001(\t\022\016\n\006player\030\005 \001(\005\"\020\n\016" +
-      "AcceptanceData\"\306\001\n\010DealData\022\026\n\016powerToPr" +
-      "opose\030\001 \001(\005\022-\n\007ourMove\030\002 \001(\0132\034.dip_q.Dea" +
-      "lData.MTOOrderData\022/\n\ttheirMove\030\003 \001(\0132\034." +
-      "dip_q.DealData.MTOOrderData\032B\n\014MTOOrderD" +
-      "ata\022\025\n\rstartProvince\030\001 \001(\005\022\033\n\023destinatio" +
-      "nProvince\030\002 \001(\005\"?\n\tOrderData\022\r\n\005start\030\001 " +
-      "\001(\005\022\016\n\006action\030\002 \001(\005\022\023\n\013destination\030\003 \001(\005" +
-      "\".\n\nOrdersData\022 \n\006orders\030\001 \003(\0132\020.dip_q.O" +
-      "rderDataB\r\n\013cruz.agentsb\006proto3"
+      "EST\020\002\022\021\n\rSEND_GAME_END\020\003\022\024\n\020SEND_GAME_WI" +
+      "NNER\020\004\"\326\001\n\024DiplomacyGymResponse\022.\n\004type\030" +
+      "\001 \001(\0162 .dip_q.DiplomacyGymResponse.Type\022" +
+      "\035\n\004deal\030\002 \001(\0132\017.dip_q.DealData\022)\n\naccept" +
+      "ance\030\003 \001(\0132\025.dip_q.AcceptanceData\"D\n\004Typ",
+      "e\022\013\n\007INVALID\020\000\022\013\n\007CONFIRM\020\001\022\r\n\tSEND_DEAL" +
+      "\020\002\022\023\n\017SEND_ACCEPTANCE\020\003\"\225\001\n\032DiplomacyGym" +
+      "OrdersResponse\0224\n\004type\030\001 \001(\0162&.dip_q.Dip" +
+      "lomacyGymOrdersResponse.Type\022!\n\006orders\030\002" +
+      " \001(\0132\021.dip_q.OrdersData\"\036\n\004Type\022\013\n\007INVAL" +
+      "ID\020\000\022\t\n\005VALID\020\001\"C\n\014ProvinceData\022\n\n\002id\030\001 " +
+      "\001(\005\022\r\n\005owner\030\002 \001(\005\022\n\n\002sc\030\003 \001(\005\022\014\n\004unit\030\004" +
+      " \001(\005\"\203\001\n\017ObservationData\022&\n\tprovinces\030\001 " +
+      "\003(\0132\023.dip_q.ProvinceData\022\034\n\024previousActi" +
+      "onReward\030\002 \001(\002\022\014\n\004done\030\003 \001(\010\022\014\n\004info\030\004 \001",
+      "(\t\022\016\n\006player\030\005 \001(\005\"\020\n\016AcceptanceData\"\306\001\n" +
+      "\010DealData\022\026\n\016powerToPropose\030\001 \001(\005\022-\n\007our" +
+      "Move\030\002 \001(\0132\034.dip_q.DealData.MTOOrderData" +
+      "\022/\n\ttheirMove\030\003 \001(\0132\034.dip_q.DealData.MTO" +
+      "OrderData\032B\n\014MTOOrderData\022\025\n\rstartProvin" +
+      "ce\030\001 \001(\005\022\033\n\023destinationProvince\030\002 \001(\005\"?\n" +
+      "\tOrderData\022\r\n\005start\030\001 \001(\005\022\016\n\006action\030\002 \001(" +
+      "\005\022\023\n\013destination\030\003 \001(\005\".\n\nOrdersData\022 \n\006" +
+      "orders\030\001 \003(\0132\020.dip_q.OrderDataB\r\n\013cruz.a" +
+      "gentsb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -8353,4 +7911,3 @@ public final class ProtoMessage {
 
   // @@protoc_insertion_point(outer_class_scope)
 }
-

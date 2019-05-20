@@ -47,7 +47,10 @@ class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
         data = b''
 
         while len(data) < n:
-            packet = self.request.recv(n - len(data))
+            try:
+                packet = self.request.recv(n - len(data))
+            except:
+                packet = None
             if not packet:
                 return None
             data += packet
@@ -76,6 +79,9 @@ class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
                                "Assuming it's for debug reasons. Otherwise, fix.")
                 response = data.upper()
 
-            self.request.sendall(len(response).to_bytes(4, byteorder='big'))
-            self.request.sendall(response)
+            try:
+                self.request.sendall(len(response).to_bytes(4, byteorder='big'))
+                self.request.sendall(response)
+            except BrokenPipeError:
+                break
 

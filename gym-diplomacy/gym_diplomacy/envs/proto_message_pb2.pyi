@@ -43,6 +43,7 @@ class BandanaRequest(google___protobuf___message___Message):
     GET_DEAL_REQUEST = typing___cast(Type, 1)
     GET_ACCEPTANCE_REQUEST = typing___cast(Type, 2)
     SEND_GAME_END = typing___cast(Type, 3)
+    SEND_GAME_WINNER = typing___cast(Type, 4)
 
     type = ... # type: BandanaRequest.Type
 

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ddejonge.bandana.tools.FileIO;
-import ddejonge.bandana.tools.ProcessRunner;
 
 
 public class ParlanceRunner {
@@ -60,10 +59,10 @@ public class ParlanceRunner {
 		
     	//Note: an exception is thrown if parlance is started CORRECTLY.
     	try {
-    		if(parlanceProcess == null){
-    			System.out.println("Parlance failed to start.");
-    		}else{
-    			System.out.println("ParlanceServer.runParlanceServer() parlance exit value: " + parlanceProcess.exitValue());
+    		if (parlanceProcess == null) {
+    			System.err.println("Parlance failed to start.");
+    		} else {
+    			System.err.println("ParlanceServer.runParlanceServer() parlance exit value: " + parlanceProcess.exitValue());
     		}
 		} catch (IllegalThreadStateException e) {
 			System.out.println("ParlanceServer.runParlanceServer() PARLANCE SERVER STARTED");

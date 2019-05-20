@@ -195,6 +195,12 @@ public class DeepDip extends DumbBot {
         }
         return mto_orders;
     }
+
+    @Override
+    public void handleSlo(String winner) {
+        openAIAdapter.setWinner(winner);
+        super.handleSlo(winner);
+    }
     
     public Logger getLogger() {
         return this.logger;

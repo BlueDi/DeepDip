@@ -71,6 +71,7 @@ public class OpenAIAdapter {
      * A boolean determining whether the current Diplomacy game has ended or not.
      */
     public boolean done;
+    public String winner;
 
     /**
      * An arbitrary string that may contain information for debug, that can be sent to the OpenAI environment.
@@ -212,7 +213,15 @@ public class OpenAIAdapter {
     public void sendEndOfGameNotification() {
         try {
             ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();
-            bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_END);
+
+            String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
+            if (agent_name.equals(this.winner)) {
+                bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_WINNER);
+                System.out.printf("GAME RESULT: " + agent_name + " won with a solo victory.");
+            } else {
+                bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_END);
+                System.out.println("GAME RESULT: " + agent_name + " did not win with a solo victory. " + this.winner + " won.");
+            }
 
             ProtoMessage.ObservationData observationData = this.generateObservationData();
             bandanaRequestBuilder.setObservation(observationData);
@@ -235,6 +244,10 @@ public class OpenAIAdapter {
         }
     }
 
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
     /**
      * Executes on the beginning of a game.
      */
@@ -250,25 +263,6 @@ public class OpenAIAdapter {
      * Executes on the end of a game.
      */
     void endOfGame(GameResult gameResult) {
-
-        // Yes, weird work around, but for some reason it works
-        String nameOfPlayer = "'OpenAINegotiator'";
-
-        String nameOfWinner = gameResult.getSoloWinner();
-
-        if(nameOfWinner == null) {
-            System.out.println("GAME RESULT: No one won with a solo victory.");
-        } else {
-            System.out.printf("GAME RESULT: " + nameOfWinner + " won with a solo victory.");
-        }
-
-        // if (nameOfPlayer.equals(nameOfWinner)) // winner
-        // {
-        //     this.wonGame();
-        // } else {
-        //     this.lostGame();
-        // }
-
         this.done = true;
         this.sendEndOfGameNotification();
 
@@ -359,6 +353,7 @@ public class OpenAIAdapter {
         }
 
         // ADD REWARD RELATED TO CONQUERED SUPPLY CENTERS
+        this.addReward(this.currentNumSc());
         this.addReward(this.balanceOfScs() * CAPTURED_SC_REWARD);
 
         observationDataBuilder.setPreviousActionReward(this.previousActionReward);
@@ -548,16 +543,19 @@ public class OpenAIAdapter {
         return wellStructured;
     }
 
+    private int currentNumSc() {
+        return (this.agent2 == null)? this.agent.me.getOwnedSCs().size() : this.agent2.getMe().getOwnedSCs().size();
+    }
+
     /**
      * This function takes the number of supply centers (SCs) controlled in the previous observation (negotiation phase)
      * and returns the balance of SCs. A negative number means SCs were lost. A positive number means SCs were captured.
      * @return
      */
     private int balanceOfScs() {
-        int currentNumSc = (this.agent2 == null)? this.agent.me.getOwnedSCs().size() : this.agent2.getMe().getOwnedSCs().size();
+        int currentNumSc = this.currentNumSc();
         int balance = currentNumSc - this.previousNumSc;
 
-        // Don't consider already considered SCs
         this.previousNumSc = currentNumSc;
 
         return balance;
@@ -575,3 +573,4 @@ public class OpenAIAdapter {
         this.info = s;
     }
 }
+

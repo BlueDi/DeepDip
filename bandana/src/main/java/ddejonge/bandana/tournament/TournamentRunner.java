@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import ddejonge.bandana.tools.ProcessRunner;
 import ddejonge.bandana.tools.Logger;
 
 
@@ -116,18 +115,18 @@ public class TournamentRunner {
                 }
 
                 //4. Start the players:
-                for (int i = 0; i < numberOfParticipants; i++) {
+                for (int i = 0; i < 2; i++) {
 
                     String name;
                     String[] command;
 
                     //make sure that each player has a different name.
-                    if (i < numberOfParticipants - 1) {
+                    if (i == 0) {
+                        name = "DeepDip";
+                        command = deepDipCommand;
+                    } else {
                         name = "RandomBot " + i;
                         command = randomBotCommand;
-                    } else {
-                        name = "DeepDip " + i;
-                        command = deepDipCommand;
                     }
 
                     //set the log folder for this agent to be a subfolder of the tournament log folder.
@@ -161,7 +160,6 @@ public class TournamentRunner {
 
                 //NOW WAIT TILL THE GAME IS FINISHED
                 while (tournamentObserver.getGameStatus() == TournamentObserver.GAME_ACTIVE || tournamentObserver.getGameStatus() == TournamentObserver.CONNECTED_WAITING_TO_START) {
-
                     try {
                         Thread.sleep(499);
                     } catch (InterruptedException e) {

@@ -51,7 +51,7 @@ public class TournamentObserver extends Observer implements Runnable{
 	
 	
 	/**Is set to true if the current game gets interrupted because one of the players did not send in his/her orders in time.*/
-	private boolean ccd;
+	public boolean ccd;
 	
 	int gameStatus;
 	int gameNumber = 0;
@@ -133,7 +133,7 @@ public class TournamentObserver extends Observer implements Runnable{
 			if(this.diplomacyMonitor != null){
 				diplomacyMonitor.setStatus("connection failed " + e);
 			}
-			e.printStackTrace();
+			//e.printStackTrace();
 		}	
 
 		if(this.diplomacyMonitor != null){

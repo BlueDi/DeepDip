@@ -17,6 +17,7 @@ message BandanaRequest {
     GET_DEAL_REQUEST = 1; // specific to negotiation scenario
     GET_ACCEPTANCE_REQUEST = 2; // specific to negotiation scenario
     SEND_GAME_END = 3;
+    SEND_GAME_WINNER = 4;
   }
 
   // Using "required" is often bad practice. Generally, the validation

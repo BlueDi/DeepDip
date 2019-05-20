@@ -9,8 +9,8 @@ PYTHON_NAME :=proto_message_pb2.py
 PYTHON_STUB_NAME :=proto_message_pb2.pyi
 JAVA_NAME :=ProtoMessage.java
 
-PYTHON_RELATIVE_DEST_DIR := ../python-modules/gym-diplomacy/gym_diplomacy/envs
-JAVA_RELATIVE_DEST_DIR   := ../java-modules/bandana/src/main/java
+PYTHON_RELATIVE_DEST_DIR := ../gym-diplomacy/gym_diplomacy/envs
+JAVA_RELATIVE_DEST_DIR   := ../bandana/src/main/java
 
 JAVA_PACKAGE := cruz/agents
 

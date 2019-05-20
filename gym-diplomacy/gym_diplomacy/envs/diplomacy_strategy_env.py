@@ -6,6 +6,7 @@ import os
 import signal
 import atexit
 import threading
+import time
 import numpy as np
 
 from gym_diplomacy.envs import proto_message_pb2
@@ -28,7 +29,7 @@ logger.setLevel(level)
 
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
-NUMBER_OF_PLAYERS = 2#7
+NUMBER_OF_PLAYERS = 7
 NUMBER_OF_PROVINCES = 8#75
 
 
@@ -140,7 +141,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Env
     received_first_observation: bool = False
-    waiting_for_action: bool = False
+    waiting_for_action = threading.Event()
     response_available = threading.Event()
     limit_action_time: int = 0
     observation: np.ndarray = None
@@ -175,14 +176,8 @@ class DiplomacyStrategyEnv(gym.Env):
             done (boolean): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        # When the agent calls step, make sure it does nothing until the agent can act
-        while not self.waiting_for_action:
-            pass
-
         self.action = action
-        self.waiting_for_action = False
-
-        # After setting 'waiting_for_action' to false, the 'handle' function should send the chosen action
+        self.waiting_for_action.set()
         self.response_available.wait()
 
         return self.observation, self.reward, self.done, self.info
@@ -202,9 +197,8 @@ class DiplomacyStrategyEnv(gym.Env):
         else:
             self._init_bandana()
 
-        # Wait until the observation field has been set, by receiving the observation from Bandana
         while self.observation is None:
-            pass
+            self.response_available.wait()
 
         return self.observation
 
@@ -321,19 +315,17 @@ class DiplomacyStrategyEnv(gym.Env):
 
         observation_data: proto_message_pb2.ObservationData = request_data.observation
         self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
+        self.response_available.set()
 
         response_data: proto_message_pb2.DiplomacyGymOrdersResponse = proto_message_pb2.DiplomacyGymOrdersResponse()
         response_data.type = proto_message_pb2.DiplomacyGymOrdersResponse.VALID
 
-        self.waiting_for_action = True
-        while self.waiting_for_action:
-            if self.done or self.terminate:
-                # Return empty deal just to finalize program
-                logger.debug("Sending empty deal to finalize program.")
-                return response_data.SerializeToString()
+        self.waiting_for_action.wait()
 
-        self.received_first_observation = True
-        self.response_available.set()
+        if self.done or self.terminate:
+            # Return empty deal just to finalize program
+            logger.debug("Sending empty deal to finalize program.")
+            return response_data.SerializeToString()
 
         orders_data: proto_message_pb2.OrdersData = action_to_orders_data(self.action, self.observation)
         response_data.orders.CopyFrom(orders_data)
@@ -347,3 +339,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
