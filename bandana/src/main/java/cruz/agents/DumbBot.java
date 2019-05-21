@@ -781,8 +781,6 @@ public class DumbBot extends Player {
 
     @Override
     public void handleSMR(String[] message) {
-        System.out.println("handleSMR() " + Arrays.toString(message));
-
         //disconnect from the game server.
         this.comm.stop();
 

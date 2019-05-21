@@ -14,6 +14,7 @@ import es.csic.iiia.fabregues.dip.orders.Order;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -201,7 +202,13 @@ public class DeepDip extends DumbBot {
         openAIAdapter.setWinner(winner);
         super.handleSlo(winner);
     }
-    
+
+    @Override
+    public void handleSMR(String[] message) {
+        System.out.println("END GAME: " + Arrays.toString(message));
+        super.handleSMR(message);
+    }    
+
     public Logger getLogger() {
         return this.logger;
     }
