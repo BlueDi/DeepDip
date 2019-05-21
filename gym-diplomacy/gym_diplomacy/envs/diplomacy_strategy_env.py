@@ -141,8 +141,6 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Env
     received_first_observation: bool = False
-    waiting_for_action = threading.Event()
-    response_available = threading.Event()
     limit_action_time: int = 0
     observation: np.ndarray = None
     action: np.ndarray = None
@@ -177,8 +175,8 @@ class DiplomacyStrategyEnv(gym.Env):
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
         self.action = action
-        self.waiting_for_action.set()
-        self.response_available.wait()
+        self.wait_action.set()
+        self.wait_observation.wait()
 
         return self.observation, self.reward, self.done, self.info
 
@@ -187,8 +185,10 @@ class DiplomacyStrategyEnv(gym.Env):
         """Resets the state of the environment and returns an initial observation.
         Returns: observation (object): the initial observation of the space.
         """
-        # Set or reset current observation to None
         self.observation = None
+
+        self.wait_action = threading.Event()
+        self.wait_observation = threading.Event()
 
         # In this case we simply restart Bandana
         if self.bandana_subprocess is not None:
@@ -197,8 +197,7 @@ class DiplomacyStrategyEnv(gym.Env):
         else:
             self._init_bandana()
 
-        while self.observation is None:
-            self.response_available.wait()
+        self.wait_observation.wait()
 
         return self.observation
 
@@ -315,18 +314,17 @@ class DiplomacyStrategyEnv(gym.Env):
 
         observation_data: proto_message_pb2.ObservationData = request_data.observation
         self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
-        self.response_available.set()
+        self.wait_observation.set()
 
         response_data: proto_message_pb2.DiplomacyGymOrdersResponse = proto_message_pb2.DiplomacyGymOrdersResponse()
         response_data.type = proto_message_pb2.DiplomacyGymOrdersResponse.VALID
-
-        self.waiting_for_action.wait()
 
         if self.done or self.terminate:
             # Return empty deal just to finalize program
             logger.debug("Sending empty deal to finalize program.")
             return response_data.SerializeToString()
 
+        self.wait_action.wait()
         orders_data: proto_message_pb2.OrdersData = action_to_orders_data(self.action, self.observation)
         response_data.orders.CopyFrom(orders_data)
 

@@ -30,8 +30,8 @@ logger.setLevel(level)
 
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
-total_timesteps = 1e3
-saving_interval = 200
+total_timesteps = 1e6
+saving_interval = 1e3
 best_mean_reward, n_steps = -np.inf, 0
 
 current_time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -124,7 +124,7 @@ def load_model(env):
 
 def train(env, total_timesteps=1e6):    
     model, model_steps = load_model(env)
-    
+
     model.learn(int(total_timesteps), callback=callback)
     
     return model
@@ -139,8 +139,8 @@ def callback(_locals, _globals):
     global n_steps, best_mean_reward
     # Print stats every X calls
     n_steps += 1
-    logger.info("Current Step: {}, max steps: {}".format(n_steps, total_timesteps))
     if n_steps % saving_interval == 0:
+        logger.info("Current Step: {}".format(n_steps))
         # Evaluate policy training performance
         x, y = ts2xy(load_results(log_dir), 'timesteps')
         if len(x) > 0:
