@@ -65,7 +65,7 @@ public class OpenAIAdapter {
     /**
      * The value of the reward achieved because of the previous actions.
      */
-    private float previousActionReward;
+    private float reward;
 
     /**
      * A boolean determining whether the current Diplomacy game has ended or not.
@@ -213,15 +213,7 @@ public class OpenAIAdapter {
     public void sendEndOfGameNotification() {
         try {
             ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();
-
-            String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
-            if (agent_name.equals(this.winner)) {
-                bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_WINNER);
-                System.out.printf("GAME RESULT: " + agent_name + " won with a solo victory.");
-            } else {
-                bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_END);
-                System.out.println("GAME RESULT: " + agent_name + " did not win with a solo victory. " + this.winner + " won.");
-            }
+            bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.SEND_GAME_END);
 
             ProtoMessage.ObservationData observationData = this.generateObservationData();
             bandanaRequestBuilder.setObservation(observationData);
@@ -315,6 +307,9 @@ public class OpenAIAdapter {
         ProtoMessage.ObservationData.Builder observationDataBuilder = ProtoMessage.ObservationData.newBuilder();
         Map<String, ProtoMessage.ProvinceData.Builder> nameToProvinceDataBuilder = new HashMap<>();
 
+        String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
+        observationDataBuilder.setPlayer(powerNameToInt.get(agent_name));
+
         // FIRST PROCESS ALL PROVINCES
         Vector<Province> provinces = (this.agent2 == null) ? this.agent.game.getProvinces() : this.agent2.getGame().getProvinces();
         int id = 1;
@@ -355,19 +350,19 @@ public class OpenAIAdapter {
         // ADD REWARD RELATED TO CONQUERED SUPPLY CENTERS
         this.addReward(this.currentNumSc());
         this.addReward(this.balanceOfScs() * CAPTURED_SC_REWARD);
+        if (agent_name.equals(this.winner)) {
+            this.wonGame();
+        } else {
+            this.lostGame();
+        }
+        observationDataBuilder.setReward((int) this.reward);
+        this.resetReward();
 
-        observationDataBuilder.setPreviousActionReward(this.previousActionReward);
         observationDataBuilder.setDone(this.done);
 
         if (this.info != null) {
             observationDataBuilder.setInfo(this.info);
         }
-        
-        String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
-        observationDataBuilder.setPlayer(powerNameToInt.get(agent_name));
-
-        // Reset previous reward
-        this.resetReward();
 
         return observationDataBuilder.build();
     }
@@ -562,11 +557,11 @@ public class OpenAIAdapter {
     }
 
     private void addReward(int reward) {
-        this.previousActionReward += reward;
+        this.reward += reward;
     }
 
     private void resetReward() {
-        this.previousActionReward = 0;
+        this.reward = 0;
     }
 
     public void setInfo(String s) {

@@ -151,10 +151,6 @@ public final class ProtoMessage {
        * <code>SEND_GAME_END = 3;</code>
        */
       SEND_GAME_END(3),
-      /**
-       * <code>SEND_GAME_WINNER = 4;</code>
-       */
-      SEND_GAME_WINNER(4),
       UNRECOGNIZED(-1),
       ;
 
@@ -182,10 +178,6 @@ public final class ProtoMessage {
        * <code>SEND_GAME_END = 3;</code>
        */
       public static final int SEND_GAME_END_VALUE = 3;
-      /**
-       * <code>SEND_GAME_WINNER = 4;</code>
-       */
-      public static final int SEND_GAME_WINNER_VALUE = 4;
 
 
       public final int getNumber() {
@@ -210,7 +202,6 @@ public final class ProtoMessage {
           case 1: return GET_DEAL_REQUEST;
           case 2: return GET_ACCEPTANCE_REQUEST;
           case 3: return SEND_GAME_END;
-          case 4: return SEND_GAME_WINNER;
           default: return null;
         }
       }
@@ -3342,11 +3333,16 @@ public final class ProtoMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <code>optional int32 player = 1;</code>
+     */
+    int getPlayer();
+
+    /**
      * <pre>
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     java.util.List<cruz.agents.ProtoMessage.ProvinceData> 
         getProvincesList();
@@ -3355,7 +3351,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     cruz.agents.ProtoMessage.ProvinceData getProvinces(int index);
     /**
@@ -3363,7 +3359,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     int getProvincesCount();
     /**
@@ -3371,7 +3367,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     java.util.List<? extends cruz.agents.ProtoMessage.ProvinceDataOrBuilder> 
         getProvincesOrBuilderList();
@@ -3380,26 +3376,22 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     cruz.agents.ProtoMessage.ProvinceDataOrBuilder getProvincesOrBuilder(
         int index);
 
     /**
-     * <pre>
-     * The value of the reward gained by the previous action.
-     * </pre>
-     *
-     * <code>optional float previousActionReward = 2;</code>
+     * <code>optional int32 reward = 3;</code>
      */
-    float getPreviousActionReward();
+    int getReward();
 
     /**
      * <pre>
      * A boolean representing whether a game has finished or not.
      * </pre>
      *
-     * <code>optional bool done = 3;</code>
+     * <code>optional bool done = 4;</code>
      */
     boolean getDone();
 
@@ -3408,7 +3400,7 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>optional string info = 4;</code>
+     * <code>optional string info = 5;</code>
      */
     java.lang.String getInfo();
     /**
@@ -3416,15 +3408,10 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>optional string info = 4;</code>
+     * <code>optional string info = 5;</code>
      */
     com.google.protobuf.ByteString
         getInfoBytes();
-
-    /**
-     * <code>optional int32 player = 5;</code>
-     */
-    int getPlayer();
   }
   /**
    * Protobuf type {@code dip_q.ObservationData}
@@ -3438,11 +3425,11 @@ public final class ProtoMessage {
       super(builder);
     }
     private ObservationData() {
+      player_ = 0;
       provinces_ = java.util.Collections.emptyList();
-      previousActionReward_ = 0F;
+      reward_ = 0;
       done_ = false;
       info_ = "";
-      player_ = 0;
     }
 
     @java.lang.Override
@@ -3470,34 +3457,34 @@ public final class ProtoMessage {
               }
               break;
             }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+            case 8: {
+
+              player_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 provinces_ = new java.util.ArrayList<cruz.agents.ProtoMessage.ProvinceData>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               provinces_.add(
                   input.readMessage(cruz.agents.ProtoMessage.ProvinceData.parser(), extensionRegistry));
               break;
             }
-            case 21: {
+            case 24: {
 
-              previousActionReward_ = input.readFloat();
+              reward_ = input.readInt32();
               break;
             }
-            case 24: {
+            case 32: {
 
               done_ = input.readBool();
               break;
             }
-            case 34: {
+            case 42: {
               java.lang.String s = input.readStringRequireUtf8();
 
               info_ = s;
-              break;
-            }
-            case 40: {
-
-              player_ = input.readInt32();
               break;
             }
           }
@@ -3508,7 +3495,7 @@ public final class ProtoMessage {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           provinces_ = java.util.Collections.unmodifiableList(provinces_);
         }
         makeExtensionsImmutable();
@@ -3527,14 +3514,23 @@ public final class ProtoMessage {
     }
 
     private int bitField0_;
-    public static final int PROVINCES_FIELD_NUMBER = 1;
+    public static final int PLAYER_FIELD_NUMBER = 1;
+    private int player_;
+    /**
+     * <code>optional int32 player = 1;</code>
+     */
+    public int getPlayer() {
+      return player_;
+    }
+
+    public static final int PROVINCES_FIELD_NUMBER = 2;
     private java.util.List<cruz.agents.ProtoMessage.ProvinceData> provinces_;
     /**
      * <pre>
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     public java.util.List<cruz.agents.ProtoMessage.ProvinceData> getProvincesList() {
       return provinces_;
@@ -3544,7 +3540,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     public java.util.List<? extends cruz.agents.ProtoMessage.ProvinceDataOrBuilder> 
         getProvincesOrBuilderList() {
@@ -3555,7 +3551,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     public int getProvincesCount() {
       return provinces_.size();
@@ -3565,7 +3561,7 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     public cruz.agents.ProtoMessage.ProvinceData getProvinces(int index) {
       return provinces_.get(index);
@@ -3575,47 +3571,43 @@ public final class ProtoMessage {
      * A list of 0 or more provinces.
      * </pre>
      *
-     * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+     * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
      */
     public cruz.agents.ProtoMessage.ProvinceDataOrBuilder getProvincesOrBuilder(
         int index) {
       return provinces_.get(index);
     }
 
-    public static final int PREVIOUSACTIONREWARD_FIELD_NUMBER = 2;
-    private float previousActionReward_;
+    public static final int REWARD_FIELD_NUMBER = 3;
+    private int reward_;
     /**
-     * <pre>
-     * The value of the reward gained by the previous action.
-     * </pre>
-     *
-     * <code>optional float previousActionReward = 2;</code>
+     * <code>optional int32 reward = 3;</code>
      */
-    public float getPreviousActionReward() {
-      return previousActionReward_;
+    public int getReward() {
+      return reward_;
     }
 
-    public static final int DONE_FIELD_NUMBER = 3;
+    public static final int DONE_FIELD_NUMBER = 4;
     private boolean done_;
     /**
      * <pre>
      * A boolean representing whether a game has finished or not.
      * </pre>
      *
-     * <code>optional bool done = 3;</code>
+     * <code>optional bool done = 4;</code>
      */
     public boolean getDone() {
       return done_;
     }
 
-    public static final int INFO_FIELD_NUMBER = 4;
+    public static final int INFO_FIELD_NUMBER = 5;
     private volatile java.lang.Object info_;
     /**
      * <pre>
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>optional string info = 4;</code>
+     * <code>optional string info = 5;</code>
      */
     public java.lang.String getInfo() {
       java.lang.Object ref = info_;
@@ -3634,7 +3626,7 @@ public final class ProtoMessage {
      * Arbritary information (mostly for debug purposes).
      * </pre>
      *
-     * <code>optional string info = 4;</code>
+     * <code>optional string info = 5;</code>
      */
     public com.google.protobuf.ByteString
         getInfoBytes() {
@@ -3650,15 +3642,6 @@ public final class ProtoMessage {
       }
     }
 
-    public static final int PLAYER_FIELD_NUMBER = 5;
-    private int player_;
-    /**
-     * <code>optional int32 player = 5;</code>
-     */
-    public int getPlayer() {
-      return player_;
-    }
-
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3671,20 +3654,20 @@ public final class ProtoMessage {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      for (int i = 0; i < provinces_.size(); i++) {
-        output.writeMessage(1, provinces_.get(i));
+      if (player_ != 0) {
+        output.writeInt32(1, player_);
       }
-      if (previousActionReward_ != 0F) {
-        output.writeFloat(2, previousActionReward_);
+      for (int i = 0; i < provinces_.size(); i++) {
+        output.writeMessage(2, provinces_.get(i));
+      }
+      if (reward_ != 0) {
+        output.writeInt32(3, reward_);
       }
       if (done_ != false) {
-        output.writeBool(3, done_);
+        output.writeBool(4, done_);
       }
       if (!getInfoBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, info_);
-      }
-      if (player_ != 0) {
-        output.writeInt32(5, player_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, info_);
       }
     }
 
@@ -3693,24 +3676,24 @@ public final class ProtoMessage {
       if (size != -1) return size;
 
       size = 0;
+      if (player_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, player_);
+      }
       for (int i = 0; i < provinces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, provinces_.get(i));
+          .computeMessageSize(2, provinces_.get(i));
       }
-      if (previousActionReward_ != 0F) {
+      if (reward_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(2, previousActionReward_);
+          .computeInt32Size(3, reward_);
       }
       if (done_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, done_);
+          .computeBoolSize(4, done_);
       }
       if (!getInfoBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, info_);
-      }
-      if (player_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, player_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, info_);
       }
       memoizedSize = size;
       return size;
@@ -3728,18 +3711,16 @@ public final class ProtoMessage {
       cruz.agents.ProtoMessage.ObservationData other = (cruz.agents.ProtoMessage.ObservationData) obj;
 
       boolean result = true;
+      result = result && (getPlayer()
+          == other.getPlayer());
       result = result && getProvincesList()
           .equals(other.getProvincesList());
-      result = result && (
-          java.lang.Float.floatToIntBits(getPreviousActionReward())
-          == java.lang.Float.floatToIntBits(
-              other.getPreviousActionReward()));
+      result = result && (getReward()
+          == other.getReward());
       result = result && (getDone()
           == other.getDone());
       result = result && getInfo()
           .equals(other.getInfo());
-      result = result && (getPlayer()
-          == other.getPlayer());
       return result;
     }
 
@@ -3750,20 +3731,19 @@ public final class ProtoMessage {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + PLAYER_FIELD_NUMBER;
+      hash = (53 * hash) + getPlayer();
       if (getProvincesCount() > 0) {
         hash = (37 * hash) + PROVINCES_FIELD_NUMBER;
         hash = (53 * hash) + getProvincesList().hashCode();
       }
-      hash = (37 * hash) + PREVIOUSACTIONREWARD_FIELD_NUMBER;
-      hash = (53 * hash) + java.lang.Float.floatToIntBits(
-          getPreviousActionReward());
+      hash = (37 * hash) + REWARD_FIELD_NUMBER;
+      hash = (53 * hash) + getReward();
       hash = (37 * hash) + DONE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getDone());
       hash = (37 * hash) + INFO_FIELD_NUMBER;
       hash = (53 * hash) + getInfo().hashCode();
-      hash = (37 * hash) + PLAYER_FIELD_NUMBER;
-      hash = (53 * hash) + getPlayer();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3883,19 +3863,19 @@ public final class ProtoMessage {
       }
       public Builder clear() {
         super.clear();
+        player_ = 0;
+
         if (provincesBuilder_ == null) {
           provinces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           provincesBuilder_.clear();
         }
-        previousActionReward_ = 0F;
+        reward_ = 0;
 
         done_ = false;
 
         info_ = "";
-
-        player_ = 0;
 
         return this;
       }
@@ -3921,19 +3901,19 @@ public final class ProtoMessage {
         cruz.agents.ProtoMessage.ObservationData result = new cruz.agents.ProtoMessage.ObservationData(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
+        result.player_ = player_;
         if (provincesBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
             provinces_ = java.util.Collections.unmodifiableList(provinces_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.provinces_ = provinces_;
         } else {
           result.provinces_ = provincesBuilder_.build();
         }
-        result.previousActionReward_ = previousActionReward_;
+        result.reward_ = reward_;
         result.done_ = done_;
         result.info_ = info_;
-        result.player_ = player_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3976,11 +3956,14 @@ public final class ProtoMessage {
 
       public Builder mergeFrom(cruz.agents.ProtoMessage.ObservationData other) {
         if (other == cruz.agents.ProtoMessage.ObservationData.getDefaultInstance()) return this;
+        if (other.getPlayer() != 0) {
+          setPlayer(other.getPlayer());
+        }
         if (provincesBuilder_ == null) {
           if (!other.provinces_.isEmpty()) {
             if (provinces_.isEmpty()) {
               provinces_ = other.provinces_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensureProvincesIsMutable();
               provinces_.addAll(other.provinces_);
@@ -3993,7 +3976,7 @@ public final class ProtoMessage {
               provincesBuilder_.dispose();
               provincesBuilder_ = null;
               provinces_ = other.provinces_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               provincesBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getProvincesFieldBuilder() : null;
@@ -4002,8 +3985,8 @@ public final class ProtoMessage {
             }
           }
         }
-        if (other.getPreviousActionReward() != 0F) {
-          setPreviousActionReward(other.getPreviousActionReward());
+        if (other.getReward() != 0) {
+          setReward(other.getReward());
         }
         if (other.getDone() != false) {
           setDone(other.getDone());
@@ -4011,9 +3994,6 @@ public final class ProtoMessage {
         if (!other.getInfo().isEmpty()) {
           info_ = other.info_;
           onChanged();
-        }
-        if (other.getPlayer() != 0) {
-          setPlayer(other.getPlayer());
         }
         onChanged();
         return this;
@@ -4042,12 +4022,38 @@ public final class ProtoMessage {
       }
       private int bitField0_;
 
+      private int player_ ;
+      /**
+       * <code>optional int32 player = 1;</code>
+       */
+      public int getPlayer() {
+        return player_;
+      }
+      /**
+       * <code>optional int32 player = 1;</code>
+       */
+      public Builder setPlayer(int value) {
+        
+        player_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 player = 1;</code>
+       */
+      public Builder clearPlayer() {
+        
+        player_ = 0;
+        onChanged();
+        return this;
+      }
+
       private java.util.List<cruz.agents.ProtoMessage.ProvinceData> provinces_ =
         java.util.Collections.emptyList();
       private void ensureProvincesIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           provinces_ = new java.util.ArrayList<cruz.agents.ProtoMessage.ProvinceData>(provinces_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -4059,7 +4065,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public java.util.List<cruz.agents.ProtoMessage.ProvinceData> getProvincesList() {
         if (provincesBuilder_ == null) {
@@ -4073,7 +4079,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public int getProvincesCount() {
         if (provincesBuilder_ == null) {
@@ -4087,7 +4093,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public cruz.agents.ProtoMessage.ProvinceData getProvinces(int index) {
         if (provincesBuilder_ == null) {
@@ -4101,7 +4107,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder setProvinces(
           int index, cruz.agents.ProtoMessage.ProvinceData value) {
@@ -4122,7 +4128,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder setProvinces(
           int index, cruz.agents.ProtoMessage.ProvinceData.Builder builderForValue) {
@@ -4140,7 +4146,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder addProvinces(cruz.agents.ProtoMessage.ProvinceData value) {
         if (provincesBuilder_ == null) {
@@ -4160,7 +4166,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder addProvinces(
           int index, cruz.agents.ProtoMessage.ProvinceData value) {
@@ -4181,7 +4187,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder addProvinces(
           cruz.agents.ProtoMessage.ProvinceData.Builder builderForValue) {
@@ -4199,7 +4205,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder addProvinces(
           int index, cruz.agents.ProtoMessage.ProvinceData.Builder builderForValue) {
@@ -4217,7 +4223,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder addAllProvinces(
           java.lang.Iterable<? extends cruz.agents.ProtoMessage.ProvinceData> values) {
@@ -4236,12 +4242,12 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder clearProvinces() {
         if (provincesBuilder_ == null) {
           provinces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           provincesBuilder_.clear();
@@ -4253,7 +4259,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public Builder removeProvinces(int index) {
         if (provincesBuilder_ == null) {
@@ -4270,7 +4276,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public cruz.agents.ProtoMessage.ProvinceData.Builder getProvincesBuilder(
           int index) {
@@ -4281,7 +4287,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public cruz.agents.ProtoMessage.ProvinceDataOrBuilder getProvincesOrBuilder(
           int index) {
@@ -4295,7 +4301,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public java.util.List<? extends cruz.agents.ProtoMessage.ProvinceDataOrBuilder> 
            getProvincesOrBuilderList() {
@@ -4310,7 +4316,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public cruz.agents.ProtoMessage.ProvinceData.Builder addProvincesBuilder() {
         return getProvincesFieldBuilder().addBuilder(
@@ -4321,7 +4327,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public cruz.agents.ProtoMessage.ProvinceData.Builder addProvincesBuilder(
           int index) {
@@ -4333,7 +4339,7 @@ public final class ProtoMessage {
        * A list of 0 or more provinces.
        * </pre>
        *
-       * <code>repeated .dip_q.ProvinceData provinces = 1;</code>
+       * <code>repeated .dip_q.ProvinceData provinces = 2;</code>
        */
       public java.util.List<cruz.agents.ProtoMessage.ProvinceData.Builder> 
            getProvincesBuilderList() {
@@ -4346,7 +4352,7 @@ public final class ProtoMessage {
           provincesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               cruz.agents.ProtoMessage.ProvinceData, cruz.agents.ProtoMessage.ProvinceData.Builder, cruz.agents.ProtoMessage.ProvinceDataOrBuilder>(
                   provinces_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
           provinces_ = null;
@@ -4354,40 +4360,28 @@ public final class ProtoMessage {
         return provincesBuilder_;
       }
 
-      private float previousActionReward_ ;
+      private int reward_ ;
       /**
-       * <pre>
-       * The value of the reward gained by the previous action.
-       * </pre>
-       *
-       * <code>optional float previousActionReward = 2;</code>
+       * <code>optional int32 reward = 3;</code>
        */
-      public float getPreviousActionReward() {
-        return previousActionReward_;
+      public int getReward() {
+        return reward_;
       }
       /**
-       * <pre>
-       * The value of the reward gained by the previous action.
-       * </pre>
-       *
-       * <code>optional float previousActionReward = 2;</code>
+       * <code>optional int32 reward = 3;</code>
        */
-      public Builder setPreviousActionReward(float value) {
+      public Builder setReward(int value) {
         
-        previousActionReward_ = value;
+        reward_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * The value of the reward gained by the previous action.
-       * </pre>
-       *
-       * <code>optional float previousActionReward = 2;</code>
+       * <code>optional int32 reward = 3;</code>
        */
-      public Builder clearPreviousActionReward() {
+      public Builder clearReward() {
         
-        previousActionReward_ = 0F;
+        reward_ = 0;
         onChanged();
         return this;
       }
@@ -4398,7 +4392,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>optional bool done = 3;</code>
+       * <code>optional bool done = 4;</code>
        */
       public boolean getDone() {
         return done_;
@@ -4408,7 +4402,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>optional bool done = 3;</code>
+       * <code>optional bool done = 4;</code>
        */
       public Builder setDone(boolean value) {
         
@@ -4421,7 +4415,7 @@ public final class ProtoMessage {
        * A boolean representing whether a game has finished or not.
        * </pre>
        *
-       * <code>optional bool done = 3;</code>
+       * <code>optional bool done = 4;</code>
        */
       public Builder clearDone() {
         
@@ -4436,7 +4430,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>optional string info = 4;</code>
+       * <code>optional string info = 5;</code>
        */
       public java.lang.String getInfo() {
         java.lang.Object ref = info_;
@@ -4455,7 +4449,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>optional string info = 4;</code>
+       * <code>optional string info = 5;</code>
        */
       public com.google.protobuf.ByteString
           getInfoBytes() {
@@ -4475,7 +4469,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>optional string info = 4;</code>
+       * <code>optional string info = 5;</code>
        */
       public Builder setInfo(
           java.lang.String value) {
@@ -4492,7 +4486,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>optional string info = 4;</code>
+       * <code>optional string info = 5;</code>
        */
       public Builder clearInfo() {
         
@@ -4505,7 +4499,7 @@ public final class ProtoMessage {
        * Arbritary information (mostly for debug purposes).
        * </pre>
        *
-       * <code>optional string info = 4;</code>
+       * <code>optional string info = 5;</code>
        */
       public Builder setInfoBytes(
           com.google.protobuf.ByteString value) {
@@ -4515,32 +4509,6 @@ public final class ProtoMessage {
   checkByteStringIsUtf8(value);
         
         info_ = value;
-        onChanged();
-        return this;
-      }
-
-      private int player_ ;
-      /**
-       * <code>optional int32 player = 5;</code>
-       */
-      public int getPlayer() {
-        return player_;
-      }
-      /**
-       * <code>optional int32 player = 5;</code>
-       */
-      public Builder setPlayer(int value) {
-        
-        player_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 player = 5;</code>
-       */
-      public Builder clearPlayer() {
-        
-        player_ = 0;
         onChanged();
         return this;
       }
@@ -7804,36 +7772,35 @@ public final class ProtoMessage {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023proto_message.proto\022\005dip_q\"\327\001\n\016Bandana" +
+      "\n\023proto_message.proto\022\005dip_q\"\301\001\n\016Bandana" +
       "Request\022(\n\004type\030\001 \001(\0162\032.dip_q.BandanaReq" +
       "uest.Type\022+\n\013observation\030\002 \001(\0132\026.dip_q.O" +
-      "bservationData\"n\n\004Type\022\013\n\007INVALID\020\000\022\024\n\020G" +
+      "bservationData\"X\n\004Type\022\013\n\007INVALID\020\000\022\024\n\020G" +
       "ET_DEAL_REQUEST\020\001\022\032\n\026GET_ACCEPTANCE_REQU" +
-      "EST\020\002\022\021\n\rSEND_GAME_END\020\003\022\024\n\020SEND_GAME_WI" +
-      "NNER\020\004\"\326\001\n\024DiplomacyGymResponse\022.\n\004type\030" +
-      "\001 \001(\0162 .dip_q.DiplomacyGymResponse.Type\022" +
-      "\035\n\004deal\030\002 \001(\0132\017.dip_q.DealData\022)\n\naccept" +
-      "ance\030\003 \001(\0132\025.dip_q.AcceptanceData\"D\n\004Typ",
-      "e\022\013\n\007INVALID\020\000\022\013\n\007CONFIRM\020\001\022\r\n\tSEND_DEAL" +
-      "\020\002\022\023\n\017SEND_ACCEPTANCE\020\003\"\225\001\n\032DiplomacyGym" +
-      "OrdersResponse\0224\n\004type\030\001 \001(\0162&.dip_q.Dip" +
-      "lomacyGymOrdersResponse.Type\022!\n\006orders\030\002" +
-      " \001(\0132\021.dip_q.OrdersData\"\036\n\004Type\022\013\n\007INVAL" +
-      "ID\020\000\022\t\n\005VALID\020\001\"C\n\014ProvinceData\022\n\n\002id\030\001 " +
-      "\001(\005\022\r\n\005owner\030\002 \001(\005\022\n\n\002sc\030\003 \001(\005\022\014\n\004unit\030\004" +
-      " \001(\005\"\203\001\n\017ObservationData\022&\n\tprovinces\030\001 " +
-      "\003(\0132\023.dip_q.ProvinceData\022\034\n\024previousActi" +
-      "onReward\030\002 \001(\002\022\014\n\004done\030\003 \001(\010\022\014\n\004info\030\004 \001",
-      "(\t\022\016\n\006player\030\005 \001(\005\"\020\n\016AcceptanceData\"\306\001\n" +
-      "\010DealData\022\026\n\016powerToPropose\030\001 \001(\005\022-\n\007our" +
-      "Move\030\002 \001(\0132\034.dip_q.DealData.MTOOrderData" +
-      "\022/\n\ttheirMove\030\003 \001(\0132\034.dip_q.DealData.MTO" +
-      "OrderData\032B\n\014MTOOrderData\022\025\n\rstartProvin" +
-      "ce\030\001 \001(\005\022\033\n\023destinationProvince\030\002 \001(\005\"?\n" +
-      "\tOrderData\022\r\n\005start\030\001 \001(\005\022\016\n\006action\030\002 \001(" +
-      "\005\022\023\n\013destination\030\003 \001(\005\".\n\nOrdersData\022 \n\006" +
-      "orders\030\001 \003(\0132\020.dip_q.OrderDataB\r\n\013cruz.a" +
-      "gentsb\006proto3"
+      "EST\020\002\022\021\n\rSEND_GAME_END\020\003\"\326\001\n\024DiplomacyGy" +
+      "mResponse\022.\n\004type\030\001 \001(\0162 .dip_q.Diplomac" +
+      "yGymResponse.Type\022\035\n\004deal\030\002 \001(\0132\017.dip_q." +
+      "DealData\022)\n\nacceptance\030\003 \001(\0132\025.dip_q.Acc" +
+      "eptanceData\"D\n\004Type\022\013\n\007INVALID\020\000\022\013\n\007CONF",
+      "IRM\020\001\022\r\n\tSEND_DEAL\020\002\022\023\n\017SEND_ACCEPTANCE\020" +
+      "\003\"\225\001\n\032DiplomacyGymOrdersResponse\0224\n\004type" +
+      "\030\001 \001(\0162&.dip_q.DiplomacyGymOrdersRespons" +
+      "e.Type\022!\n\006orders\030\002 \001(\0132\021.dip_q.OrdersDat" +
+      "a\"\036\n\004Type\022\013\n\007INVALID\020\000\022\t\n\005VALID\020\001\"C\n\014Pro" +
+      "vinceData\022\n\n\002id\030\001 \001(\005\022\r\n\005owner\030\002 \001(\005\022\n\n\002" +
+      "sc\030\003 \001(\005\022\014\n\004unit\030\004 \001(\005\"u\n\017ObservationDat" +
+      "a\022\016\n\006player\030\001 \001(\005\022&\n\tprovinces\030\002 \003(\0132\023.d" +
+      "ip_q.ProvinceData\022\016\n\006reward\030\003 \001(\005\022\014\n\004don" +
+      "e\030\004 \001(\010\022\014\n\004info\030\005 \001(\t\"\020\n\016AcceptanceData\"",
+      "\306\001\n\010DealData\022\026\n\016powerToPropose\030\001 \001(\005\022-\n\007" +
+      "ourMove\030\002 \001(\0132\034.dip_q.DealData.MTOOrderD" +
+      "ata\022/\n\ttheirMove\030\003 \001(\0132\034.dip_q.DealData." +
+      "MTOOrderData\032B\n\014MTOOrderData\022\025\n\rstartPro" +
+      "vince\030\001 \001(\005\022\033\n\023destinationProvince\030\002 \001(\005" +
+      "\"?\n\tOrderData\022\r\n\005start\030\001 \001(\005\022\016\n\006action\030\002" +
+      " \001(\005\022\023\n\013destination\030\003 \001(\005\".\n\nOrdersData\022" +
+      " \n\006orders\030\001 \003(\0132\020.dip_q.OrderDataB\r\n\013cru" +
+      "z.agentsb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7876,7 +7843,7 @@ public final class ProtoMessage {
     internal_static_dip_q_ObservationData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_dip_q_ObservationData_descriptor,
-        new java.lang.String[] { "Provinces", "PreviousActionReward", "Done", "Info", "Player", });
+        new java.lang.String[] { "Player", "Provinces", "Reward", "Done", "Info", });
     internal_static_dip_q_AcceptanceData_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_dip_q_AcceptanceData_fieldAccessorTable = new

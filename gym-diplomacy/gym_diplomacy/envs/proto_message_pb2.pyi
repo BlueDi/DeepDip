@@ -43,7 +43,6 @@ class BandanaRequest(google___protobuf___message___Message):
     GET_DEAL_REQUEST = typing___cast(Type, 1)
     GET_ACCEPTANCE_REQUEST = typing___cast(Type, 2)
     SEND_GAME_END = typing___cast(Type, 3)
-    SEND_GAME_WINNER = typing___cast(Type, 4)
 
     type = ... # type: BandanaRequest.Type
 
@@ -165,29 +164,29 @@ class ProvinceData(google___protobuf___message___Message):
         def ClearField(self, field_name: typing_extensions___Literal[b"id",b"owner",b"sc",b"unit"]) -> None: ...
 
 class ObservationData(google___protobuf___message___Message):
-    previousActionReward = ... # type: float
+    player = ... # type: int
+    reward = ... # type: int
     done = ... # type: bool
     info = ... # type: typing___Text
-    player = ... # type: int
 
     @property
     def provinces(self) -> google___protobuf___internal___containers___RepeatedCompositeFieldContainer[ProvinceData]: ...
 
     def __init__(self,
+        player : typing___Optional[int] = None,
         provinces : typing___Optional[typing___Iterable[ProvinceData]] = None,
-        previousActionReward : typing___Optional[float] = None,
+        reward : typing___Optional[int] = None,
         done : typing___Optional[bool] = None,
         info : typing___Optional[typing___Text] = None,
-        player : typing___Optional[int] = None,
         ) -> None: ...
     @classmethod
     def FromString(cls, s: bytes) -> ObservationData: ...
     def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
     def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
     if sys.version_info >= (3,):
-        def ClearField(self, field_name: typing_extensions___Literal[u"done",u"info",u"player",u"previousActionReward",u"provinces"]) -> None: ...
+        def ClearField(self, field_name: typing_extensions___Literal[u"done",u"info",u"player",u"provinces",u"reward"]) -> None: ...
     else:
-        def ClearField(self, field_name: typing_extensions___Literal[b"done",b"info",b"player",b"previousActionReward",b"provinces"]) -> None: ...
+        def ClearField(self, field_name: typing_extensions___Literal[b"done",b"info",b"player",b"provinces",b"reward"]) -> None: ...
 
 class AcceptanceData(google___protobuf___message___Message):
 

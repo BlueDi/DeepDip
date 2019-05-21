@@ -58,7 +58,7 @@ def observation_data_to_observation(observation_data: proto_message_pb2.Observat
         observation[(province.id - 1) * 3 + 1] = province.sc
         observation[(province.id - 1) * 3 + 2] = province.unit
 
-    reward = observation_data.previousActionReward
+    reward = observation_data.reward
     done = observation_data.done
     info = {}
 

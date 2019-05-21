@@ -30,7 +30,7 @@ logger.setLevel(level)
 
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
-total_timesteps = 1e6
+total_timesteps = 1e3
 saving_interval = 200
 best_mean_reward, n_steps = -np.inf, 0
 
@@ -138,8 +138,9 @@ def callback(_locals, _globals):
     """
     global n_steps, best_mean_reward
     # Print stats every X calls
-    if (n_steps + 1) % saving_interval == 0:
-        logger.info("Current Step: {}, max steps: {}".format(n_steps, total_timesteps))
+    n_steps += 1
+    logger.info("Current Step: {}, max steps: {}".format(n_steps, total_timesteps))
+    if n_steps % saving_interval == 0:
         # Evaluate policy training performance
         x, y = ts2xy(load_results(log_dir), 'timesteps')
         if len(x) > 0:
@@ -147,16 +148,13 @@ def callback(_locals, _globals):
             logger.info("{} timesteps".format(x[-1]))
             logger.info("Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}".format(best_mean_reward, mean_reward))
 
-
             # New best model, you could save the agent here
             if mean_reward > best_mean_reward:
                 best_mean_reward = mean_reward
                 # Example for saving best model
-                # Example for saving best model
                 logger.info("Saving new best model")
                 _locals['self'].save(pickle_dir + 'ppo2_best_model.pkl')
 
-    n_steps += 1
     # Returning False will stop training early
     return True
 

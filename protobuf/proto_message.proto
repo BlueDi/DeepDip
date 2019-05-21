@@ -17,7 +17,6 @@ message BandanaRequest {
     GET_DEAL_REQUEST = 1; // specific to negotiation scenario
     GET_ACCEPTANCE_REQUEST = 2; // specific to negotiation scenario
     SEND_GAME_END = 3;
-    SEND_GAME_WINNER = 4;
   }
 
   // Using "required" is often bad practice. Generally, the validation
@@ -70,18 +69,17 @@ message ProvinceData {
 }
 
 message ObservationData {
+  int32 player = 1;
   // A list of 0 or more provinces.
-  repeated ProvinceData provinces = 1;
+  repeated ProvinceData provinces = 2;
 
-  // The value of the reward gained by the previous action.
-  float previousActionReward = 2;
+  int32 reward = 3;
 
   // A boolean representing whether a game has finished or not.
-  bool done = 3;
+  bool done = 4;
 
   // Arbritary information (mostly for debug purposes).
-  string info = 4;
-  int32 player = 5;
+  string info = 5;
 }
 
 message AcceptanceData {

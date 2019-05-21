@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='proto_message.proto',
   package='dip_q',
   syntax='proto3',
-  serialized_pb=_b('\n\x13proto_message.proto\x12\x05\x64ip_q\"\xd7\x01\n\x0e\x42\x61ndanaRequest\x12(\n\x04type\x18\x01 \x01(\x0e\x32\x1a.dip_q.BandanaRequest.Type\x12+\n\x0bobservation\x18\x02 \x01(\x0b\x32\x16.dip_q.ObservationData\"n\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\x14\n\x10GET_DEAL_REQUEST\x10\x01\x12\x1a\n\x16GET_ACCEPTANCE_REQUEST\x10\x02\x12\x11\n\rSEND_GAME_END\x10\x03\x12\x14\n\x10SEND_GAME_WINNER\x10\x04\"\xd6\x01\n\x14\x44iplomacyGymResponse\x12.\n\x04type\x18\x01 \x01(\x0e\x32 .dip_q.DiplomacyGymResponse.Type\x12\x1d\n\x04\x64\x65\x61l\x18\x02 \x01(\x0b\x32\x0f.dip_q.DealData\x12)\n\nacceptance\x18\x03 \x01(\x0b\x32\x15.dip_q.AcceptanceData\"D\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\x0b\n\x07\x43ONFIRM\x10\x01\x12\r\n\tSEND_DEAL\x10\x02\x12\x13\n\x0fSEND_ACCEPTANCE\x10\x03\"\x95\x01\n\x1a\x44iplomacyGymOrdersResponse\x12\x34\n\x04type\x18\x01 \x01(\x0e\x32&.dip_q.DiplomacyGymOrdersResponse.Type\x12!\n\x06orders\x18\x02 \x01(\x0b\x32\x11.dip_q.OrdersData\"\x1e\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\t\n\x05VALID\x10\x01\"C\n\x0cProvinceData\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05owner\x18\x02 \x01(\x05\x12\n\n\x02sc\x18\x03 \x01(\x05\x12\x0c\n\x04unit\x18\x04 \x01(\x05\"\x83\x01\n\x0fObservationData\x12&\n\tprovinces\x18\x01 \x03(\x0b\x32\x13.dip_q.ProvinceData\x12\x1c\n\x14previousActionReward\x18\x02 \x01(\x02\x12\x0c\n\x04\x64one\x18\x03 \x01(\x08\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\x0e\n\x06player\x18\x05 \x01(\x05\"\x10\n\x0e\x41\x63\x63\x65ptanceData\"\xc6\x01\n\x08\x44\x65\x61lData\x12\x16\n\x0epowerToPropose\x18\x01 \x01(\x05\x12-\n\x07ourMove\x18\x02 \x01(\x0b\x32\x1c.dip_q.DealData.MTOOrderData\x12/\n\ttheirMove\x18\x03 \x01(\x0b\x32\x1c.dip_q.DealData.MTOOrderData\x1a\x42\n\x0cMTOOrderData\x12\x15\n\rstartProvince\x18\x01 \x01(\x05\x12\x1b\n\x13\x64\x65stinationProvince\x18\x02 \x01(\x05\"?\n\tOrderData\x12\r\n\x05start\x18\x01 \x01(\x05\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\x05\x12\x13\n\x0b\x64\x65stination\x18\x03 \x01(\x05\".\n\nOrdersData\x12 \n\x06orders\x18\x01 \x03(\x0b\x32\x10.dip_q.OrderDataB\r\n\x0b\x63ruz.agentsb\x06proto3')
+  serialized_pb=_b('\n\x13proto_message.proto\x12\x05\x64ip_q\"\xc1\x01\n\x0e\x42\x61ndanaRequest\x12(\n\x04type\x18\x01 \x01(\x0e\x32\x1a.dip_q.BandanaRequest.Type\x12+\n\x0bobservation\x18\x02 \x01(\x0b\x32\x16.dip_q.ObservationData\"X\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\x14\n\x10GET_DEAL_REQUEST\x10\x01\x12\x1a\n\x16GET_ACCEPTANCE_REQUEST\x10\x02\x12\x11\n\rSEND_GAME_END\x10\x03\"\xd6\x01\n\x14\x44iplomacyGymResponse\x12.\n\x04type\x18\x01 \x01(\x0e\x32 .dip_q.DiplomacyGymResponse.Type\x12\x1d\n\x04\x64\x65\x61l\x18\x02 \x01(\x0b\x32\x0f.dip_q.DealData\x12)\n\nacceptance\x18\x03 \x01(\x0b\x32\x15.dip_q.AcceptanceData\"D\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\x0b\n\x07\x43ONFIRM\x10\x01\x12\r\n\tSEND_DEAL\x10\x02\x12\x13\n\x0fSEND_ACCEPTANCE\x10\x03\"\x95\x01\n\x1a\x44iplomacyGymOrdersResponse\x12\x34\n\x04type\x18\x01 \x01(\x0e\x32&.dip_q.DiplomacyGymOrdersResponse.Type\x12!\n\x06orders\x18\x02 \x01(\x0b\x32\x11.dip_q.OrdersData\"\x1e\n\x04Type\x12\x0b\n\x07INVALID\x10\x00\x12\t\n\x05VALID\x10\x01\"C\n\x0cProvinceData\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05owner\x18\x02 \x01(\x05\x12\n\n\x02sc\x18\x03 \x01(\x05\x12\x0c\n\x04unit\x18\x04 \x01(\x05\"u\n\x0fObservationData\x12\x0e\n\x06player\x18\x01 \x01(\x05\x12&\n\tprovinces\x18\x02 \x03(\x0b\x32\x13.dip_q.ProvinceData\x12\x0e\n\x06reward\x18\x03 \x01(\x05\x12\x0c\n\x04\x64one\x18\x04 \x01(\x08\x12\x0c\n\x04info\x18\x05 \x01(\t\"\x10\n\x0e\x41\x63\x63\x65ptanceData\"\xc6\x01\n\x08\x44\x65\x61lData\x12\x16\n\x0epowerToPropose\x18\x01 \x01(\x05\x12-\n\x07ourMove\x18\x02 \x01(\x0b\x32\x1c.dip_q.DealData.MTOOrderData\x12/\n\ttheirMove\x18\x03 \x01(\x0b\x32\x1c.dip_q.DealData.MTOOrderData\x1a\x42\n\x0cMTOOrderData\x12\x15\n\rstartProvince\x18\x01 \x01(\x05\x12\x1b\n\x13\x64\x65stinationProvince\x18\x02 \x01(\x05\"?\n\tOrderData\x12\r\n\x05start\x18\x01 \x01(\x05\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\x05\x12\x13\n\x0b\x64\x65stination\x18\x03 \x01(\x05\".\n\nOrdersData\x12 \n\x06orders\x18\x01 \x03(\x0b\x32\x10.dip_q.OrderDataB\r\n\x0b\x63ruz.agentsb\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -47,15 +47,11 @@ _BANDANAREQUEST_TYPE = _descriptor.EnumDescriptor(
       name='SEND_GAME_END', index=3, number=3,
       options=None,
       type=None),
-    _descriptor.EnumValueDescriptor(
-      name='SEND_GAME_WINNER', index=4, number=4,
-      options=None,
-      type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=136,
-  serialized_end=246,
+  serialized_end=224,
 )
 _sym_db.RegisterEnumDescriptor(_BANDANAREQUEST_TYPE)
 
@@ -84,8 +80,8 @@ _DIPLOMACYGYMRESPONSE_TYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=395,
-  serialized_end=463,
+  serialized_start=373,
+  serialized_end=441,
 )
 _sym_db.RegisterEnumDescriptor(_DIPLOMACYGYMRESPONSE_TYPE)
 
@@ -106,8 +102,8 @@ _DIPLOMACYGYMORDERSRESPONSE_TYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=585,
-  serialized_end=615,
+  serialized_start=563,
+  serialized_end=593,
 )
 _sym_db.RegisterEnumDescriptor(_DIPLOMACYGYMORDERSRESPONSE_TYPE)
 
@@ -147,7 +143,7 @@ _BANDANAREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=31,
-  serialized_end=246,
+  serialized_end=224,
 )
 
 
@@ -192,8 +188,8 @@ _DIPLOMACYGYMRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=249,
-  serialized_end=463,
+  serialized_start=227,
+  serialized_end=441,
 )
 
 
@@ -231,8 +227,8 @@ _DIPLOMACYGYMORDERSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=466,
-  serialized_end=615,
+  serialized_start=444,
+  serialized_end=593,
 )
 
 
@@ -283,8 +279,8 @@ _PROVINCEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=617,
-  serialized_end=684,
+  serialized_start=595,
+  serialized_end=662,
 )
 
 
@@ -296,37 +292,37 @@ _OBSERVATIONDATA = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='provinces', full_name='dip_q.ObservationData.provinces', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      name='player', full_name='dip_q.ObservationData.player', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='provinces', full_name='dip_q.ObservationData.provinces', index=1,
+      number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='previousActionReward', full_name='dip_q.ObservationData.previousActionReward', index=1,
-      number=2, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='reward', full_name='dip_q.ObservationData.reward', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='done', full_name='dip_q.ObservationData.done', index=2,
-      number=3, type=8, cpp_type=7, label=1,
+      name='done', full_name='dip_q.ObservationData.done', index=3,
+      number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='info', full_name='dip_q.ObservationData.info', index=3,
-      number=4, type=9, cpp_type=9, label=1,
+      name='info', full_name='dip_q.ObservationData.info', index=4,
+      number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='player', full_name='dip_q.ObservationData.player', index=4,
-      number=5, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -342,8 +338,8 @@ _OBSERVATIONDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=687,
-  serialized_end=818,
+  serialized_start=664,
+  serialized_end=781,
 )
 
 
@@ -366,8 +362,8 @@ _ACCEPTANCEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=820,
-  serialized_end=836,
+  serialized_start=783,
+  serialized_end=799,
 )
 
 
@@ -404,8 +400,8 @@ _DEALDATA_MTOORDERDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=971,
-  serialized_end=1037,
+  serialized_start=934,
+  serialized_end=1000,
 )
 
 _DEALDATA = _descriptor.Descriptor(
@@ -448,8 +444,8 @@ _DEALDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=839,
-  serialized_end=1037,
+  serialized_start=802,
+  serialized_end=1000,
 )
 
 
@@ -493,8 +489,8 @@ _ORDERDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1039,
-  serialized_end=1102,
+  serialized_start=1002,
+  serialized_end=1065,
 )
 
 
@@ -524,8 +520,8 @@ _ORDERSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1104,
-  serialized_end=1150,
+  serialized_start=1067,
+  serialized_end=1113,
 )
 
 _BANDANAREQUEST.fields_by_name['type'].enum_type = _BANDANAREQUEST_TYPE
