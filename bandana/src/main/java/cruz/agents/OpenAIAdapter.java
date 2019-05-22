@@ -32,12 +32,12 @@ public class OpenAIAdapter {
     /**
      * Reward given for winning the game
      */
-    public static final int WON_GAME_REWARD = +100;
+    public static final int WON_GAME_REWARD = +10;
 
     /**
      * Reward given for losing the game
      */
-    public static final int LOST_GAME_REWARD = -100;
+    public static final int LOST_GAME_REWARD = -10;
 
     /**
      * Reward given for generating an invalid deal
@@ -348,12 +348,13 @@ public class OpenAIAdapter {
         }
 
         // ADD REWARD RELATED TO CONQUERED SUPPLY CENTERS
-        this.addReward(this.currentNumSc());
-        this.addReward(this.balanceOfScs() * CAPTURED_SC_REWARD);
-        if (agent_name.equals(this.winner)) {
-            this.wonGame();
-        } else {
-            this.lostGame();
+        this.addReward((int) Math.pow(CAPTURED_SC_REWARD, this.currentNumSc()));
+        if (this.winner != null) {
+            if (agent_name.equals(this.winner)) {
+                this.wonGame();
+            } else {
+                this.lostGame();
+            }
         }
         observationDataBuilder.setReward((int) this.reward);
         this.resetReward();

@@ -200,7 +200,7 @@ public class DeepDip extends DumbBot {
     @Override
     public void handleSlo(String winner) {
         openAIAdapter.setWinner(winner);
-        if (this.me.equals(winner)) {
+        if (this.me.getName().equals(winner)) {
             System.out.println("GAME RESULT: " + this.me + " won with a solo victory.");
         } else {
             System.out.println("GAME RESULT: " + this.me + " did not win with a solo victory. " + winner + " won.");
