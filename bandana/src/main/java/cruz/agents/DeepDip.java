@@ -116,6 +116,20 @@ public class DeepDip extends DumbBot {
         }
     }
 
+    private List<Order> generateHoldOrders() {
+        List<Region> units = new ArrayList<>();
+        units.addAll(this.me.getControlledRegions());
+        List<Order> orders = new ArrayList<>(units.size());
+        
+        while (!units.isEmpty()) {
+            Region unit = units.get(0);
+            orders.add(new HLDOrder(this.me, unit));
+            units.remove(0);
+        }
+
+        return orders;
+    }
+
     private List<Order> getOrdersOfControlledRegions(List<Order> orders) {
         if (orders.isEmpty()) {
             return orders;

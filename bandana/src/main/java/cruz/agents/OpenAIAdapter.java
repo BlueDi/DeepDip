@@ -176,7 +176,6 @@ public class OpenAIAdapter {
      */
     public List<Order> getOrdersFromDeepDip() {
         try {
-            this.agent2.getLogger().logln("GAME STATUS: " + this.openAIObserver.getGameStatus(), true);
             this.generatePowerNameToIntMap();
 
             ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();

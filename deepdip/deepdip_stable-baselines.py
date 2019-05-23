@@ -32,6 +32,7 @@ gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
 saving_interval = 1e3
+train_timesteps = 1e2
 best_mean_reward, n_steps = -np.inf, 0
 
 current_time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -159,7 +160,7 @@ def callback(_locals, _globals):
     return True
 
 
-def evaluate(env, num_steps=1000):
+def evaluate(env, num_steps=1e3):
     """
     Evaluate a RL agent
     :param model: (BaseRLModel object) the RL Agent
@@ -169,7 +170,7 @@ def evaluate(env, num_steps=1000):
     model, model_steps = load_model(env)
     episode_rewards = [0.0]
     obs = env.reset()
-    for i in range(num_steps):
+    for i in range(int(num_steps)):
         # _states are only useful when using LSTM policies
         action, _states = model.predict(obs)
         # here, action, rewards and dones are arrays
@@ -225,7 +226,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     env = make_env(args.env_id)
-    train(env, total_timesteps)
-    evaluate(env, 1000)
+    #train(env, total_timesteps)
+    evaluate(env, train_timesteps)
     plot_results(log_dir)
 
