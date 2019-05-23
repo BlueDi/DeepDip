@@ -175,8 +175,10 @@ class DiplomacyStrategyEnv(gym.Env):
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
         self.action = action
-        self.wait_action.set()
-        self.wait_observation.wait()
+
+        self.wait_action = False
+        while not self.wait_action:
+            pass
 
         return self.observation, self.reward, self.done, self.info
 
@@ -187,17 +189,14 @@ class DiplomacyStrategyEnv(gym.Env):
         """
         self.observation = None
 
-        self.wait_action = threading.Event()
-        self.wait_observation = threading.Event()
-
-        # In this case we simply restart Bandana
         if self.bandana_subprocess is not None:
             self._kill_bandana()
             self._init_bandana()
         else:
             self._init_bandana()
 
-        self.wait_observation.wait()
+        while self.observation is None:
+            pass
 
         return self.observation
 
@@ -314,7 +313,8 @@ class DiplomacyStrategyEnv(gym.Env):
 
         observation_data: proto_message_pb2.ObservationData = request_data.observation
         self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
-        self.wait_observation.set()
+
+        self.wait_action = True
 
         response_data: proto_message_pb2.DiplomacyGymOrdersResponse = proto_message_pb2.DiplomacyGymOrdersResponse()
         response_data.type = proto_message_pb2.DiplomacyGymOrdersResponse.VALID
@@ -324,7 +324,9 @@ class DiplomacyStrategyEnv(gym.Env):
             logger.debug("Sending empty deal to finalize program.")
             return response_data.SerializeToString()
 
-        self.wait_action.wait()
+        while self.wait_action:
+            pass
+
         orders_data: proto_message_pb2.OrdersData = action_to_orders_data(self.action, self.observation)
         response_data.orders.CopyFrom(orders_data)
 
