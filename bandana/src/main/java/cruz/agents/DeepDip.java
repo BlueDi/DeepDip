@@ -95,7 +95,7 @@ public class DeepDip extends DumbBot {
                     System.out.println(orders);
                     return orders;
                 } else {
-                    return this.generateMovementOrders();
+                    return this.generateHoldOrders();
                 }
             case 2:
             case 4:
