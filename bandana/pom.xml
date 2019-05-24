@@ -87,11 +87,13 @@
                 <version>3.2.1</version>
                 <executions>
                     <execution>
+                        <id>DeepDip-shade</id>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <outputFile>agents/DeepDip.jar</outputFile>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -100,6 +102,23 @@
                             </transformers>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>TournamentRunner-shade</id>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <outputFile>TournamentRunner.jar</outputFile>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>ddejonge.bandana.tournament.TournamentRunner</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
         </plugins>
