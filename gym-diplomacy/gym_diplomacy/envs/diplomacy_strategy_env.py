@@ -1,31 +1,22 @@
 import gym
 from gym import spaces
 
-import subprocess
+import atexit
+import logging
+import numpy as np
 import os
 import signal
-import atexit
+import subprocess
 import threading
 import time
-import numpy as np
 
 from gym_diplomacy.envs import proto_message_pb2
 from gym_diplomacy.envs import comm
 
-import logging
 
-logging_level = 'DEBUG'
-level = getattr(logging, logging_level)
+FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)15s()] %(message)s"
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(level)
-
-### LEVELS OF LOGGING (in increasing order of severity)
-# DEBUG	    Detailed information, typically of interest only when diagnosing problems.
-# INFO	    Confirmation that things are working as expected.
-# WARNING	An indication that something unexpected happened, or indicative of some problem in the near future
-# (e.g. ‘disk space low’). The software is still working as expected.
-# ERROR	    Due to a more serious problem, the software has not been able to perform some function.
-# CRITICAL	A serious error, indicating that the program itself may be unable to continue running.
 
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
@@ -187,6 +178,7 @@ class DiplomacyStrategyEnv(gym.Env):
         """Resets the state of the environment and returns an initial observation.
         Returns: observation (object): the initial observation of the space.
         """
+        self.action = None
         self.observation = None
 
         if self.bandana_subprocess is not None:
@@ -234,26 +226,26 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def _init_bandana(self):
-        logger.info("Starting BANDANA tournament...")
+        logger.debug("Starting BANDANA tournament...")
         logger.debug("Running '{}' command on directory '{}'."
                      .format(self.bandana_init_command, self.bandana_root_path))
 
         self.bandana_subprocess = subprocess.Popen(self.bandana_init_command, cwd=self.bandana_root_path, shell=True, preexec_fn=os.setsid)
-        logger.info("Initialized BANDANA tournament.")
+        logger.debug("Initialized BANDANA tournament.")
 
 
     def _kill_bandana(self):
         if self.bandana_subprocess is None:
-            logger.info("No BANDANA process to terminate.")
+            logger.warning("No BANDANA process to terminate.")
         else:
-            logger.info("Terminating BANDANA process...")
+            logger.debug("Terminating BANDANA process...")
 
             # Killing the process group (pg) also kills the children, whereas killing the process would leave the
             # children as orphan processes
             os.killpg(os.getpgid(self.bandana_subprocess.pid), signal.SIGTERM)
             self.bandana_subprocess.wait()
 
-            logger.info("BANDANA process terminated.")
+            logger.debug("BANDANA process terminated.")
 
             # Set current process to None
             self.bandana_subprocess = None
@@ -294,14 +286,14 @@ class DiplomacyStrategyEnv(gym.Env):
         # Exit the server thread when the main thread terminates
         self.server_thread.daemon = True
         self.server_thread.start()
-        logger.info("Started ThreadedTCPServer daemon thread.")
+        logger.debug("Started ThreadedTCPServer daemon thread.")
 
 
     def _terminate_socket_server(self):
         with self.server:
             self.server.shutdown()
             self.server.server_close()
-            logger.info("Shut down ThreadedTCPServer.")
+            logger.debug("Shut down ThreadedTCPServer.")
 
 
     def handle_request(self, request: bytearray) -> None:

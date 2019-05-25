@@ -8,9 +8,6 @@ import ddejonge.bandana.tools.Logger;
 
 
 public class TournamentRunner {
-
-	// JC: CUSTOM SETTINGS BEGIN
-
     final static boolean MODE = false;  //Strategy/false vs Negotiation/true
 	final static int REMOTE_DEBUG = 0;	// JC: determine whether I want to remote debug the OpenAI jar or not
     private final static String GAME_MAP = "small"; // Game map can be 'standard' or 'small'
@@ -164,11 +161,6 @@ public class TournamentRunner {
                         Thread.sleep(499);
                     } catch (InterruptedException e) {
                         System.err.println("Failed sleep" + e);
-                    }
-
-                    if (tournamentObserver.playerFailed()) {
-                        // One or more players did not send its orders in in time.
-                        System.err.println("A player failed to send its orders in time.");
                     }
                 }
             }

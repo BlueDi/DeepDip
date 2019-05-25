@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import re
 from datetime import datetime
@@ -17,23 +18,17 @@ from stable_baselines.results_plotter import load_results, ts2xy
 
 from ppo import PPO2
 
-import logging
-
 
 FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)15s()] %(message)s"
-logging.basicConfig(format=FORMAT)
-
-logging_level = 'DEBUG'
-level = getattr(logging, logging_level)
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(level)
 
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
-saving_interval = 1e3
+saving_interval = 1 #1 interval = 128 steps
 train_timesteps = 1e2
-best_mean_reward, n_steps = -np.inf, 0
+best_mean_reward, n_steps = 0, 0
 
 current_time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 log_dir = "./deepdip-results/"
@@ -90,10 +85,7 @@ def make_env(gym_env_id):
         gym_env = gym.make(gym_env_id)
         monitor_file_path = log_dir + current_time_string + "-monitor.csv"
         env = Monitor(gym_env, monitor_file_path, allow_early_resets=True)
-
-        # vectorized environments allow to easily multiprocess training
-        # we demonstrate its usefulness in the next examples
-        env = DummyVecEnv([lambda: env]) # The algorithms require a vectorized environment to run
+        env = DummyVecEnv([lambda: env])
     return env
 
 
@@ -117,15 +109,23 @@ def load_model(env):
 
             return model, model_steps
     
-    logger.info("No pickle was found for environment {}. Creating new model with algorithm {} and policy 'MlpPolicy'...".format(gym_env_id, algorithm))
+    logger.debug("No pickle was found for environment {}. Creating new model with algorithm {} and policy 'MlpPolicy'...".format(gym_env_id, algorithm))
     model = PPO2(policy='MlpPolicy', env=env, verbose=0)
 
     return model, model_steps  
 
 
-def train(env, total_timesteps=1e6):    
+def train(env, total_timesteps=1e6):   
+    global best_mean_reward
+ 
     model, model_steps = load_model(env)
 
+    with open('mean_reward.txt', 'r') as f:
+        lines = f.read().splitlines()
+        last_line = lines[-1]
+        best_mean_reward = last_line.split()[4]
+
+    logger.info("Starting train.")
     model.learn(int(total_timesteps), callback=callback)
     
     return model
@@ -133,30 +133,27 @@ def train(env, total_timesteps=1e6):
 
 def callback(_locals, _globals):
     """
-    Callback called after n steps (see ACER or PPO2)
+    Callback called after n steps
     :param _locals: (dict)
     :param _globals: (dict)
     """
-    global n_steps, best_mean_reward
-    # Print stats every X calls
+    global best_mean_reward, n_steps, saving_interval
+
     n_steps += 1
     if n_steps % saving_interval == 0:
-        logger.info("Current Step: {}".format(n_steps))
-        # Evaluate policy training performance
         x, y = ts2xy(load_results(log_dir), 'timesteps')
         if len(x) > 0:
             mean_reward = np.mean(y[-100:])
-            logger.info("{} timesteps".format(x[-1]))
-            logger.info("Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}".format(best_mean_reward, mean_reward))
+            logger.info("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}\n".format(x[-1], best_mean_reward, mean_reward))
 
-            # New best model, you could save the agent here
+            with open("mean_reward.txt", "a") as text_file:
+                print("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}".format(x[-1], best_mean_reward, mean_reward), file=text_file)
+
             if mean_reward > best_mean_reward:
                 best_mean_reward = mean_reward
-                # Example for saving best model
-                logger.info("Saving new best model")
+                logger.debug("Saving new best model")
                 _locals['self'].save(pickle_dir + 'ppo2_best_model.pkl')
 
-    # Returning False will stop training early
     return True
 
 
@@ -184,7 +181,7 @@ def evaluate(env, num_steps=1e3):
             episode_rewards.append(0.0)
     # Compute mean reward for the last 100 episodes
     mean_100ep_reward = round(np.mean(episode_rewards[-100:]), 1)
-    print("Mean reward:", mean_100ep_reward, "Num episodes:", len(episode_rewards))
+    logger.info("Mean reward:", mean_100ep_reward, "Num episodes:", len(episode_rewards))
     
     return mean_100ep_reward
 
@@ -226,7 +223,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     env = make_env(args.env_id)
-    #train(env, total_timesteps)
+    train(env, total_timesteps)
     evaluate(env, train_timesteps)
     plot_results(log_dir)
 
