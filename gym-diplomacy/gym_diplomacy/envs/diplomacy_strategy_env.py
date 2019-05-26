@@ -110,7 +110,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Set this in SOME subclasses
     metadata = {'render.modes': []}
-    reward_range = (-float('inf'), float('inf'))
+    reward_range = (-10, 3**4)
     spec = None
 
     # Set these in ALL subclasses

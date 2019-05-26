@@ -66,7 +66,7 @@ public class DeepDip extends DumbBot {
         DeepDip deepDip = new DeepDip(name, finalYear, logPath);
 
         try {
-            deepDip.start(deepDip.comm);
+            deepDip.start(deepDip.icomm);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +75,6 @@ public class DeepDip extends DumbBot {
     @Override
     public void init() {
         this.logger.enable(this.logPath, this.me.getName() + ".log");
-        this.logger.logln(this.name + " playing as " + this.me.getName(), true);
         this.logger.writeToFile();
     }
 

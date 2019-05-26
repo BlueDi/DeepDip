@@ -30,15 +30,17 @@ class StreamGobbler extends Thread {
 
     public void run() {
         PrintWriter pw = null;
+        BufferedReader br = null;
+        String line = null;
+
         try {
             if (this.outputStream != null) {
                 pw = new PrintWriter(this.outputStream);
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
-            String line = null;
+            br = new BufferedReader(new InputStreamReader(this.inputStream));
 
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 if (pw != null) {
                     pw.println(this.type + ": " + line);
                 }
@@ -49,11 +51,20 @@ class StreamGobbler extends Thread {
             }
         } catch (IOException e) {
             System.err.println("Failed to read from " + this.type);
-        }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        if (pw != null) {
-            pw.flush();
-            pw.close();
+            if (pw != null) {
+                pw.flush();
+                pw.close();
+            }
         }
     }
 }

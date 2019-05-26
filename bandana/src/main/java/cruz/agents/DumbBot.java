@@ -3,9 +3,11 @@ package cruz.agents;
 import es.csic.iiia.fabregues.dip.Player;
 import es.csic.iiia.fabregues.dip.board.*;
 import es.csic.iiia.fabregues.dip.comm.CommException;
+import es.csic.iiia.fabregues.dip.comm.Comm;
 import es.csic.iiia.fabregues.dip.comm.IComm;
 import es.csic.iiia.fabregues.dip.comm.daide.DaideComm;
 import es.csic.iiia.fabregues.dip.orders.*;
+import es.csic.iiia.fabregues.utilities.Interface;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -28,7 +30,7 @@ public class DumbBot extends Player {
     private static final int DEFAULT_GAME_SERVER_PORT = 16713;
     private int finalYear;
 
-    IComm comm;
+    IComm icomm;
 
     DumbBot(String name, int finalYear, String logPath) {
         super(logPath);
@@ -37,7 +39,7 @@ public class DumbBot extends Player {
 
         try {
             InetAddress gameServerIp = InetAddress.getLocalHost();
-            this.comm = new DaideComm(gameServerIp, DEFAULT_GAME_SERVER_PORT, this.name);
+            this.icomm = new DaideComm(gameServerIp, DEFAULT_GAME_SERVER_PORT, this.name);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -80,19 +82,28 @@ public class DumbBot extends Player {
         DumbBot dumbBot = new DumbBot(name, finalYear, logPath);
 
         try {
-            dumbBot.start(dumbBot.comm);
+            dumbBot.start(dumbBot.icomm);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void init() {
-        System.out.println("Player " + this.name + " has started and is playing as: " + me.getName());
-    }
+    public void init() {}
 
     @Override
-    public void start() {
+    public void start() {}
+
+    @Override
+    public void start(IComm comm) {
+        this.name = comm.getName();
+        this.log = new Interface(this.logPath + "dip_" + this.name);
+        this.comm = new Comm(comm, this);
+        try {
+            this.comm.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Order> play() {
@@ -111,20 +122,14 @@ public class DumbBot extends Player {
     }
 
     List<Order> generateOrders() {
-        System.out.println("Dumb generating orders");
-        System.out.println(game.getPhase());
-        System.out.println(game.getPhase().ordinal());
         switch (game.getPhase().ordinal() + 1) {
             case 1:
             case 3:
-                System.out.println("generate movement orders");
                 return this.generateMovementOrders();
             case 2:
             case 4:
-                System.out.println("generate retreat orders");
                 return this.generateRetreatOrders();
             case 5:
-                System.out.println("generate build or remove orders");
                 int nBuilds = this.me.getOwnedSCs().size() - this.me.getControlledRegions().size();
                 if (nBuilds < 0) {
                     return this.generateRemoveOrders(-nBuilds);
