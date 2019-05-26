@@ -32,7 +32,7 @@ public class OpenAIAdapter {
     /**
      * Reward given for winning the game
      */
-    public static final int WON_GAME_REWARD = +10;
+    public static final int WON_GAME_REWARD = (int) Math.pow(3, 4);
 
     /**
      * Reward given for losing the game
@@ -45,7 +45,7 @@ public class OpenAIAdapter {
     public static final int INVALID_DEAL_REWARD = -10;
 
     /** Reward given for capturing a Supply Center (SC). Losing a SC gives a negative reward with the same value. */
-    public static final int CAPTURED_SC_REWARD = +5;
+    public static final int CAPTURED_SC_REWARD = +3;
 
 
     /**
@@ -101,7 +101,7 @@ public class OpenAIAdapter {
     
     private void init(){
         this.resetReward();
-        this.previousNumSc = (this.agent2 == null)? this.agent.me.getOwnedSCs().size() : 0;
+        this.previousNumSc = (this.agent2 == null)? this.agent.me.getOwnedSCs().size() : 1;
 
         this.done = false;
         this.info = null;
@@ -347,7 +347,7 @@ public class OpenAIAdapter {
         }
 
         // ADD REWARD RELATED TO CONQUERED SUPPLY CENTERS
-        this.addReward((int) Math.pow(CAPTURED_SC_REWARD, this.currentNumSc()));
+        this.addReward((int) Math.pow(CAPTURED_SC_REWARD, this.balanceOfScs()));
         if (this.winner != null) {
             if (agent_name.equals(this.winner)) {
                 this.wonGame();
