@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
-saving_interval = 1 #1 interval = 128 steps
+saving_interval = 3 #1 interval = 128 steps
 train_timesteps = 1e2
 best_mean_reward, n_steps = 0, 0
 
@@ -120,10 +120,12 @@ def train(env, total_timesteps=1e6):
  
     model, model_steps = load_model(env)
 
-    with open('mean_reward.txt', 'r') as f:
+    f = open('mean_reward.txt', 'a+')
+    f.close()
+    with open('mean_reward.txt', 'r+') as f:
         lines = f.read().splitlines()
-        last_line = lines[-1]
-        best_mean_reward = last_line.split()[4]
+        last_line = lines[-1] if lines else None
+        best_mean_reward = float(last_line.split()[4]) if isinstance(last_line, str) else -float('inf')
 
     logger.info("Starting train.")
     model.learn(int(total_timesteps), callback=callback)
