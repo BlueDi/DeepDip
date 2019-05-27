@@ -51,7 +51,13 @@ class StreamGobbler extends Thread {
             }
         } catch (IOException e) {
             System.err.println("Failed to read from " + this.type);
-            e.printStackTrace();
+            if (pw != null) {
+                pw.println(this.type + ": empty");
+            }
+
+            if (this.print) {
+                System.out.println(this.type + ": empty");
+            }
         } finally {
             try {
                 if (br != null) {
