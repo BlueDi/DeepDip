@@ -72,7 +72,9 @@ class DiplomacyTCPHandler(socketserver.BaseRequestHandler):
 
             data = self.recv_all(data_length)
 
-            if self.server.handler is not None:
+            if data is None:
+                response = data.upper()
+            elif self.server.handler is not None:
                 response = self.server.handler(bytearray(data))
             else:
                 logger.warning("The handler for the message received is None in DiplomacyTCPHandler. "

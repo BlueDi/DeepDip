@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
-total_timesteps = 1e6
-saving_interval = 3 #1 interval = 128 steps
+total_timesteps = 1e7
+saving_interval = 8 #1 interval = 128 steps
 train_timesteps = 1e2
 best_mean_reward, n_steps = 0, 0
 
@@ -99,7 +99,7 @@ def load_model(env):
         search = re.search(algorithm + r'_' + gym_env_id + r'_(.*)_steps.pkl', file_name)
         if search:
             if algorithm == 'ppo2':
-                model = PPO2.load(file_name, env=env, verbose=0)
+                model = PPO2.load(file_name, env=env, verbose=0, tensorboard_log=log_dir)
             else:
                 raise Exception("Algorithm not supported: {}".format(algorithm))
 
@@ -110,7 +110,7 @@ def load_model(env):
             return model, model_steps
     
     logger.debug("No pickle was found for environment {}. Creating new model with algorithm {} and policy 'MlpPolicy'...".format(gym_env_id, algorithm))
-    model = PPO2(policy='MlpPolicy', env=env, verbose=0)
+    model = PPO2(policy='MlpPolicy', env=env, verbose=0, tensorboard_log=log_dir)
 
     return model, model_steps  
 
@@ -183,7 +183,7 @@ def evaluate(env, num_steps=1e3):
             episode_rewards.append(0.0)
     # Compute mean reward for the last 100 episodes
     mean_100ep_reward = round(np.mean(episode_rewards[-100:]), 1)
-    logger.info("Mean reward:", mean_100ep_reward, "Num episodes:", len(episode_rewards))
+    logger.info("Mean reward: {}, Num episodes: {}".format(mean_100ep_reward, len(episode_rewards)))
     
     return mean_100ep_reward
 

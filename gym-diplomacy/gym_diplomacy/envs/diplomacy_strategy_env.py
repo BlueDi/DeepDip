@@ -180,11 +180,9 @@ class DiplomacyStrategyEnv(gym.Env):
         """
         self.action = None
         self.observation = None
+        self.wait_action = False
 
-        if self.bandana_subprocess is not None:
-            self._kill_bandana()
-            self._init_bandana()
-        else:
+        if self.bandana_subprocess is None:
             self._init_bandana()
 
         while self.observation is None:
@@ -300,11 +298,9 @@ class DiplomacyStrategyEnv(gym.Env):
         request_data: proto_message_pb2.BandanaRequest = proto_message_pb2.BandanaRequest()
         request_data.ParseFromString(request)
 
-        if request_data.type is proto_message_pb2.BandanaRequest.INVALID:
-            raise ValueError("Type of BandanaRequest is INVALID.", request_data)
-
-        observation_data: proto_message_pb2.ObservationData = request_data.observation
-        self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
+        if request_data.type is not proto_message_pb2.BandanaRequest.INVALID:
+            observation_data: proto_message_pb2.ObservationData = request_data.observation
+            self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
 
         self.wait_action = True
 

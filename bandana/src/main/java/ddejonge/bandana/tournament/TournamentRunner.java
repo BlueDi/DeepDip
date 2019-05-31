@@ -27,7 +27,7 @@ public class TournamentRunner {
 	// Add your own line here to run your own bot.
 	final static String[] randomBotCommand = {"java", "-jar", "agents/RandomBot.jar", "-log", LOG_FOLDER, "-name", "RandomBot", "-fy", FINAL_YEAR};
 	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", LOG_FOLDER, "-name", "RandomNegotiator", "-fy", FINAL_YEAR};
-	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", LOG_FOLDER, "-name", "DumbBot", "-fy", FINAL_YEAR};
+	final static String[] dumbBotCommand = {"java", "-jar", "agents/DumbBot.jar", "-log", LOG_FOLDER, "-name", "DumbBot", "-fy", FINAL_YEAR};
 	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", LOG_FOLDER, "-name", "D-Brane", "-fy", FINAL_YEAR};
 	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", LOG_FOLDER, "-name", "DBraneExampleBot", "-fy", };
 	final static String[] openAIBotNegotiatorCommand = {"java", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", LOG_FOLDER, "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
@@ -39,8 +39,7 @@ public class TournamentRunner {
     final static String[] openAIBotNegotiatorCommandDebug = {"java", "-agentlib:jdwp=transport=dt_socket,server=n,address=5005,suspend=y", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", "log", "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
 	
 	public static void main(String[] args) throws IOException {
-		
-		int numberOfGames = 1;				//The number of games this tournament consists of.
+		int numberOfGames = Integer.MAX_VALUE; //The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 1; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 3;  //30 seconds for each SUM and AUT phases
@@ -122,8 +121,8 @@ public class TournamentRunner {
                         name = "DeepDip";
                         command = deepDipCommand;
                     } else {
-                        name = "RandomBot " + i;
-                        command = randomBotCommand;
+                        name = "DumbBot";
+                        command = dumbBotCommand;
                     }
 
                     //set the log folder for this agent to be a subfolder of the tournament log folder.
