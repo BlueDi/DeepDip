@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ddejonge.bandana.tools.FileIO;
-import ddejonge.bandana.tools.ProcessRunner;
 
 
 public class ParlanceRunner {
@@ -54,19 +53,16 @@ public class ParlanceRunner {
 		//Run parlance-server
 		String[] cmd = {PARLANCE_PATH, "-g" + numGames, map};
 		parlanceProcess = ProcessRunner.exec(cmd, "parlance init-server.sh");
-
-		System.out.println("Working Directory = " +
-				System.getProperty("user.dir"));
 		
     	//Note: an exception is thrown if parlance is started CORRECTLY.
     	try {
-    		if(parlanceProcess == null){
-    			System.out.println("Parlance failed to start.");
-    		}else{
-    			System.out.println("ParlanceServer.runParlanceServer() parlance exit value: " + parlanceProcess.exitValue());
+    		if (parlanceProcess == null) {
+    			System.err.println("Parlance failed to start.");
+    		} else {
+    			System.err.println("ParlanceServer.runParlanceServer() parlance exit value: " + parlanceProcess.exitValue());
     		}
-		} catch (IllegalThreadStateException e) {
-			System.out.println("ParlanceServer.runParlanceServer() PARLANCE SERVER STARTED");
+		} catch (IllegalThreadStateException ignore) {
+			//System.out.println("ParlanceServer.runParlanceServer() PARLANCE SERVER STARTED");
 		}
     	
 	    	

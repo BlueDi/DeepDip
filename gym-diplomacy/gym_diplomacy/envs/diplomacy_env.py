@@ -10,8 +10,10 @@ import signal
 import atexit
 import numpy as np
 
+import grpc
+
+from gym_diplomacy.envs import proto_message_pb2, proto_message_pb2_grpc
 from gym_diplomacy.envs import proto_message_pb2
-from gym_diplomacy.envs import comm
 
 import logging
 
@@ -137,11 +139,9 @@ class DiplomacyEnv(gym.Env):
     bandana_subprocess = None
 
     # Communication
-
-    socket_server = None
+    server: grpc.server = None
 
     # Env
-
     received_first_observation: bool = False
 
     waiting_for_action: bool = False
@@ -237,11 +237,8 @@ class DiplomacyEnv(gym.Env):
             else:
                 self._init_bandana(self.enable_bandana_output)
 
-            if self.socket_server is None:
-                self._init_socket_server()
-
-            self.socket_server.terminate = False
-            self.socket_server.threaded_listen()
+            if self.server is None:
+                self._init_grpc_server()
 
             # Wait until the observation field has been set, by receiving the observation from Bandana
             while self.observation is None:
@@ -295,8 +292,8 @@ class DiplomacyEnv(gym.Env):
 
         self.terminate = True
 
-        if self.socket_server is not None:
-            self.socket_server.close()
+        if self.server is not None:
+            self._terminate_grpc_server()
 
         if self.bandana_subprocess is not None:
             self._kill_bandana()
@@ -392,8 +389,13 @@ class DiplomacyEnv(gym.Env):
         self.action_space = spaces.MultiDiscrete([NUMBER_OF_PROVINCES, NUMBER_OF_PROVINCES,
                                                   NUMBER_OF_OPPONENTS, NUMBER_OF_PROVINCES, NUMBER_OF_PROVINCES])
 
-    def _init_socket_server(self):
-        self.socket_server = comm.LocalSocketServer(5000, self._handle)
+    def _init_grpc_server(self):
+        self.server = DiplomacyGymServiceServicer.create_server(self)
+        self.server.start()
+
+
+    def _terminate_grpc_server(self):
+        self.server.stop(0)
 
     def _handle(self, request: bytearray) -> bytes:
         request_data: proto_message_pb2.BandanaRequest = proto_message_pb2.BandanaRequest()
@@ -447,25 +449,12 @@ class DiplomacyEnv(gym.Env):
             if self.done:
                 # Return empty deal because game is over and BANDANA needs a response
                 logger.debug("Sending empty deal to finalize program.")
-                # TODO: Terminate should not be here. Refactor all of this!
-                self.socket_server.terminate = True
                 return response_data
             if time.time() > timeout:
                 logger.info("Timed out waiting for step function. Either step is taking too long or it hasn't been "
                             "called in '{}' seconds.".format(time_to_timeout))
-
-                # The socket needs to be terminated, otherwise it'll hang
-                self.socket_server.terminate = True
-
                 # Bandana needs to be killed, otherwise it'll ask for one more action when it shouldn't
                 self._kill_bandana()
-
-                return response_data
-
-            if self.terminate:
-                logger.debug("Close has been called, so we are terminating the waiting for action loop.")
-                self.socket_server.terminate = True
-                # self.clean_up()
                 return response_data
 
         # Once we have the action, send it as a deal
@@ -477,7 +466,6 @@ class DiplomacyEnv(gym.Env):
     def _handle_send_game_end_request(self,
                                       request_data: proto_message_pb2.BandanaRequest) -> proto_message_pb2.DiplomacyGymResponse:
         logger.debug("Handling 'SEND_GAME_END'.")
-
         observation_data: proto_message_pb2.ObservationData = request_data.observation
         self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
 
@@ -486,11 +474,6 @@ class DiplomacyEnv(gym.Env):
 
         response_data: proto_message_pb2.DiplomacyGymResponse = proto_message_pb2.DiplomacyGymResponse()
         response_data.type = proto_message_pb2.DiplomacyGymResponse.CONFIRM
-
-        # TODO: put these lines in a function
-        self.socket_server.terminate = True
-
-        # self.terminate = True
 
         self.waiting_for_action = False
         logger.debug("'waiting_for_action': {}".format(self.waiting_for_action))

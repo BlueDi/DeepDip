@@ -14,6 +14,7 @@ import es.csic.iiia.fabregues.dip.orders.Order;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +66,7 @@ public class DeepDip extends DumbBot {
         DeepDip deepDip = new DeepDip(name, finalYear, logPath);
 
         try {
-            deepDip.start(deepDip.comm);
+            deepDip.start(deepDip.icomm);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +75,6 @@ public class DeepDip extends DumbBot {
     @Override
     public void init() {
         this.logger.enable(this.logPath, this.me.getName() + ".log");
-        this.logger.logln(this.name + " playing as " + this.me.getName(), true);
         this.logger.writeToFile();
     }
 
@@ -94,7 +94,7 @@ public class DeepDip extends DumbBot {
                     System.out.println(orders);
                     return orders;
                 } else {
-                    return this.generateMovementOrders();
+                    return this.generateHoldOrders();
                 }
             case 2:
             case 4:
@@ -113,6 +113,20 @@ public class DeepDip extends DumbBot {
             default:
                 return null;
         }
+    }
+
+    private List<Order> generateHoldOrders() {
+        List<Region> units = new ArrayList<>();
+        units.addAll(this.me.getControlledRegions());
+        List<Order> orders = new ArrayList<>(units.size());
+        
+        while (!units.isEmpty()) {
+            Region unit = units.get(0);
+            orders.add(new HLDOrder(this.me, unit));
+            units.remove(0);
+        }
+
+        return orders;
     }
 
     private List<Order> getOrdersOfControlledRegions(List<Order> orders) {
@@ -195,7 +209,24 @@ public class DeepDip extends DumbBot {
         }
         return mto_orders;
     }
-    
+
+    @Override
+    public void handleSlo(String winner) {
+        openAIAdapter.setWinner(winner);
+        if (this.me.getName().equals(winner)) {
+            System.out.println("GAME RESULT: " + this.me + " won with a solo victory.");
+        } else {
+            System.out.println("GAME RESULT: " + this.me + " did not win with a solo victory. " + winner + " won.");
+        }
+        super.handleSlo(winner);
+    }
+
+    @Override
+    public void handleSMR(String[] message) {
+        System.out.println("END GAME: " + Arrays.toString(message));
+        super.handleSMR(message);
+    }    
+
     public Logger getLogger() {
         return this.logger;
     }

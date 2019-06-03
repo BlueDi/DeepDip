@@ -11,10 +11,12 @@ tensorflow = "*"
 matplotlib = "*"
 numpy = "*"
 pandas = "*"
-baselines = {editable = true,path = "./baselines"}
 torch = "*"
 torchvision = "*"
 gym-diplomacy = {editable = true,path = "./gym-diplomacy"}
+stable-baselines = "*"
+protobuf = "*"
+baselines = {editable = true,path = "./baselines"}
 
 [requires]
 python_version = "3.6"

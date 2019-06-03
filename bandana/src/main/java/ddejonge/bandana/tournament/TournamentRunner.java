@@ -4,17 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import ddejonge.bandana.tools.ProcessRunner;
 import ddejonge.bandana.tools.Logger;
 
 
 public class TournamentRunner {
-
-	// JC: CUSTOM SETTINGS BEGIN
-
     final static boolean MODE = false;  //Strategy/false vs Negotiation/true
 	final static int REMOTE_DEBUG = 0;	// JC: determine whether I want to remote debug the OpenAI jar or not
-    private final static String GAME_MAP = "small"; // Game map can be 'standard' or 'small'
+    private final static String GAME_MAP = "small"; // Game map can be 'standard', 'mini' or 'small'
     private final static String FINAL_YEAR = "2000";
 
     // Using a custom map to define how many players are there on each custom map
@@ -31,11 +27,11 @@ public class TournamentRunner {
 	// Add your own line here to run your own bot.
 	final static String[] randomBotCommand = {"java", "-jar", "agents/RandomBot.jar", "-log", LOG_FOLDER, "-name", "RandomBot", "-fy", FINAL_YEAR};
 	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", LOG_FOLDER, "-name", "RandomNegotiator", "-fy", FINAL_YEAR};
-	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", LOG_FOLDER, "-name", "DumbBot", "-fy", FINAL_YEAR};
+	final static String[] dumbBotCommand = {"java", "-jar", "agents/DumbBot.jar", "-log", LOG_FOLDER, "-name", "DumbBot", "-fy", FINAL_YEAR};
 	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", LOG_FOLDER, "-name", "D-Brane", "-fy", FINAL_YEAR};
 	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", LOG_FOLDER, "-name", "DBraneExampleBot", "-fy", };
 	final static String[] openAIBotNegotiatorCommand = {"java", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", LOG_FOLDER, "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
-	final static String[] deepDipCommand = {"java", "-jar", "target/DeepDip-0.1-shaded.jar", "-log", LOG_FOLDER, "-name", "DeepDip", "-fy", FINAL_YEAR};
+	final static String[] deepDipCommand = {"java", "-jar", "agents/DeepDip.jar", "-log", LOG_FOLDER, "-name", "DeepDip", "-fy", FINAL_YEAR};
 	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", LOG_FOLDER, "-name", "AnacExampleNegotiator", "-fy", FINAL_YEAR};
 
 
@@ -43,8 +39,7 @@ public class TournamentRunner {
     final static String[] openAIBotNegotiatorCommandDebug = {"java", "-agentlib:jdwp=transport=dt_socket,server=n,address=5005,suspend=y", "-jar", "target/open-ai-negotiator-0.1-shaded.jar", "-log", "log", "-name", "OpenAINegotiator", "-fy", FINAL_YEAR};
 	
 	public static void main(String[] args) throws IOException {
-		
-		int numberOfGames = 1;				//The number of games this tournament consists of.
+		int numberOfGames = Integer.MAX_VALUE; //The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 1; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 3;  //30 seconds for each SUM and AUT phases
@@ -116,18 +111,18 @@ public class TournamentRunner {
                 }
 
                 //4. Start the players:
-                for (int i = 0; i < numberOfParticipants; i++) {
+                for (int i = 0; i < 2; i++) {
 
                     String name;
                     String[] command;
 
                     //make sure that each player has a different name.
-                    if (i < numberOfParticipants - 1) {
-                        name = "RandomBot " + i;
-                        command = randomBotCommand;
-                    } else {
-                        name = "DeepDip " + i;
+                    if (i == 0) {
+                        name = "DeepDip";
                         command = deepDipCommand;
+                    } else {
+                        name = "DumbBot";
+                        command = dumbBotCommand;
                     }
 
                     //set the log folder for this agent to be a subfolder of the tournament log folder.
@@ -161,16 +156,10 @@ public class TournamentRunner {
 
                 //NOW WAIT TILL THE GAME IS FINISHED
                 while (tournamentObserver.getGameStatus() == TournamentObserver.GAME_ACTIVE || tournamentObserver.getGameStatus() == TournamentObserver.CONNECTED_WAITING_TO_START) {
-
                     try {
                         Thread.sleep(499);
                     } catch (InterruptedException e) {
                         System.err.println("Failed sleep" + e);
-                    }
-
-                    if (tournamentObserver.playerFailed()) {
-                        // One or more players did not send its orders in in time.
-                        System.err.println("A player failed to send its orders in time.");
                     }
                 }
             }

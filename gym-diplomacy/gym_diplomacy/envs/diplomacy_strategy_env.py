@@ -1,35 +1,32 @@
 import gym
 from gym import spaces
 
-import subprocess
+import atexit
+import grpc
+import logging
+import numpy as np
 import os
 import signal
-import atexit
+import socketserver
+import subprocess
 import threading
-import numpy as np
+import typing
+import time
 
-from gym_diplomacy.envs import proto_message_pb2
-from gym_diplomacy.envs import comm
+from abc import ABCMeta, abstractmethod
+from concurrent import futures
 
-import logging
+from gym_diplomacy.envs import proto_message_pb2, proto_message_pb2_grpc
 
-logging_level = 'DEBUG'
-level = getattr(logging, logging_level)
+
+FORMAT = "%(asctime)s %(levelname)s -- [%(filename)s:%(lineno)s - %(funcName)s()] %(message)s"
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(level)
-
-### LEVELS OF LOGGING (in increasing order of severity)
-# DEBUG	    Detailed information, typically of interest only when diagnosing problems.
-# INFO	    Confirmation that things are working as expected.
-# WARNING	An indication that something unexpected happened, or indicative of some problem in the near future
-# (e.g. ‘disk space low’). The software is still working as expected.
-# ERROR	    Due to a more serious problem, the software has not been able to perform some function.
-# CRITICAL	A serious error, indicating that the program itself may be unable to continue running.
 
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
-NUMBER_OF_PLAYERS = 2#7
-NUMBER_OF_PROVINCES = 8#75
+NUMBER_OF_PLAYERS = 2
+NUMBER_OF_PROVINCES = 19#8#75
 
 
 def observation_data_to_observation(observation_data: proto_message_pb2.ObservationData) -> np.array:
@@ -57,7 +54,7 @@ def observation_data_to_observation(observation_data: proto_message_pb2.Observat
         observation[(province.id - 1) * 3 + 1] = province.sc
         observation[(province.id - 1) * 3 + 2] = province.unit
 
-    reward = observation_data.previousActionReward
+    reward = observation_data.reward
     done = observation_data.done
     info = {}
 
@@ -118,14 +115,12 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Set this in SOME subclasses
     metadata = {'render.modes': []}
-    reward_range = (-float('inf'), float('inf'))
+    reward_range = (-10, 3**5)
     spec = None
 
     # Set these in ALL subclasses
     action_space = None
     observation_space = None
-
-    metadata = {'render.modes': ['human']}
 
     ### CUSTOM ATTRIBUTES
 
@@ -136,12 +131,10 @@ class DiplomacyStrategyEnv(gym.Env):
     bandana_subprocess = None
 
     # Communication
-    socket_server = None
+    server: grpc.server = None
 
     # Env
     received_first_observation: bool = False
-    waiting_for_action: bool = False
-    response_available = threading.Event()
     limit_action_time: int = 0
     observation: np.ndarray = None
     action: np.ndarray = None
@@ -152,6 +145,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     terminate = False
     termination_complete = False
+    closing: bool = False
 
 
     def __init__(self):
@@ -174,41 +168,29 @@ class DiplomacyStrategyEnv(gym.Env):
             done (boolean): whether the episode has ended, in which case further step() calls will return undefined results
             info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
         """
-        # When the agent calls step, make sure it does nothing until the agent can act
-        while not self.waiting_for_action:
-            pass
-
         self.action = action
-        self.waiting_for_action = False
 
-        # After setting 'waiting_for_action' to false, the 'handle' function should send the chosen action
-        self.response_available.wait()
+        self.wait_action = False
+        while not self.wait_action:
+            pass
 
         return self.observation, self.reward, self.done, self.info
 
 
     def reset(self):
         """Resets the state of the environment and returns an initial observation.
-        Returns: observation (object): the initial observation of the
-            space.
+        Returns: observation (object): the initial observation of the space.
         """
-        # Set or reset current observation to None
+        self.action = None
         self.observation = None
+        self.wait_action = False
 
-        # In this case we simply restart Bandana
-        if self.bandana_subprocess is not None:
-            self._kill_bandana()
-            self._init_bandana()
-        else:
+        if self.bandana_subprocess is None:
             self._init_bandana()
 
-        if self.socket_server is None:
-            self._init_socket_server()
+        if self.server is None:
+            self._init_grpc_server()
 
-        self.socket_server.terminate = False
-        self.socket_server.threaded_listen()
-
-        # Wait until the observation field has been set, by receiving the observation from Bandana
         while self.observation is None:
             pass
 
@@ -216,35 +198,6 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def render(self, mode='human'):
-        """Renders the environment.
-        The set of supported modes varies per environment. (And some
-        environments do not support rendering at all.) By convention,
-        if mode is:
-        - human: render to the current display or terminal and
-          return nothing. Usually for human consumption.
-        - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
-          representing RGB values for an x-by-y pixel image, suitable
-          for turning into a video.
-        - ansi: Return a string (str) or StringIO.StringIO containing a
-          terminal-style text representation. The text can include newlines
-          and ANSI escape sequences (e.g. for colors).
-        Note:
-            Make sure that your class's metadata 'render.modes' key includes
-              the list of supported modes. It's recommended to call super()
-              in implementations to use the functionality of this method.
-        Args:
-            mode (str): the mode to render with
-        Example:
-        class MyEnv(Env):
-            metadata = {'render.modes': ['human', 'rgb_array']}
-            def render(self, mode='human'):
-                if mode == 'rgb_array':
-                    return np.array(...) # return RGB frame suitable for video
-                elif mode is 'human':
-                    ... # pop up a window and render
-                else:
-                    super(MyEnv, self).render(mode=mode) # just raise an exception
-        """
         raise NotImplementedError
 
 
@@ -257,11 +210,11 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self.terminate = True
 
-        if self.socket_server is not None:
-            self.socket_server.close()
-
         if self.bandana_subprocess is not None:
             self._kill_bandana()
+
+        if self.server is not None:
+            self._terminate_grpc_server()
 
         self.termination_complete = True
 
@@ -274,46 +227,41 @@ class DiplomacyStrategyEnv(gym.Env):
 
 
     def seed(self, seed=None):
-        """Sets the seed for this env's random number generator(s).
-        Note:
-            Some environments use multiple pseudorandom number generators.
-            We want to capture all such seeds used in order to ensure that
-            there aren't accidental correlations between multiple generators.
-        Returns:
-            list<bigint>: Returns the list of seeds used in this env's random
-              number generators. The first value in the list should be the
-              "main" seed, or the value which a reproducer should pass to
-              'seed'. Often, the main seed equals the provided 'seed', but
-              this won't be true if seed=None, for example.
-        """
-        logger.warning("Could not seed environment %s", self)
         return
 
 
     def _init_bandana(self):
-        logger.info("Starting BANDANA tournament...")
+        logger.debug("Starting BANDANA tournament...")
         logger.debug("Running '{}' command on directory '{}'."
                      .format(self.bandana_init_command, self.bandana_root_path))
 
         self.bandana_subprocess = subprocess.Popen(self.bandana_init_command, cwd=self.bandana_root_path, shell=True, preexec_fn=os.setsid)
-        logger.info("Started BANDANA tournament.")
+        logger.debug("Initialized BANDANA tournament.")
 
 
     def _kill_bandana(self):
         if self.bandana_subprocess is None:
-            logger.info("No BANDANA process to terminate.")
+            logger.warning("No BANDANA process to terminate.")
         else:
-            logger.info("Terminating BANDANA process...")
+            logger.debug("Terminating BANDANA process...")
 
             # Killing the process group (pg) also kills the children, whereas killing the process would leave the
             # children as orphan processes
             os.killpg(os.getpgid(self.bandana_subprocess.pid), signal.SIGTERM)
-            self.bandana_subprocess.wait()
 
-            logger.info("BANDANA process terminated.")
+            logger.debug("BANDANA process terminated.")
 
             # Set current process to None
             self.bandana_subprocess = None
+
+
+    def _init_grpc_server(self):
+        self.server = DiplomacyGymServiceServicer.create_server(self)
+        self.server.start()
+
+
+    def _terminate_grpc_server(self):
+        self.server.stop(0)
 
 
     def _init_observation_space(self):
@@ -342,39 +290,50 @@ class DiplomacyStrategyEnv(gym.Env):
         self.action_space = spaces.MultiDiscrete(action_space_description)
 
 
-    def _init_socket_server(self):
-        self.socket_server = comm.LocalSocketServer(5000, self._handle)
+    def handle_request(self, request: proto_message_pb2.BandanaRequest) -> proto_message_pb2.DiplomacyGymOrdersResponse:
+        if request.type is not proto_message_pb2.BandanaRequest.INVALID:
+            observation_data: proto_message_pb2.ObservationData = request.observation
+            self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
 
-
-    def _handle(self, request: bytearray) -> None:
-        request_data: proto_message_pb2.BandanaRequest = proto_message_pb2.BandanaRequest()
-        request_data.ParseFromString(request)
-
-        if request_data.type is proto_message_pb2.BandanaRequest.INVALID:
-            raise ValueError("Type of BandanaRequest is INVALID.", request_data)
-
-        observation_data: proto_message_pb2.ObservationData = request_data.observation
-        self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
+        self.wait_action = True
 
         response_data: proto_message_pb2.DiplomacyGymOrdersResponse = proto_message_pb2.DiplomacyGymOrdersResponse()
         response_data.type = proto_message_pb2.DiplomacyGymOrdersResponse.VALID
 
-        self.waiting_for_action = True
-        while self.waiting_for_action:
-            if self.done or self.terminate:
-                # Return empty deal just to finalize program
-                logger.debug("Sending empty deal to finalize program.")
-                # TODO: Terminate should not be here. Refactor all of this!
-                self.socket_server.terminate = True
-                return response_data.SerializeToString()
+        if self.done or self.terminate:
+            # Return empty deal just to finalize program
+            logger.debug("Sending empty deal to finalize program.")
+            return response_data
 
-        self.received_first_observation = True
-        self.response_available.set()
+        while self.wait_action:
+            pass
 
         orders_data: proto_message_pb2.OrdersData = action_to_orders_data(self.action, self.observation)
         response_data.orders.CopyFrom(orders_data)
 
-        return response_data.SerializeToString()
+        return response_data
+
+
+class DiplomacyGymServiceServicer(proto_message_pb2_grpc.DiplomacyGymServiceServicer):
+    diplomacy_env: DiplomacyStrategyEnv
+
+    def __init__(self, diplomacy_env):
+        self.diplomacy_env = diplomacy_env
+
+    def GetStrategyAction(self, request: proto_message_pb2.BandanaRequest, context):
+        return self.diplomacy_env.handle_request(request)
+
+    def GetAction(self, request: proto_message_pb2.BandanaRequest, context):
+        return self.diplomacy_env.handle_request(request)
+
+    @staticmethod
+    def create_server(diplomacy_env: DiplomacyStrategyEnv):
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        proto_message_pb2_grpc.add_DiplomacyGymServiceServicer_to_server(
+            DiplomacyGymServiceServicer(diplomacy_env), server
+        )
+        server.add_insecure_port('[::]:5000')
+        return server
 
 
 def main():
@@ -383,3 +342,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
