@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
-saving_interval = 8 #1 interval = 128 steps
+saving_interval = 1 #1 interval = 128 steps
 train_timesteps = 1e2
 best_mean_reward, n_steps = 0, 0
 
