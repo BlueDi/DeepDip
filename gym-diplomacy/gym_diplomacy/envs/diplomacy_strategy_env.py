@@ -2,26 +2,31 @@ import gym
 from gym import spaces
 
 import atexit
+import grpc
 import logging
 import numpy as np
 import os
 import signal
+import socketserver
 import subprocess
 import threading
+import typing
 import time
 
-from gym_diplomacy.envs import proto_message_pb2
-from gym_diplomacy.envs import comm
+from abc import ABCMeta, abstractmethod
+from concurrent import futures
+
+from gym_diplomacy.envs import proto_message_pb2, proto_message_pb2_grpc
 
 
-FORMAT = "%(levelname)-8s -- [%(filename)s:%(lineno)s - %(funcName)15s()] %(message)s"
+FORMAT = "%(asctime)s %(levelname)s -- [%(filename)s:%(lineno)s - %(funcName)s()] %(message)s"
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
-NUMBER_OF_PLAYERS = 7
-NUMBER_OF_PROVINCES = 8#75
+NUMBER_OF_PLAYERS = 2
+NUMBER_OF_PROVINCES = 19#8#75
 
 
 def observation_data_to_observation(observation_data: proto_message_pb2.ObservationData) -> np.array:
@@ -110,14 +115,12 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Set this in SOME subclasses
     metadata = {'render.modes': []}
-    reward_range = (-10, 3**4)
+    reward_range = (-10, 3**5)
     spec = None
 
     # Set these in ALL subclasses
     action_space = None
     observation_space = None
-
-    metadata = {'render.modes': ['human']}
 
     ### CUSTOM ATTRIBUTES
 
@@ -128,7 +131,7 @@ class DiplomacyStrategyEnv(gym.Env):
     bandana_subprocess = None
 
     # Communication
-    server: 'DiplomacyThreadedTCPServer' = None
+    server: grpc.server = None
 
     # Env
     received_first_observation: bool = False
@@ -142,6 +145,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     terminate = False
     termination_complete = False
+    closing: bool = False
 
 
     def __init__(self):
@@ -149,7 +153,6 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self._init_observation_space()
         self._init_action_space()
-        self._init_socket_server()
 
 
     def step(self, action):
@@ -185,6 +188,9 @@ class DiplomacyStrategyEnv(gym.Env):
         if self.bandana_subprocess is None:
             self._init_bandana()
 
+        if self.server is None:
+            self._init_grpc_server()
+
         while self.observation is None:
             pass
 
@@ -204,10 +210,11 @@ class DiplomacyStrategyEnv(gym.Env):
 
         self.terminate = True
 
-        self.server.shutdown()
-
         if self.bandana_subprocess is not None:
             self._kill_bandana()
+
+        if self.server is not None:
+            self._terminate_grpc_server()
 
         self.termination_complete = True
 
@@ -241,12 +248,20 @@ class DiplomacyStrategyEnv(gym.Env):
             # Killing the process group (pg) also kills the children, whereas killing the process would leave the
             # children as orphan processes
             os.killpg(os.getpgid(self.bandana_subprocess.pid), signal.SIGTERM)
-            self.bandana_subprocess.wait()
 
             logger.debug("BANDANA process terminated.")
 
             # Set current process to None
             self.bandana_subprocess = None
+
+
+    def _init_grpc_server(self):
+        self.server = DiplomacyGymServiceServicer.create_server(self)
+        self.server.start()
+
+
+    def _terminate_grpc_server(self):
+        self.server.stop(0)
 
 
     def _init_observation_space(self):
@@ -275,31 +290,9 @@ class DiplomacyStrategyEnv(gym.Env):
         self.action_space = spaces.MultiDiscrete(action_space_description)
 
 
-    def _init_socket_server(self):
-        self.server = comm.DiplomacyThreadedTCPServer(5000)
-        self.server.handler = self.handle_request
-
-        self.server_thread = threading.Thread(target=self.server.serve_forever)
-
-        # Exit the server thread when the main thread terminates
-        self.server_thread.daemon = True
-        self.server_thread.start()
-        logger.debug("Started ThreadedTCPServer daemon thread.")
-
-
-    def _terminate_socket_server(self):
-        with self.server:
-            self.server.shutdown()
-            self.server.server_close()
-            logger.debug("Shut down ThreadedTCPServer.")
-
-
-    def handle_request(self, request: bytearray) -> None:
-        request_data: proto_message_pb2.BandanaRequest = proto_message_pb2.BandanaRequest()
-        request_data.ParseFromString(request)
-
-        if request_data.type is not proto_message_pb2.BandanaRequest.INVALID:
-            observation_data: proto_message_pb2.ObservationData = request_data.observation
+    def handle_request(self, request: proto_message_pb2.BandanaRequest) -> proto_message_pb2.DiplomacyGymOrdersResponse:
+        if request.type is not proto_message_pb2.BandanaRequest.INVALID:
+            observation_data: proto_message_pb2.ObservationData = request.observation
             self.observation, self.reward, self.done, self.info = observation_data_to_observation(observation_data)
 
         self.wait_action = True
@@ -310,7 +303,7 @@ class DiplomacyStrategyEnv(gym.Env):
         if self.done or self.terminate:
             # Return empty deal just to finalize program
             logger.debug("Sending empty deal to finalize program.")
-            return response_data.SerializeToString()
+            return response_data
 
         while self.wait_action:
             pass
@@ -318,7 +311,29 @@ class DiplomacyStrategyEnv(gym.Env):
         orders_data: proto_message_pb2.OrdersData = action_to_orders_data(self.action, self.observation)
         response_data.orders.CopyFrom(orders_data)
 
-        return response_data.SerializeToString()
+        return response_data
+
+
+class DiplomacyGymServiceServicer(proto_message_pb2_grpc.DiplomacyGymServiceServicer):
+    diplomacy_env: DiplomacyStrategyEnv
+
+    def __init__(self, diplomacy_env):
+        self.diplomacy_env = diplomacy_env
+
+    def GetStrategyAction(self, request: proto_message_pb2.BandanaRequest, context):
+        return self.diplomacy_env.handle_request(request)
+
+    def GetAction(self, request: proto_message_pb2.BandanaRequest, context):
+        return self.diplomacy_env.handle_request(request)
+
+    @staticmethod
+    def create_server(diplomacy_env: DiplomacyStrategyEnv):
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        proto_message_pb2_grpc.add_DiplomacyGymServiceServicer_to_server(
+            DiplomacyGymServiceServicer(diplomacy_env), server
+        )
+        server.add_insecure_port('[::]:5000')
+        return server
 
 
 def main():

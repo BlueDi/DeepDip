@@ -14,81 +14,53 @@ import es.csic.iiia.fabregues.dip.orders.*;
 import java.io.File;
 import java.util.*;
 
-/**
- * The class that makes the connection between the Open AI environment and the BANDANA player.
- */
+/** The class that makes the connection between the Open AI environment and the BANDANA player. */
 public class OpenAIAdapter {
-
-    /**
-     * Reward given for each deal rejected by other players
-     */
+    /** Reward given for each deal rejected by other players */
     public static final int REJECTED_DEAL_REWARD = -5;
 
-    /**
-     * Reward given for each deal accepted by other players.
-     */
+    /** Reward given for each deal accepted by other players. */
     public static final int ACCEPTED_DEAL_REWARD = +5;
-
-    /**
-     * Reward given for winning the game
-     */
-    public static final int WON_GAME_REWARD = (int) Math.pow(3, 4);
-
-    /**
-     * Reward given for losing the game
-     */
-    public static final int LOST_GAME_REWARD = -10;
-
-    /**
-     * Reward given for generating an invalid deal
-     */
-    public static final int INVALID_DEAL_REWARD = -10;
 
     /** Reward given for capturing a Supply Center (SC). Losing a SC gives a negative reward with the same value. */
     public static final int CAPTURED_SC_REWARD = +3;
 
+    /** Reward given for winning the game */
+    public static final int WON_GAME_REWARD = (int) Math.pow(CAPTURED_SC_REWARD, 5);
 
-    /**
-     * The OpenAINegotiator instance to which this adapter is connected.
-     */
+    /** Reward given for losing the game */
+    public static final int LOST_GAME_REWARD = -10;
+
+    /** Reward given for generating an invalid deal */
+    public static final int INVALID_DEAL_REWARD = -10;
+
+    /** The OpenAINegotiator instance to which this adapter is connected. */
     public OpenAINegotiator agent;
     public DeepDip agent2;
 
-    /**
-     * A map containing an integer ID of each power, in order to be able to map a power to an integer and vice-versa.
-     */
+    /** A map containing an integer ID of each power, in order to be able to map a power to an integer and vice-versa. */
     private Map<String, Integer> powerNameToInt;
 
     /** Number of supply centers controlled in the previous negotiation stage */
     private int previousNumSc;
 
-    /**
-     * The value of the reward achieved because of the previous actions.
-     */
+    /** The value of the reward achieved because of the previous actions. */
     private float reward;
 
-    /**
-     * A boolean determining whether the current Diplomacy game has ended or not.
-     */
+    /** A boolean determining whether the current Diplomacy game has ended or not. */
     public boolean done;
     public String winner;
 
-    /**
-     * An arbitrary string that may contain information for debug, that can be sent to the OpenAI environment.
-     */
+    /** An arbitrary string that may contain information for debug, that can be sent to the OpenAI environment. */
     private String info;
 
-    /**
-     * An Observer instance that allows us to know the current game state. It is used to know when the games has ended.
-     */
+    /** An Observer instance that allows us to know the current game state. It is used to know when the games has ended. */
     public OpenAIObserver openAIObserver;
 
-    /** The SocketClient instance used to send requests to the OpenAI Gym environment. */
-    protected SocketClient socketClient;
+    /** The DiplomacyGymServiceClient instance used to send requests to the OpenAI Gym environment. */
+    protected DiplomacyGymServiceClient serviceClient;
 
-    /**
-     * @param agent The OpenAINegotiator instance that will receive actions from the OpenAI environment.
-     */
+    /** @param agent The OpenAINegotiator instance that will receive actions from the OpenAI environment. */
     OpenAIAdapter(OpenAINegotiator agent) {
         this.agent = agent;
         this.init();
@@ -105,7 +77,7 @@ public class OpenAIAdapter {
 
         this.done = false;
         this.info = null;
-        this.socketClient = new SocketClient(5000);
+        this.serviceClient = new DiplomacyGymServiceClient("localhost", 5000);
     }
 
     /**
@@ -130,42 +102,6 @@ public class OpenAIAdapter {
      * @return A BasicDeal created with data from the Open AI module.
      */
     public BasicDeal getDealFromDipQ() {
-        try {
-            // Make sure the power to int map is updated with the current Powers in the game
-            this.generatePowerNameToIntMap();
-
-            ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();
-
-            ProtoMessage.ObservationData observationData = this.generateObservationData();
-
-            bandanaRequestBuilder.setObservation(observationData);
-            bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.GET_DEAL_REQUEST);
-
-            byte[] message = bandanaRequestBuilder.build().toByteArray();
-
-            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
-
-            // If something went wrong with getting the response from Python module
-            if (response == null) {
-                return null;
-            }
-
-            ProtoMessage.DiplomacyGymResponse diplomacyGymResponse = ProtoMessage.DiplomacyGymResponse.parseFrom(response);
-            BasicDeal generatedDeal = this.generateDeal(diplomacyGymResponse.getDeal());
-
-            // If deal is invalid, give negative reward. If an invalid deal is returned, the game will deal with it, so
-            // we can still return it.
-            if(!(this.isDealValid(generatedDeal))) {
-                this.addReward(INVALID_DEAL_REWARD);
-            }
-
-            return generatedDeal;
-
-
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
-        }
-
         return null;
     }
     
@@ -175,34 +111,24 @@ public class OpenAIAdapter {
      * @return List of Orders created with data from the OpenAI module.
      */
     public List<Order> getOrdersFromDeepDip() {
-        try {
-            this.generatePowerNameToIntMap();
+        this.generatePowerNameToIntMap();
 
-            ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();
+        ProtoMessage.BandanaRequest.Builder bandanaRequestBuilder = ProtoMessage.BandanaRequest.newBuilder();
 
-            ProtoMessage.ObservationData observationData = this.generateObservationData();
+        ProtoMessage.ObservationData observationData = this.generateObservationData();
 
-            bandanaRequestBuilder.setObservation(observationData);
-            bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.GET_DEAL_REQUEST);
+        bandanaRequestBuilder.setObservation(observationData);
+        bandanaRequestBuilder.setType(ProtoMessage.BandanaRequest.Type.GET_DEAL_REQUEST);
 
-            byte[] message = bandanaRequestBuilder.build().toByteArray();
-
-            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
-
-            // If something went wrong with getting the response from Python module
-            if (response == null) {
-                return new ArrayList<>();
-            }
-
-            ProtoMessage.DiplomacyGymOrdersResponse diplomacyGymResponse = ProtoMessage.DiplomacyGymOrdersResponse.parseFrom(response);
-            List<Order> generatedOrders = this.generateOrders(diplomacyGymResponse.getOrders());
-
-            return generatedOrders;
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
+        ProtoMessage.BandanaRequest message = bandanaRequestBuilder.build();
+        ProtoMessage.DiplomacyGymOrdersResponse diplomacyGymResponse = this.serviceClient.getStrategyAction(message);
+        if (diplomacyGymResponse == null) {
+            return new ArrayList<>();
         }
 
-        return new ArrayList<>();
+        List<Order> generatedOrders = this.generateOrders(diplomacyGymResponse.getOrders());
+
+        return generatedOrders;
     }
 
     /**
@@ -217,17 +143,13 @@ public class OpenAIAdapter {
             ProtoMessage.ObservationData observationData = this.generateObservationData();
             bandanaRequestBuilder.setObservation(observationData);
 
-            byte[] message = bandanaRequestBuilder.build().toByteArray();
-
-            byte[] response = this.socketClient.sendMessageAndReceiveResponse(message);
-
+            ProtoMessage.BandanaRequest message = bandanaRequestBuilder.build();
+            ProtoMessage.DiplomacyGymResponse response = this.serviceClient.getAction(message);
             if (response == null) {
                 return;
             }
 
-            ProtoMessage.DiplomacyGymResponse diplomacyGymResponse = ProtoMessage.DiplomacyGymResponse.parseFrom(response);
-
-            if (diplomacyGymResponse.getType() != ProtoMessage.DiplomacyGymResponse.Type.CONFIRM) {
+            if (response.getType() != ProtoMessage.DiplomacyGymResponse.Type.CONFIRM) {
                 throw new Exception("The response from DiplomacyGym to the end of game notification is not 'CONFIRM'.");
             }
         } catch (Exception e) {
@@ -239,9 +161,7 @@ public class OpenAIAdapter {
         this.winner = winner;
     }
 
-    /**
-     * Executes on the beginning of a game.
-     */
+    /** Executes on the beginning of a game. */
     void beginningOfGame() {
         this.done = false;
 
@@ -250,34 +170,32 @@ public class OpenAIAdapter {
         this.createObserver();
     }
 
-    /**
-     * Executes on the end of a game.
-     */
+    /** Executes on the end of a game. */
     void endOfGame(GameResult gameResult) {
         this.done = true;
         this.sendEndOfGameNotification();
 
         // Terminate observer so it does not hang and cause exceptions.
         this.openAIObserver.exit();
-        this.socketClient.close();
+        try {
+            this.serviceClient.shutdown();
+        } catch (InterruptedException e) {
+            System.err.println("Failed to close gRPC.");
+        }
     }
 
-    /**
-     * Executes when a deal is accepted.
-     */
+    /** Executes when a deal is accepted. */
     void acceptedDeal() {
         this.addReward(ACCEPTED_DEAL_REWARD);
     }
 
-    /**
-     * Executes when a deal is rejected.
-     */
+    /** Executes when a deal is rejected. */
     void rejectedDeal() {
         this.addReward(REJECTED_DEAL_REWARD);
     }
 
     void wonGame() {
-        this.addReward(WON_GAME_REWARD);
+        this.reward = WON_GAME_REWARD;
     }
 
     void lostGame() {

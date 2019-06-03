@@ -126,6 +126,43 @@
             ],
             "version": "==1.21.1"
         },
+        "grpcio-tools": {
+            "hashes": [
+                "sha256:04b642dc43d154d9383e7e8141b0ad5e8427f46e5d9b88a87da9787d3312479c",
+                "sha256:095762c550363b68320194153feb1a60586cc86cd192190e756a6b003742aca0",
+                "sha256:14e1d201bbd2084e1f44ab6a8c5d6fec88c5aa94b8af946c89e6043390e88718",
+                "sha256:2058b5f411578935ef8ec7943458c1d262722de1c1df26fa599b0f54232d0291",
+                "sha256:20cea46554dc095796b5ed6e93ca9eae4f2865d3d8b69cef3d88738c218eb596",
+                "sha256:28376d8fea76016d500b3ae8883489ccef783e5f74bb12894fdd7347d5894f6f",
+                "sha256:30be4d04cae981e0764c9c6a90154de1864350a0ee6f906bb7a3fb6969da9260",
+                "sha256:314bcd400730f074688570274441193296830f018d9df70902126065e34f9c18",
+                "sha256:3dc77cce3ed8a99126ab78e077074711b0173238dd7a9214fe92025d42dcb8fb",
+                "sha256:4328f07818bbcaf3ea3b46380c743fd65392031d3bf3c0c28fd2d3b074ae2a0a",
+                "sha256:4564241ca8865163ea575187f7160d0957992974cd71bc2a217275690d0e6f18",
+                "sha256:49557224e68b469d5488690136b8e6e4b0f383d5601cfef964847bb45536c72e",
+                "sha256:4da4e8f7fc564b0289c4680901bb1642aef646c88f43346b6282d620cfd2a58b",
+                "sha256:4f2c390ab8d9b3ae1b8ce90f1cb23102b7d28672ce6ee357845af199b31a8de6",
+                "sha256:4fc02ff19903d3642d3f294a9f38999808c84cf0c12b80f854e063386611640a",
+                "sha256:50d460c8e172b5b0b0a443c19219f3adf11323d1ff969a23cf4a4d9626bd4c94",
+                "sha256:711451998edc6ae87e737af0c051d3eb75c3358435d880f4599c6c927ff50ec7",
+                "sha256:7eed258012119f177342399e049e45652b150c3315a37114ce30ef6e99a13e3a",
+                "sha256:8340e5bf4a21e45c6a39dd019b2d70691a1181cf1c5545e2ae96eb95cbf9d965",
+                "sha256:844401a18a6674490657cd5040f20d0a71650d82e8573da82dc6f1d16bbec1ea",
+                "sha256:87289456f7fba8ce65cfca868e0250945b85bed5b3b28a49e7e373d8a985e1e5",
+                "sha256:9bbcccee9aadfcfdd063e7ad5c26926dab9a3c8d727823e9028c44641ee1e5dc",
+                "sha256:aba021c82b936fec8a3fa5c15277fc11c0bf3a8f95a4a7b3f85d9b1225fff729",
+                "sha256:cf74d4843651cf13afbef8aae472d51aaa500bed130f5bfbaba57ec02068f1a5",
+                "sha256:d13e36a5936e04321ca703cedf9dfe61f4c837e31dd0330708303dca30aaec94",
+                "sha256:d4ecf399b09bf8c646414a0385085537614ebdd221ea588d2c29ce71ade5d6f0",
+                "sha256:d5857c9682ca80cad4dce6e94e9bcc35b77a4d58ec7647e0efeb29fe6183cd43",
+                "sha256:da18c9ad04d0bacd8c8682b2f81feef9835f2cf27c7f59acb3e664052dacb22a",
+                "sha256:df73f88859f2f86ebfd6200603be191651443237a3d02e2bd0e0308b833e5497",
+                "sha256:e9b3e2bc69fbd9910dd5e7d21a1003995e46bc6853032c758eccae3ef5b9de4d",
+                "sha256:ecdc2369e3f1d6e83029ca4b600aeccaa441976315fa52f518d2f53537addbe6",
+                "sha256:fe60c48804528aa4c4af7be0d27b025c5494d1716d1fa4fb1a1560aab8320f4c"
+            ],
+            "version": "==1.21.1"
+        },
         "gym": {
             "extras": [
                 "atari",
@@ -183,17 +220,17 @@
         },
         "keras-applications": {
             "hashes": [
-                "sha256:60607b2b98868983e5153bf1cc6aa468ba73adc93bc977a90edaa4bc595e69fa",
-                "sha256:94b8acc84fb8b1e3d752e20ed4cafa8377c9ecf6e6c1aa09942d959dc02e439a"
+                "sha256:5579f9a12bcde9748f4a12233925a59b93b73ae6947409ff34aa2ba258189fe5",
+                "sha256:df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95"
             ],
-            "version": "==1.0.7"
+            "version": "==1.0.8"
         },
         "keras-preprocessing": {
             "hashes": [
-                "sha256:0170b799a7562f80ad7931d22d56de22cf4bdd502e11c48f31a46380137a70a8",
-                "sha256:5e3700117981c2db762e512ed6586638124fac5842170701628088a11aeb51ac"
+                "sha256:44aee5f2c4d80c3b29f208359fcb336df80f293a0bb6b1c738da43ca206656fb",
+                "sha256:5a8debe01d840de93d49e05ccf1c9b81ae30e210d34dacbcc47aeb3049b528e5"
             ],
-            "version": "==1.0.9"
+            "version": "==1.1.0"
         },
         "kiwisolver": {
             "hashes": [
@@ -395,10 +432,10 @@
         },
         "progressbar2": {
             "hashes": [
-                "sha256:9d2395d74f2c4cb302bd7e083968f15c1e3a5ade2bc4c9ce9fad78010bfbdb94",
-                "sha256:ee967e20f236fa82f526e2302a2fe6110255bfeb85983e6df0add271a760eeae"
+                "sha256:9ecb2d35edaa30ed86eb92fb0135eb19a6ef9b3657be4350cc3d0d3563e6af65",
+                "sha256:c086fc1f718839c0ec95caaeb7bd5a1d0268a8775960b8f9dee06f2a04c84628"
             ],
-            "version": "==3.41.0"
+            "version": "==3.42.0"
         },
         "protobuf": {
             "hashes": [
