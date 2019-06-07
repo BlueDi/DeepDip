@@ -54,6 +54,9 @@ public class OpenAIAdapter {
     /** An arbitrary string that may contain information for debug, that can be sent to the OpenAI environment. */
     private String info;
 
+    /** An Observer instance that allows us to know the current game state. It is used to know when the games has ended. */
+    public OpenAIObserver openAIObserver;
+
     /** The DiplomacyGymServiceClient instance used to send requests to the OpenAI Gym environment. */
     protected DiplomacyGymServiceClient serviceClient;
 
@@ -75,6 +78,22 @@ public class OpenAIAdapter {
         this.done = false;
         this.info = null;
         this.serviceClient = new DiplomacyGymServiceClient("localhost", 5000);
+    }
+
+    /**
+     * Creates the OpenAIObserver instance which will connect to the Parlance server.
+     * <p>
+     * The path for the logging is given because the Observer class needs one, but it is not essential.
+     * <p>
+     * TODO (low-prio): Figure out how to create an Observer without needing a logging path.
+     */
+    private void createObserver() {
+        String openAIObserverPath = "log" + File.separator + "OpenAIObserver" + Logger.getDateString();
+        File logFile = new File(openAIObserverPath);
+        logFile.mkdirs();
+
+        this.openAIObserver = new OpenAIObserver(openAIObserverPath, this);
+        this.openAIObserver.connectToServer();
     }
 
     /**
@@ -145,6 +164,10 @@ public class OpenAIAdapter {
     /** Executes on the beginning of a game. */
     void beginningOfGame() {
         this.done = false;
+
+        // The observer needs to be created and destroyed every game, because it does not know when the tournament ends
+        // and will be left hanging.
+        this.createObserver();
     }
 
     /** Executes on the end of a game. */
@@ -152,6 +175,8 @@ public class OpenAIAdapter {
         this.done = true;
         this.sendEndOfGameNotification();
 
+        // Terminate observer so it does not hang and cause exceptions.
+        this.openAIObserver.exit();
         try {
             this.serviceClient.shutdown();
         } catch (InterruptedException e) {
