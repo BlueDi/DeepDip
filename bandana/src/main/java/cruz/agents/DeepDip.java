@@ -165,7 +165,6 @@ public class DeepDip extends DumbBot {
                 }
             }
         } catch (Exception e) {
-            System.err.println("INVALID ORDER: " + e.getMessage());
             return false;
         }
 
