@@ -1,28 +1,21 @@
 package cruz.agents;
 
-import ddejonge.bandana.tools.Utilities;
 import ddejonge.bandana.tools.Logger;
 import ddejonge.bandana.tournament.GameResult;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Power;
-import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
-import es.csic.iiia.fabregues.dip.orders.HLDOrder;
-import es.csic.iiia.fabregues.dip.orders.MTOOrder;
-import es.csic.iiia.fabregues.dip.orders.SUPMTOOrder;
-import es.csic.iiia.fabregues.dip.orders.SUPOrder;
-import es.csic.iiia.fabregues.dip.orders.Order;
+import es.csic.iiia.fabregues.dip.orders.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class DeepDip extends DumbBot {
     // The OpenAI Adapter contains the necessary functions and fields to make the connection to the Open AI environment
-    OpenAIAdapter openAIAdapter;
-    Logger logger = new Logger();
+    private OpenAIAdapter openAIAdapter;
+    private Logger logger = new Logger();
 
     private DeepDip(String name, int finalYear, String logPath) {
         super(name, finalYear, logPath);
@@ -37,7 +30,7 @@ public class DeepDip extends DumbBot {
     public static void main(String[] args) {
         String name = "DeepDip";
         String logPath = "log/";
-        int finalYear = 2000;
+        int finalYear = 1905;
 
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-name") && args.length > i + 1) {
@@ -59,7 +52,7 @@ public class DeepDip extends DumbBot {
                 }
             }
         }
-        
+
         File logFolder = new File(logPath);
         logFolder.mkdirs();
         DeepDip deepDip = new DeepDip(name, finalYear, logPath);
@@ -70,7 +63,7 @@ public class DeepDip extends DumbBot {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public void init() {
         this.logger.enable(this.logPath, this.me.getName() + ".log");
@@ -81,7 +74,7 @@ public class DeepDip extends DumbBot {
     public void start() {
         this.openAIAdapter.beginningOfGame();
     }
-    
+
     List<Order> generateOrders() {
         switch (game.getPhase().ordinal() + 1) {
             case 1:
@@ -115,10 +108,9 @@ public class DeepDip extends DumbBot {
     }
 
     private List<Order> generateHoldOrders() {
-        List<Region> units = new ArrayList<>();
-        units.addAll(this.me.getControlledRegions());
+        List<Region> units = new ArrayList<>(this.me.getControlledRegions());
         List<Order> orders = new ArrayList<>(units.size());
-        
+
         while (!units.isEmpty()) {
             Region unit = units.get(0);
             orders.add(new HLDOrder(this.me, unit));
@@ -135,7 +127,7 @@ public class DeepDip extends DumbBot {
 
         List<Region> player_controlled_regions = this.me.getControlledRegions();
         List<Order> orders_of_controlled_regions = new ArrayList<>();
-        for(Order unit_order : orders) {
+        for (Order unit_order : orders) {
             Region r = unit_order.getLocation();
             if (player_controlled_regions.contains(r)) {
                 orders_of_controlled_regions.add(unit_order);
@@ -157,7 +149,7 @@ public class DeepDip extends DumbBot {
 
             List<MTOOrder> mto_orders = this.getMTOOrders(orders);
 
-            for(Order unit_order : orders) {
+            for (Order unit_order : orders) {
                 List<Region> adjacent_regions = unit_order.getLocation().getAdjacentRegions();
                 if (unit_order instanceof MTOOrder && !adjacent_regions.contains(((MTOOrder) unit_order).getDestination())) {
                     throw new Exception("Bad destination in a MTOOrder.");
@@ -171,7 +163,6 @@ public class DeepDip extends DumbBot {
                     }
                 } else if (unit_order instanceof SUPMTOOrder) {
                     Region supported_region = ((SUPMTOOrder) unit_order).getSupportedRegion();
-                    List<Region> player_controlled_regions = this.me.getControlledRegions();
                     boolean isAdjacentRegions = adjacent_regions.contains(supported_region);
                     boolean hasMTOOrder = mto_orders.contains(((SUPMTOOrder) unit_order).getSupportedOrder());
                     if (!isAdjacentRegions || !hasMTOOrder) {
@@ -189,7 +180,7 @@ public class DeepDip extends DumbBot {
 
     private boolean isOnlySupportOrders(List<Order> orders) {
         boolean hasOnlySupport = true;
-        for(Order unit_order : orders) {
+        for (Order unit_order : orders) {
             if (unit_order instanceof MTOOrder || unit_order instanceof HLDOrder) {
                 hasOnlySupport = false;
                 break;
@@ -200,7 +191,7 @@ public class DeepDip extends DumbBot {
 
     private List<MTOOrder> getMTOOrders(List<Order> orders) {
         List<MTOOrder> mto_orders = new ArrayList<>();
-        for(Order unit_order : orders) {
+        for (Order unit_order : orders) {
             List<Region> adjacent_regions = unit_order.getLocation().getAdjacentRegions();
             if (unit_order instanceof MTOOrder && !adjacent_regions.contains(((MTOOrder) unit_order).getDestination())) {
                 mto_orders.add((MTOOrder) unit_order);
@@ -227,7 +218,7 @@ public class DeepDip extends DumbBot {
 
         System.out.println("END GAME: " + Arrays.toString(message));
         super.handleSMR(message);
-    }    
+    }
 
     public Logger getLogger() {
         return this.logger;
@@ -241,3 +232,4 @@ public class DeepDip extends DumbBot {
         return this.me;
     }
 }
+

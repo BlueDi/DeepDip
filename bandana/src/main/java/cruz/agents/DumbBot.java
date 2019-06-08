@@ -2,8 +2,8 @@ package cruz.agents;
 
 import es.csic.iiia.fabregues.dip.Player;
 import es.csic.iiia.fabregues.dip.board.*;
-import es.csic.iiia.fabregues.dip.comm.CommException;
 import es.csic.iiia.fabregues.dip.comm.Comm;
+import es.csic.iiia.fabregues.dip.comm.CommException;
 import es.csic.iiia.fabregues.dip.comm.IComm;
 import es.csic.iiia.fabregues.dip.comm.daide.DaideComm;
 import es.csic.iiia.fabregues.dip.orders.*;
@@ -13,7 +13,6 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.List;
 
 public class DumbBot extends Player {
     private final int[] m_spr_prox_weight = new int[]{100, 1000, 30, 10, 6, 5, 4, 3, 2, 1};
@@ -89,10 +88,12 @@ public class DumbBot extends Player {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
-    public void start() {}
+    public void start() {
+    }
 
     @Override
     public void start(IComm comm) {
@@ -145,7 +146,7 @@ public class DumbBot extends Player {
         }
     }
 
-    List<Order> generateMovementOrders() {
+    private List<Order> generateMovementOrders() {
         List<Order> orders = new ArrayList<>(this.me.getControlledRegions().size());
         boolean selectionIsOK;
         boolean orderUnitToMove;
@@ -259,7 +260,7 @@ public class DumbBot extends Player {
 
     private List<Order> checkForWastedHolds(List<Order> orders) {
         List<Region> units = this.me.getControlledRegions();
-        Iterator var4 = units.iterator();
+        Iterator<Region> var4 = units.iterator();
 
         while (true) {
             Region unit;
@@ -294,8 +295,7 @@ public class DumbBot extends Player {
                         return orders;
                     }
 
-                    unit = (Region) var4.next();
-                    Region destination = null;
+                    unit = var4.next();
                     unitSupported = null;
                     currentUnitOrder = null;
 
@@ -311,7 +311,7 @@ public class DumbBot extends Player {
                 List<Region> destList = new ArrayList<>(unit.getAdjacentRegions().size());
                 this.copy(destList, unit.getAdjacentRegions());
                 Collections.shuffle(destList, new Random(System.currentTimeMillis()));
-                Iterator var11 = destList.iterator();
+                Iterator<Region> var11 = destList.iterator();
 
                 while (true) {
                     while (true) {
@@ -319,14 +319,13 @@ public class DumbBot extends Player {
                             continue label124;
                         }
 
-                        Region dest = (Region) var11.next();
+                        Region dest = var11.next();
                         boolean isBeingMovedTo = false;
                         MTOOrder mto = null;
-                        Iterator var15 = orders.iterator();
 
                         Order destUnitOrder;
-                        while (var15.hasNext()) {
-                            destUnitOrder = (Order) var15.next();
+                        for (Order order : orders) {
+                            destUnitOrder = order;
                             if (destUnitOrder instanceof MTOOrder) {
                                 mto = (MTOOrder) destUnitOrder;
                                 if (mto.getDestination().equals(dest)) {
@@ -584,25 +583,16 @@ public class DumbBot extends Player {
         float maxPower = 0.0F;
         List<Region> adjacentRegions = new ArrayList<>();
         List<Power> neighborPowers = new ArrayList<>();
-        Iterator var6 = province.getRegions().iterator();
 
-        Region region;
-        while (var6.hasNext()) {
-            region = (Region) var6.next();
+        for (Region region : province.getRegions()) {
             adjacentRegions.addAll(region.getAdjacentRegions());
         }
 
-        var6 = adjacentRegions.iterator();
-
-        while (var6.hasNext()) {
-            region = (Region) var6.next();
-            neighborPowers.add(this.game.getController(region));
+        for (Region adjacentRegion : adjacentRegions) {
+            neighborPowers.add(this.game.getController(adjacentRegion));
         }
 
-        var6 = neighborPowers.iterator();
-
-        while (var6.hasNext()) {
-            Power power = (Power) var6.next();
+        for (Power power : neighborPowers) {
             if (power != null && !power.equals(this.me) && this.getSize(power) > maxPower) {
                 maxPower = this.getSize(power);
             }
@@ -634,10 +624,8 @@ public class DumbBot extends Player {
 
         this.defenseValue = new HashMap<>();
         this.attackValue = new HashMap<>();
-        Iterator var4 = this.game.getProvinces().iterator();
 
-        while (var4.hasNext()) {
-            Province province = (Province) var4.next();
+        for (Province province : this.game.getProvinces()) {
             if (province.isSC()) {
                 if (this.me.getOwnedSCs().contains(province)) {
                     this.defenseValue.put(province, this.calcDefVal(province));
@@ -653,11 +641,8 @@ public class DumbBot extends Player {
         }
 
         this.proximity = new HashMap<>();
-        var4 = this.game.getProvinces().iterator();
 
-        while (var4.hasNext()) {
-            Province province = (Province) var4.next();
-
+        for (Province province : this.game.getProvinces()) {
             for (Region region : province.getRegions()) {
                 Float[] nearby = new Float[10];
                 nearby[0] = this.attackValue.get(province) * (float) prox_att_weight + this.defenseValue.get(province) * (float) prox_def_weight;
@@ -670,12 +655,12 @@ public class DumbBot extends Player {
             for (Province province : this.game.getProvinces()) {
                 Region region;
                 label65:
-                for (Iterator var16 = province.getRegions().iterator(); var16.hasNext(); this.proximity.get(region)[proxCount] = this.proximity.get(region)[proxCount] / 5.0F) {
-                    region = (Region) var16.next();
+                for (Iterator<Region> var16 = province.getRegions().iterator(); var16.hasNext(); this.proximity.get(region)[proxCount] = this.proximity.get(region)[proxCount] / 5.0F) {
+                    region = var16.next();
                     Float[] proximities = this.proximity.get(region);
                     proximities[proxCount] = proximities[proxCount - 1];
                     Region multipleCoasts = null;
-                    Iterator var11 = region.getAdjacentRegions().iterator();
+                    Iterator<Region> var11 = region.getAdjacentRegions().iterator();
 
                     while (true) {
                         while (true) {
@@ -683,7 +668,7 @@ public class DumbBot extends Player {
                                 continue label65;
                             }
 
-                            Region adjRegion = (Region) var11.next();
+                            Region adjRegion = var11.next();
                             if (adjRegion.getName().substring(4).compareTo("CS") == 0 && multipleCoasts != null) {
                                 if (this.proximity.get(adjRegion)[proxCount - 1] > this.proximity.get(multipleCoasts)[proxCount - 1]) {
                                     this.proximity.get(region)[proxCount] = this.proximity.get(region)[proxCount] - this.proximity.get(multipleCoasts)[proxCount - 1] + this.proximity.get(adjRegion)[proxCount - 1];
@@ -706,21 +691,18 @@ public class DumbBot extends Player {
     private void initStrCompValues() {
         this.strengthValue = new HashMap<>();
         this.competitionValue = new HashMap<>();
-        Iterator var2 = this.game.getProvinces().iterator();
 
-        Province province;
-        while (var2.hasNext()) {
-            province = (Province) var2.next();
+        for (Province province : this.game.getProvinces()) {
             HashMap<Power, Integer> adjUnitCount = new HashMap<>();
 
             Power power;
-            Iterator var5;
+            Iterator<Power> var5;
             int count;
             label59:
             for (var5 = this.game.getPowers().iterator(); var5.hasNext(); adjUnitCount.put(power, count)) {
-                power = (Power) var5.next();
+                power = var5.next();
                 count = 0;
-                Iterator var8 = power.getControlledRegions().iterator();
+                Iterator<Region> var8 = power.getControlledRegions().iterator();
 
                 while (true) {
                     while (true) {
@@ -728,7 +710,7 @@ public class DumbBot extends Player {
                             continue label59;
                         }
 
-                        Region unit = (Region) var8.next();
+                        Region unit = var8.next();
 
                         for (Region region : province.getRegions()) {
                             if (region.getAdjacentRegions().contains(unit)) {
@@ -740,10 +722,8 @@ public class DumbBot extends Player {
                 }
             }
 
-            var5 = this.game.getPowers().iterator();
-
-            while (var5.hasNext()) {
-                power = (Power) var5.next();
+            for (Power value : this.game.getPowers()) {
+                power = value;
                 if (power.equals(this.me)) {
                     this.strengthValue.put(province, adjUnitCount.get(this.me));
                 } else if (!this.competitionValue.containsKey(province)) {
@@ -754,10 +734,7 @@ public class DumbBot extends Player {
             }
         }
 
-        var2 = this.game.getProvinces().iterator();
-
-        while (var2.hasNext()) {
-            province = (Province) var2.next();
+        for (Province province : this.game.getProvinces()) {
             if (!this.competitionValue.containsKey(province)) {
                 this.competitionValue.put(province, 0);
             }
