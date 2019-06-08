@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameResult implements Serializable{
-
+	private static final int SC_TO_WIN = 5;
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
 	 * SOLO: the player achieved a solo victory.<br/>
 	 * DRAW: the player did not get eliminated and no other power achieved a solo victory.<br/>
 	 * LOST: the player lost because another power achieved a solo victory.<br/>
@@ -48,8 +47,6 @@ public class GameResult implements Serializable{
 	 * @param numberOfPlayers The number of participants.
 	 */
 	public GameResult(String[] smrMessage, int numberOfPlayers){
-
-		// JC: Creating everything with the newly added number of players
 		this.numberOfPlayers = numberOfPlayers;
 
 		this.powers = new String[this.numberOfPlayers];
@@ -60,40 +57,30 @@ public class GameResult implements Serializable{
 		this.playerNumber2preciseRank = new double[this.numberOfPlayers];
 		
 		int cursor = 5; //set the cursor to the opening parenthesis of the first power.
-		for(int pow=0; pow<this.numberOfPlayers; pow++){
-						
+		for(int pow=0; pow < this.numberOfPlayers; pow++) {
 			powers[pow] = smrMessage[cursor + 1];
 			names[pow] = smrMessage[cursor + 3];
 			numSCs[pow] = Integer.parseInt(smrMessage[cursor + 8]);
-			if(numSCs[pow] == 0){
+			if (numSCs[pow] == 0) {
 				yearOfElimination[pow] = Integer.parseInt(smrMessage[cursor + 9]);
 				cursor += 11; //set the cursor to the opening parenthesis of the next power.
-			}else{
+			} else {
 				yearOfElimination[pow] = 0;
 				cursor += 10; //set the cursor to the opening parenthesis of the next power.
 			}
 			
-			if(numSCs[pow] >= 18){
+			if(numSCs[pow] >= SC_TO_WIN){
 				endedInSolo = true;
 				numSurvivors = 1;
 			}
-			
-			/*
-			String nameWithoutQuotes = names[pow].replace("'", "");
-			if(markedPlayers.contains(powers[pow]) || markedPlayers.contains(nameWithoutQuotes)){
-				isMarked[pow] = true;
-			}*/
-
 		}
 		
 		//to determine the player results we need to use another for loop, because we have to know if there is a solo victory beforehand.
 		for(int pow=0; pow<this.numberOfPlayers; pow++){
-			
-			
 			if(numSCs[pow] == 0){
 				playerResults[pow] = PlayerResult.ELIMINATED;
 			
-			}else if(numSCs[pow] >= 18){
+			}else if(numSCs[pow] >= SC_TO_WIN){
 				playerResults[pow] = PlayerResult.SOLO;
 			
 			}else if(endedInSolo){
@@ -102,9 +89,7 @@ public class GameResult implements Serializable{
 			}else{
 				playerResults[pow] = PlayerResult.DRAW; //the game ended in a draw, and the current power is not eliminated.
 				numSurvivors++;
-			
 			}
-			
 		}
 		
 		rankPlayers();
@@ -113,10 +98,8 @@ public class GameResult implements Serializable{
 	
 	/**
 	 * Orders the players, from winners to losers.
-	 * 
 	 */
 	private void rankPlayers(){
-		
 		rank2playerNumber = new int[this.numberOfPlayers]; //note: the player who ends first will have index 0 in this array.
 		
 		boolean[] hasRank = new boolean[this.numberOfPlayers];
@@ -127,7 +110,6 @@ public class GameResult implements Serializable{
 		//we complete a number of cycles. In every cycle we loop over each player that hasn't been ranked yet,
 		//the best one of those will receive the new rank.
 		while(numRankedPlayers < this.numberOfPlayers){
-			
 			i = (i+1) % this.numberOfPlayers; //go to next player.
 			
 			//after completing a full cycle we can add the best player of the previous cycle.
@@ -155,8 +137,7 @@ public class GameResult implements Serializable{
 		
 		
 		
-		for(int j=0; j<this.numberOfPlayers; j++){
-			
+		for(int j=0; j < this.numberOfPlayers; j++){
 			//for the player ranked j, determine how many players have finished equally.
 			
 			int player1 = rank2playerNumber[j];
@@ -185,7 +166,7 @@ public class GameResult implements Serializable{
 				playerNumber2preciseRank[player] = preciseRank;
 			}
 			
-			j=highestRank;
+			j = highestRank;
 		}
 	}
 	
@@ -196,10 +177,7 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	int getIndexOf(String name){
-		for(int i=0; i<names.length; i++){
-			/*if(names[i].equals("'" + name + "'")){
-				return i;
-			}*/
+		for(int i=0; i < names.length; i++){
 			if(names[i].equals(name)){
 				return i;
 			}
@@ -252,7 +230,6 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	public double getRank(String name){
-		
 		int playerIndex = getIndexOf(name);
 		
 		if(playerIndex == -1){
@@ -268,7 +245,6 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	public int getNumSupplyCenters(String name){
-		
 		int playerIndex = getIndexOf(name);
 		
 		if(playerIndex == -1){
@@ -287,7 +263,6 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	public int getYearOfElimination(String name){
-		
 		int playerIndex = getIndexOf(name);
 		
 		if(playerIndex == -1){
@@ -303,7 +278,6 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	public String getPowerPlayed(String playerName){
-		
 		int playerIndex = getIndexOf(playerName);
 		
 		if(playerIndex == -1){
@@ -320,9 +294,7 @@ public class GameResult implements Serializable{
 	 * @return
 	 */
 	public String getPlayerNameByPower(String powerName){
-		
-		int index;
-		for(index=0; index<powers.length; index++){
+		for(int index=0; index<powers.length; index++){
 			if(powers[index].equals(powerName)){
 				return names[index];
 			}
@@ -335,25 +307,22 @@ public class GameResult implements Serializable{
 	 * Returns the name of the player that obtained a Solo Victory, or returns null if the game ended in a draw.
 	 * @return
 	 */
-	public String getSoloWinner(){
-		
+	public String getSoloWinner() {
 		if(!endedInSolo){
 			return null;
 		}
 		
-		for(int i=0; i<this.numberOfPlayers; i++){
-			
-			if(numSCs[i] >= 18){
+		for (int i=0; i < this.numberOfPlayers; i++) {
+			if (numSCs[i] >= SC_TO_WIN) {
 				return names[i];
 			}
 		}
 		
-		throw new RuntimeException("GameResult.getSoloWinner() Error! Result is solo victory, but no player has 18 or more supply centers.");
+		throw new RuntimeException("GameResult.getSoloWinner() Error! Result is solo victory, but no player has 5 or more supply centers.");
 	}
 	
 	@Override
-	public String toString(){
-		
+	public String toString() {
 		//Make sure the players are ranked.
 		if(rank2playerNumber == null){
 			rankPlayers();
@@ -361,10 +330,10 @@ public class GameResult implements Serializable{
 		
 		String string = "";
 		
-		for(int j=0; j<this.numberOfPlayers; j++){
+		for(int j=0; j < this.numberOfPlayers; j++){
 			int playerIndex = rank2playerNumber[j];
 			
-			string += "" + (j+1)+ ". " + names[playerIndex] + " " + powers[playerIndex]; 
+			string += "" + (j+1) + ". " + names[playerIndex] + " " + powers[playerIndex]; 
 			
 			/*
 			if(isMarked[playerIndex]){

@@ -2,6 +2,7 @@ package cruz.agents;
 
 import ddejonge.bandana.tools.Utilities;
 import ddejonge.bandana.tools.Logger;
+import ddejonge.bandana.tournament.GameResult;
 import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
-@SuppressWarnings("Duplicates")
 
 public class DeepDip extends DumbBot {
     // The OpenAI Adapter contains the necessary functions and fields to make the connection to the Open AI environment
@@ -38,7 +37,7 @@ public class DeepDip extends DumbBot {
     public static void main(String[] args) {
         String name = "DeepDip";
         String logPath = "log/";
-        int finalYear = 1905;
+        int finalYear = 2000;
 
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-name") && args.length > i + 1) {
@@ -212,7 +211,7 @@ public class DeepDip extends DumbBot {
 
     @Override
     public void handleSlo(String winner) {
-        openAIAdapter.setWinner(winner);
+        this.openAIAdapter.setWinner(winner);
         if (this.me.getName().equals(winner)) {
             System.out.println("GAME RESULT: " + this.me + " won with a solo victory.");
         } else {
@@ -223,6 +222,9 @@ public class DeepDip extends DumbBot {
 
     @Override
     public void handleSMR(String[] message) {
+        GameResult gameResult = new GameResult(message, 2);
+        this.openAIAdapter.endOfGame(gameResult);
+
         System.out.println("END GAME: " + Arrays.toString(message));
         super.handleSMR(message);
     }    
