@@ -225,7 +225,6 @@ public class TournamentObserver extends Observer implements Runnable{
 	 */
 	@Override
 	public void handleCCD(String powerName) {
-		System.err.println("TournamentObserver.handleCCD() "  + powerName + " did not manage to submit its orders in time.");
 		ccd = true;
 	}
 	

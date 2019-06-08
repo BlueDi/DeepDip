@@ -134,16 +134,11 @@ public class DumbBot extends Player {
                 int nBuilds = this.me.getOwnedSCs().size() - this.me.getControlledRegions().size();
                 if (nBuilds < 0) {
                     return this.generateRemoveOrders(-nBuilds);
-                } else {
-                    if (nBuilds > 0) {
-                        return this.generateBuildOrders(nBuilds);
-                    }
-
-                    return new ArrayList<>();
+                } else if (nBuilds > 0) {
+                    return this.generateBuildOrders(nBuilds);
                 }
-            default:
-                return null;
         }
+        return new ArrayList<>();
     }
 
     private List<Order> generateMovementOrders() {
@@ -151,13 +146,11 @@ public class DumbBot extends Player {
         boolean selectionIsOK;
         boolean orderUnitToMove;
         Random r = new Random(System.currentTimeMillis());
-        List<Region> units = new ArrayList<>();
-        this.copy(units, this.me.getControlledRegions());
+        List<Region> units = new ArrayList<>(this.me.getControlledRegions());
 
         while (!units.isEmpty()) {
             Region unit = units.get(0);
-            List<Region> destList = new ArrayList<>(unit.getAdjacentRegions().size() + 1);
-            this.copy(destList, unit.getAdjacentRegions());
+            List<Region> destList = new ArrayList<>(unit.getAdjacentRegions());
             destList.add(unit);
             destList.sort(new DestValueComparator(this.destinationValue));
             Region destination;
@@ -254,10 +247,6 @@ public class DumbBot extends Player {
         return this.checkForWastedHolds(orders);
     }
 
-    private void copy(List<Region> units, List<Region> controlledRegions) {
-        units.addAll(controlledRegions);
-    }
-
     private List<Order> checkForWastedHolds(List<Order> orders) {
         List<Region> units = this.me.getControlledRegions();
         Iterator<Region> var4 = units.iterator();
@@ -308,8 +297,7 @@ public class DumbBot extends Player {
                 } while (!(currentUnitOrder instanceof HLDOrder));
 
                 maxDestValue = 0;
-                List<Region> destList = new ArrayList<>(unit.getAdjacentRegions().size());
-                this.copy(destList, unit.getAdjacentRegions());
+                List<Region> destList = new ArrayList<>(unit.getAdjacentRegions());
                 Collections.shuffle(destList, new Random(System.currentTimeMillis()));
                 Iterator<Region> var11 = destList.iterator();
 
@@ -383,8 +371,7 @@ public class DumbBot extends Player {
 
         for (Region region : dislodgedUnits) {
             Dislodgement dislodgement = units.get(region);
-            List<Region> dest = new ArrayList<>();
-            this.copy(dest, dislodgement.getRetreateTo());
+            List<Region> dest = new ArrayList<>(dislodgement.getRetreateTo());
             boolean selectionIsOK;
 
             do {
@@ -432,8 +419,7 @@ public class DumbBot extends Player {
     }
 
     List<Order> generateRemoveOrders(int nRemoves) {
-        List<Region> regions = new ArrayList<>();
-        this.copy(regions, this.me.getControlledRegions());
+        List<Region> regions = new ArrayList<>(this.me.getControlledRegions());
         regions.sort(new DestValueComparator(this.destinationValue));
         List<Order> orders = new ArrayList<>(nRemoves);
 
@@ -451,48 +437,42 @@ public class DumbBot extends Player {
             return new ArrayList<>();
         } else {
             List<Order> orders = new ArrayList<>(nBuilds);
-            List<Region> valuedHomeRegions = new ArrayList<>();
-            this.copy(valuedHomeRegions, this.getBuildHomeList(this.me));
-            valuedHomeRegions.sort(new DestValueComparator(this.destinationValue));
+            List<Region> valuedHomeRegions = new ArrayList<>(this.getBuildHomeList());
+            if (!valuedHomeRegions.isEmpty()) {
+                valuedHomeRegions.sort(new DestValueComparator(this.destinationValue));
 
-            label66:
-            while (!valuedHomeRegions.isEmpty() && nBuilds > 0) {
                 boolean tryNextHome = true;
                 Region currentHome = valuedHomeRegions.get(0);
                 int homeCounter = 0;
+                while (!valuedHomeRegions.isEmpty() && nBuilds > 0) {
+                    while (tryNextHome) {
+                        if (homeCounter < valuedHomeRegions.size()) {
+                            Region nextHome = valuedHomeRegions.get(homeCounter++);
+                            int nextHomeChance;
+                            if (this.destinationValue.get(nextHome) == 0) {
+                                nextHomeChance = 0;
+                            } else {
+                                nextHomeChance = (this.destinationValue.get(currentHome) - this.destinationValue.get(nextHome)) * 500 / this.destinationValue.get(currentHome);
+                            }
 
-                while (true) {
-                    while (true) {
-                        while (tryNextHome) {
-                            if (homeCounter < valuedHomeRegions.size()) {
-                                Region nextHome = valuedHomeRegions.get(homeCounter++);
-                                int nextHomeChance;
-                                if (this.destinationValue.get(nextHome) == 0) {
-                                    nextHomeChance = 0;
-                                } else {
-                                    nextHomeChance = (this.destinationValue.get(currentHome) - this.destinationValue.get(nextHome)) * 500 / this.destinationValue.get(currentHome);
-                                }
-
-                                if (r.nextInt(100) < 50 && r.nextInt(100) >= nextHomeChance) {
-                                    currentHome = nextHome;
-                                } else {
-                                    tryNextHome = false;
-                                }
+                            if (r.nextInt(100) < 50 && r.nextInt(100) >= nextHomeChance) {
+                                currentHome = nextHome;
                             } else {
                                 tryNextHome = false;
                             }
+                        } else {
+                            tryNextHome = false;
                         }
-
-                        orders.add(new BLDOrder(this.me, currentHome));
-                        List<Region> sameNodeList = currentHome.getProvince().getRegions();
-
-                        for (Region region : sameNodeList) {
-                            valuedHomeRegions.remove(region);
-                        }
-
-                        --nBuilds;
-                        continue label66;
                     }
+
+                    orders.add(new BLDOrder(this.me, currentHome));
+                    List<Region> sameNodeList = currentHome.getProvince().getRegions();
+
+                    for (Region region : sameNodeList) {
+                        valuedHomeRegions.remove(region);
+                    }
+
+                    --nBuilds;
                 }
             }
 
@@ -504,11 +484,11 @@ public class DumbBot extends Player {
         }
     }
 
-    private List<Region> getBuildHomeList(Power me) {
+    private List<Region> getBuildHomeList() {
         List<Region> homeRegions = new ArrayList<>();
 
-        for (Province province : me.getHomes()) {
-            if (me.isOwning(province) && this.game.getController(province) == null) {
+        for (Province province : this.me.getHomes()) {
+            if (province != null && this.me.isOwning(province) && this.game.getController(province) == null) {
                 homeRegions.addAll(province.getRegions());
             }
         }
@@ -772,11 +752,12 @@ public class DumbBot extends Player {
 
     @Override
     public void submissionError(String[] message) {
-        if (message.length < 2) { //This should not happen, but just in case...
+        if (message.length < 2) {
             System.err.println("submissionError() " + Arrays.toString(message));
             return;
         }
 
+        /*
         //Extract the illegal order from the message and print it.
         StringBuilder illegalOrder = new StringBuilder();
         for (int i = 2; i < message.length - 4; i++) {
@@ -841,6 +822,7 @@ public class DumbBot extends Player {
                 System.err.println("submissionError() Received error message of unknown type: " + Arrays.toString(message));
                 break;
         }
+        */
     }
 }
 

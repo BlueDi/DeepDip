@@ -83,7 +83,6 @@ public class DeepDip extends DumbBot {
                 List<Order> orders = this.getOrdersOfControlledRegions(received_orders);
 
                 if (this.isValidOrders(orders)) {
-                    System.out.println(orders);
                     return orders;
                 } else {
                     return this.generateHoldOrders();
@@ -95,16 +94,11 @@ public class DeepDip extends DumbBot {
                 int nBuilds = this.me.getOwnedSCs().size() - this.me.getControlledRegions().size();
                 if (nBuilds < 0) {
                     return this.generateRemoveOrders(-nBuilds);
-                } else {
-                    if (nBuilds > 0) {
-                        return this.generateBuildOrders(nBuilds);
-                    }
-
-                    return new ArrayList<>();
+                } else if (nBuilds > 0) {
+                    return this.generateBuildOrders(nBuilds);
                 }
-            default:
-                return null;
         }
+        return new ArrayList<>();
     }
 
     private List<Order> generateHoldOrders() {
