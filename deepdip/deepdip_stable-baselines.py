@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
-saving_interval = 1 #1 interval = 128 steps
+saving_interval = 8 #1 interval = 128 steps
 train_timesteps = 1e2
 best_mean_reward, n_steps = 0, 0
 
@@ -91,34 +91,24 @@ def make_env(gym_env_id):
 
 def load_model(env):
     model = None
-    model_steps = 0
-
-    existing_pickle_files = get_files_with_pattern(pickle_dir, algorithm + r'_' + gym_env_id + r'_(.*)_steps.pkl')
+    existing_pickle_files = get_files_with_pattern(pickle_dir, 'ppo2_best_model.pkl')
     
     for file_name in existing_pickle_files:
-        search = re.search(algorithm + r'_' + gym_env_id + r'_(.*)_steps.pkl', file_name)
+        search = re.search('ppo2_best_model.pkl', file_name)
         if search:
-            if algorithm == 'ppo2':
-                model = PPO2.load(file_name, env=env, verbose=0, tensorboard_log=log_dir)
-            else:
-                raise Exception("Algorithm not supported: {}".format(algorithm))
-
-            model_steps = int(search.group(1))
-
-            logger.info("Loading existing pickle file for environment {} with {} steps of training with algorithm {} and policy '{}'.".format(gym_env_id, model_steps, algorithm, model.policy))
-
-            return model, model_steps
+            model = PPO2.load(file_name, env=env, verbose=0, tensorboard_log=log_dir)
+            logger.info("Loading existing pickle file for environment {} with algorithm {} and policy '{}'.".format(gym_env_id, algorithm, model.policy))
+            return model
     
     logger.debug("No pickle was found for environment {}. Creating new model with algorithm {} and policy 'MlpPolicy'...".format(gym_env_id, algorithm))
     model = PPO2(policy='MlpPolicy', env=env, verbose=0, tensorboard_log=log_dir)
-
-    return model, model_steps  
+    return model  
 
 
 def train(env, total_timesteps=1e6):   
     global best_mean_reward
  
-    model, model_steps = load_model(env)
+    model = load_model(env)
 
     f = open('mean_reward.txt', 'a+')
     f.close()
@@ -166,7 +156,7 @@ def evaluate(env, num_steps=1e3):
     :param num_steps: (int) number of timesteps to evaluate it
     :return: (float) Mean reward for the last 100 episodes
     """
-    model, model_steps = load_model(env)
+    model = load_model(env)
     episode_rewards = [0.0]
     obs = env.reset()
     for i in range(int(num_steps)):
