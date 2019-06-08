@@ -27,6 +27,7 @@ gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
 saving_interval = 8 #1 interval = 128 steps
+steps_to_calculate_mean = saving_interval * 128
 train_timesteps = 1e2
 best_mean_reward, n_steps = 0, 0
 
@@ -135,7 +136,7 @@ def callback(_locals, _globals):
     if n_steps % saving_interval == 0:
         x, y = ts2xy(load_results(log_dir), 'timesteps')
         if len(x) > 0:
-            mean_reward = np.mean(y[-100:])
+            mean_reward = np.mean(y[-steps_to_calculate_mean:])
             logger.info("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}\n".format(x[-1], best_mean_reward, mean_reward))
 
             with open("mean_reward.txt", "a") as text_file:
