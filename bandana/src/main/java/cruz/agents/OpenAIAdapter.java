@@ -239,15 +239,7 @@ public class OpenAIAdapter {
             observationDataBuilder.addProvinces(entry.getValue().build());
         }
 
-        // ADD REWARD RELATED TO CONQUERED SUPPLY CENTERS
-        this.addReward((int) Math.pow(CAPTURED_SC_REWARD, this.balanceOfScs()));
-        if (this.winner != null) {
-            if (agent_name.equals(this.winner)) {
-                this.wonGame();
-            } else {
-                this.lostGame();
-            }
-        }
+        this.addReward((int) Math.pow(CAPTURED_SC_REWARD, this.currentNumSc()));
         observationDataBuilder.setReward((int) this.reward);
         this.resetReward();
 
