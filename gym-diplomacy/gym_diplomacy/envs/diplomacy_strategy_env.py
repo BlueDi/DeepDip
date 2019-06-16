@@ -87,7 +87,10 @@ def action_to_orders_data(action, state) -> proto_message_pb2.OrdersData:
 
 def get_player_units(state):
     player = 1
-    units = state[2::3]
+    if state is not None:
+        units = state[2::3]
+    else:
+        return []
     player_units = [i for i, unit in enumerate(units) if unit == player]
     return player_units
 
@@ -115,7 +118,7 @@ class DiplomacyStrategyEnv(gym.Env):
 
     # Set this in SOME subclasses
     metadata = {'render.modes': []}
-    reward_range = (-10, 3**5)
+    reward_range = (-5, 11)
     spec = None
 
     # Set these in ALL subclasses
