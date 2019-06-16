@@ -27,7 +27,7 @@ algorithm = 'ppo2'
 total_timesteps = 1e6
 saving_interval = 8 #1 interval = 128 steps
 steps_to_calculate_mean = saving_interval * 128
-train_timesteps = 1e2
+evaluate_timesteps = 1e4
 best_mean_reward, n_steps = 0, 0
 
 current_time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -42,7 +42,6 @@ def multiprocess_make_env(env_id, rank, seed=0):
     Utility function for multiprocessed env.
     
     :param env_id: (str) the environment ID
-    :param num_env: (int) the number of environment you wish to have in subprocesses
     :param seed: (int) the inital seed for RNG
     :param rank: (int) index of the subprocess
     """
@@ -154,7 +153,6 @@ def evaluate(env, num_steps=1e3):
     Evaluate a RL agent
     :param model: (BaseRLModel object) the RL Agent
     :param num_steps: (int) number of timesteps to evaluate it
-    :return: (float) Mean reward for the last 100 episodes
     """
     model = load_model(env)
     episode_rewards = [0.0]
@@ -170,8 +168,6 @@ def evaluate(env, num_steps=1e3):
             obs = env.reset()
             episode_rewards.append(0.0)
 
-    if episode_rewards[-1] == 0:
-        episode_rewards = episode_rewards[:-1]
     mean_reward = round(np.mean(episode_rewards), 2)
     logger.info("Mean reward: {}, Num episodes: {}".format(mean_reward, len(episode_rewards)))
 
@@ -207,9 +203,31 @@ def plot_results(log_folder, title='Learning Curve'):
     plt.show()
 
 
+def plot_rewards():
+    """Plot the rewards that the agent got in the callback of the training."""
+    steps = []
+    rewards = []
+    with open('mean_reward.txt','r') as f:
+        for line in f:
+            step, *middle, reward = line.split()
+            step = step[:-1]
+            steps.append(float(step))
+            rewards.append(float(reward))
+
+    plt.plot(steps, rewards, label='y=3^x')
+    plt.xlabel('Number of Timesteps')
+    plt.ylabel('Rewards')
+    plt.title("Learning Curve")
+    plt.xticks(np.arange(int(min(steps)), int(max(steps)+1), 2e5))
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(4,5))
+    plt.show()
+
+
 if __name__ == '__main__':
     env = make_env(gym_env_id)
     train(env, total_timesteps)
-    evaluate(env, train_timesteps)
+    evaluate(env, evaluate_timesteps)
     plot_results(log_dir)
+    plot_rewards()
+    env.close()
 
