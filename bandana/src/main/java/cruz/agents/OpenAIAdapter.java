@@ -28,6 +28,9 @@ public class OpenAIAdapter {
     /** Reward given for generating an invalid deal */
     public static final int INVALID_DEAL_REWARD = -10;
 
+    /** Reward given for winning the game. */
+    public static final int SC_WIN = 5;
+
     /** The OpenAINegotiator instance to which this adapter is connected. */
     public OpenAINegotiator agent;
     public DeepDip agent2;
@@ -243,9 +246,9 @@ public class OpenAIAdapter {
             this.reward = this.currentNumSc();
             String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
             if (agent_name.equals(this.winner)) {
-                this.reward += 5;
+                this.reward += SC_WIN;
             } else {
-                this.reward -= 5;
+                this.reward -= SC_WIN;
             }
         } else {
             this.reward = 0;

@@ -9,9 +9,9 @@ import ddejonge.bandana.tools.Logger;
 
 public class TournamentRunner {
     final static boolean MODE = false;  //Strategy/false vs Negotiation/true
-	final static int REMOTE_DEBUG = 0;	// JC: determine whether I want to remote debug the OpenAI jar or not
-    private final static String GAME_MAP = "small"; // Game map can be 'standard', 'mini' or 'small'
-    private final static String FINAL_YEAR = "2000";
+	final static int REMOTE_DEBUG = 0;	//Set whether I want to remote debug the OpenAI jar or not
+    private final static String GAME_MAP = "small"; //Game map can be 'standard', 'mini' or 'small'
+    private final static String FINAL_YEAR = "2000"; //The year after which the agents in each game are supposed to propose a draw to each other.
 
     // Using a custom map to define how many players are there on each custom map
     private final static Map<String, Integer> mapToNumberOfPlayers  = new HashMap<String, Integer>() {{
@@ -43,33 +43,26 @@ public class TournamentRunner {
 		
 		int deadlineForMovePhases = 1; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 3;  //30 seconds for each SUM and AUT phases
-		int deadlineForBuildPhases = 3;  	//30 seconds for each WIN phase
-		
-		String finalYear = FINAL_YEAR; 	//The year after which the agents in each game are supposed to propose a draw to each other. 
-		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
+		int deadlineForBuildPhases = 3;  	//30 seconds for each WIN phase 
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                if (MODE) {
-                    NegoServerRunner.stop();
-                }
+                NegoServerRunner.stop();
                 ParlanceRunner.stop();
             }
         });
 
-		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
+		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, FINAL_YEAR);
 	}
 	
 	
 	static List<Process> players = new ArrayList<Process>();
 	
 	public static void run(int numberOfGames, int moveTimeLimit, int retreatTimeLimit, int buildTimeLimit, String finalYear) throws IOException{
-
         TournamentObserver tournamentObserver = null;
 
         try {
-            // JC: get number of participants from GAME_MAP
             int numberOfParticipants = mapToNumberOfPlayers.get(GAME_MAP);
 
             //Create a folder to store all the results of the tournament.
@@ -101,18 +94,13 @@ public class TournamentRunner {
             tournamentObserver = new TournamentObserver(tournamentLogFolderPath, scoreCalculators, numberOfGames, numberOfParticipants, true);
 
             //3. Run the Negotiation Server.
-            if (MODE) {
-                NegoServerRunner.run(tournamentObserver, tournamentLogFolderPath, numberOfGames);
-            }
+            NegoServerRunner.run(tournamentObserver, tournamentLogFolderPath, numberOfGames);
 
             for (int gameNumber = 1; gameNumber <= numberOfGames; gameNumber++) {
-                if (MODE) {
-                    NegoServerRunner.notifyNewGame(gameNumber);
-                }
+                NegoServerRunner.notifyNewGame(gameNumber);
 
                 //4. Start the players:
-                for (int i = 0; i < 2; i++) {
-
+                for (int i = 0; i < numberOfParticipants; i++) {
                     String name;
                     String[] command;
 
@@ -157,7 +145,7 @@ public class TournamentRunner {
                 //NOW WAIT TILL THE GAME IS FINISHED
                 while (tournamentObserver.getGameStatus() == TournamentObserver.GAME_ACTIVE || tournamentObserver.getGameStatus() == TournamentObserver.CONNECTED_WAITING_TO_START) {
                     try {
-                        Thread.sleep(499);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         System.err.println("Failed sleep" + e);
                     }
@@ -176,9 +164,7 @@ public class TournamentRunner {
             }
 
             ParlanceRunner.stop();
-            if (MODE) {
-                NegoServerRunner.stop();
-            }
+            NegoServerRunner.stop();
         }
 	}
 }
