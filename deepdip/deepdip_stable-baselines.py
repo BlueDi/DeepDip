@@ -1,4 +1,3 @@
-import argparse
 import logging
 import os
 import re
@@ -142,7 +141,7 @@ def callback(_locals, _globals):
             with open("mean_reward.txt", "a") as text_file:
                 print("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}".format(x[-1], best_mean_reward, mean_reward), file=text_file)
 
-            if mean_reward > best_mean_reward:
+            if mean_reward >= best_mean_reward:
                 best_mean_reward = mean_reward
                 logger.debug("Saving new best model")
                 _locals['self'].save(pickle_dir + 'ppo2_best_model.pkl')
@@ -163,8 +162,6 @@ def evaluate(env, num_steps=1e3):
     for i in range(int(num_steps)):
         # _states are only useful when using LSTM policies
         action, _states = model.predict(obs)
-        # here, action, rewards and dones are arrays
-        # because we are using vectorized env
         obs, rewards, dones, info = env.step(action)
         
         # Stats
@@ -172,11 +169,11 @@ def evaluate(env, num_steps=1e3):
         if dones[0]:
             obs = env.reset()
             episode_rewards.append(0.0)
-    # Compute mean reward for the last 100 episodes
-    mean_100ep_reward = round(np.mean(episode_rewards[-100:]), 1)
-    logger.info("Mean reward: {}, Num episodes: {}".format(mean_100ep_reward, len(episode_rewards)))
-    
-    return mean_100ep_reward
+
+    if episode_rewards[-1] == 0:
+        episode_rewards = episode_rewards[:-1]
+    mean_reward = round(np.mean(episode_rewards), 2)
+    logger.info("Mean reward: {}, Num episodes: {}".format(mean_reward, len(episode_rewards)))
 
 
 def moving_average(values, window):
@@ -211,12 +208,11 @@ def plot_results(log_folder, title='Learning Curve'):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=None)
-    parser.add_argument('env_id', nargs='?', default='Diplomacy_Strategy-v0', help='Select the environment to run')
-    args = parser.parse_args()
-
-    env = make_env(args.env_id)
-    train(env, total_timesteps)
+    env = make_env(gym_env_id)
+    #train(env, total_timesteps)
     evaluate(env, train_timesteps)
     plot_results(log_dir)
+    env.close()
+    print(env)
+    exit()
 
