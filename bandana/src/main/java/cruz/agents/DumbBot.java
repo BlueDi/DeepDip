@@ -757,7 +757,6 @@ public class DumbBot extends Player {
             return;
         }
 
-        /*
         //Extract the illegal order from the message and print it.
         StringBuilder illegalOrder = new StringBuilder();
         for (int i = 2; i < message.length - 4; i++) {
@@ -822,7 +821,6 @@ public class DumbBot extends Player {
                 System.err.println("submissionError() Received error message of unknown type: " + Arrays.toString(message));
                 break;
         }
-        */
     }
 }
 
