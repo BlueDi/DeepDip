@@ -17,16 +17,18 @@ from language  import protocol
 mini = Variant("mini", filename="parlance://data/mini.cfg")
 small = Variant("small", filename="parlance://data/small.cfg")
 standard = Variant("standard", filename="parlance://data/standard.cfg")
+three = Variant("three", filename="parlance://data/three.cfg")
 
 __all__ = ['mini', 'mini_map', 'mini_sco', 'mini_now',
         'small', 'small_map', 'small_sco', 'small_now',
         'standard', 'standard_map', 'standard_sco', 'standard_now',
+        'three', 'three_map', 'three_sco', 'three_now',
 		'default_rep', 'base_rep']
 
 # Mini map and its various attendants
-mini_map = Map(small)
-mini_sco = small.sco()
-mini_now = small.now()
+mini_map = Map(mini)
+mini_sco = mini.sco()
+mini_now = mini.now()
 
 # Small map and its various attendants
 small_map = Map(small)
@@ -37,6 +39,11 @@ small_now = small.now()
 standard_map = Map(standard)
 standard_sco = standard.sco()
 standard_now = standard.now()
+
+# Mini map and its various attendants
+three_map = Map(three)
+three_sco = three.sco()
+three_now = three.now()
 
 default_rep = protocol.default_rep
 base_rep = protocol.base_rep
