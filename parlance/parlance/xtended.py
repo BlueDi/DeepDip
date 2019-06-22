@@ -40,7 +40,7 @@ standard_map = Map(standard)
 standard_sco = standard.sco()
 standard_now = standard.now()
 
-# Mini map and its various attendants
+# Three map and its various attendants
 three_map = Map(three)
 three_sco = three.sco()
 three_now = three.now()
