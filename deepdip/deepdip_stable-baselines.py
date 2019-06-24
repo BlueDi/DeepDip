@@ -90,10 +90,10 @@ def make_env(gym_env_id):
 
 def load_model(env):
     model = None
-    existing_pickle_files = get_files_with_pattern(pickle_dir, 'ppo2_best_model.pkl')
+    existing_pickle_files = get_files_with_pattern(pickle_dir, 'ppo2_recent_model.pkl')
     
     for file_name in existing_pickle_files:
-        search = re.search('ppo2_best_model.pkl', file_name)
+        search = re.search('ppo2_recent_model.pkl', file_name)
         if search:
             model = PPO2.load(file_name, env=env, verbose=0, tensorboard_log=log_dir)
             logger.info("Loading existing pickle file for environment {} with algorithm {} and policy '{}'.".format(gym_env_id, algorithm, model.policy))
@@ -140,6 +140,7 @@ def callback(_locals, _globals):
             with open("mean_reward.txt", "a") as text_file:
                 print("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}".format(x[-1], best_mean_reward, mean_reward), file=text_file)
 
+            _locals['self'].save(pickle_dir + 'ppo2_recent_model.pkl')
             if mean_reward >= best_mean_reward:
                 best_mean_reward = mean_reward
                 logger.debug("Saving new best model")
