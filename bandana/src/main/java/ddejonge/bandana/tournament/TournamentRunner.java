@@ -10,13 +10,14 @@ import ddejonge.bandana.tools.Logger;
 public class TournamentRunner {
     final static boolean MODE = false;  //Strategy/false vs Negotiation/true
 	final static int REMOTE_DEBUG = 0;	//Set whether I want to remote debug the OpenAI jar or not
-    private final static String GAME_MAP = "small"; //Game map can be 'standard', 'mini' or 'small'
+    private final static String GAME_MAP = "three"; //Game map can be 'standard', or 'mini', or 'small', or 'three'
     private final static String FINAL_YEAR = "2000"; //The year after which the agents in each game are supposed to propose a draw to each other.
 
     // Using a custom map to define how many players are there on each custom map
     private final static Map<String, Integer> mapToNumberOfPlayers  = new HashMap<String, Integer>() {{
         put("standard", 7);
         put("small", 2);
+        put("three", 3);
     }};
 
 	// Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
@@ -79,13 +80,12 @@ public class TournamentRunner {
             //Create a list of ScoreCalculators to determine how the players should be ranked in the tournament.
             ArrayList<ScoreCalculator> scoreCalculators = new ArrayList<ScoreCalculator>();
 
-            if(GAME_MAP.toLowerCase().equals("standard")) {
+            if (GAME_MAP.toLowerCase().equals("standard")) {
                 scoreCalculators.add(new SoloVictoryCalculator());
                 scoreCalculators.add(new SupplyCenterCalculator());
                 scoreCalculators.add(new PointsCalculator());
                 scoreCalculators.add(new RankCalculator());
-            }
-            else {
+            } else {
                 scoreCalculators.add(new RankCalculator());
             }
 
@@ -109,7 +109,7 @@ public class TournamentRunner {
                         name = "DeepDip";
                         command = deepDipCommand;
                     } else {
-                        name = "DumbBot";
+                        name = "DumbBot " + i;
                         command = dumbBotCommand;
                     }
 
@@ -159,7 +159,7 @@ public class TournamentRunner {
                 playerProcess.destroy();
             }
 
-            if(tournamentObserver != null){
+            if (tournamentObserver != null) {
                 tournamentObserver.exit();
             }
 

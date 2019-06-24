@@ -29,7 +29,7 @@ public class OpenAIAdapter {
     public static final int INVALID_DEAL_REWARD = -10;
 
     /** Reward given for winning the game. */
-    public static final int SC_WIN = 5;
+    public static final int SC_WIN = 8;
 
     /** The OpenAINegotiator instance to which this adapter is connected. */
     public OpenAINegotiator agent;
@@ -184,6 +184,11 @@ public class OpenAIAdapter {
         }
     }
 
+    /**
+     * First process all Provinces.
+     * Then add the Owners and Units of each Province.
+     * Then add the created Provinces to the Observation.
+     */
     private ProtoMessage.ObservationData generateObservationData() {
         ProtoMessage.ObservationData.Builder observationDataBuilder = ProtoMessage.ObservationData.newBuilder();
         Map<String, ProtoMessage.ProvinceData.Builder> nameToProvinceDataBuilder = new HashMap<>();
@@ -191,39 +196,36 @@ public class OpenAIAdapter {
         String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
         observationDataBuilder.setPlayer(powerNameToInt.get(agent_name));
 
-        // FIRST PROCESS ALL PROVINCES
-        Vector<Province> provinces = (this.agent2 == null) ? this.agent.game.getProvinces() : this.agent2.getGame().getProvinces();
+        Vector<Region> regions = (this.agent2 == null) ? this.agent.game.getRegions() : this.agent2.getGame().getRegions();
         int id = 1;
-        for (Province p : provinces) {
+        for (Region r : regions) {
             ProtoMessage.ProvinceData.Builder provinceDataBuilder = ProtoMessage.ProvinceData.newBuilder();
-            int isSc = p.isSC() ? 1 : 0;
+            int isSc = r.getProvince().isSC() ? 1 : 0;
 
             provinceDataBuilder.setId(id);
             provinceDataBuilder.setSc(isSc);
 
-            nameToProvinceDataBuilder.put(p.getName(), provinceDataBuilder);
+            nameToProvinceDataBuilder.put(r.getName(), provinceDataBuilder);
 
             id++;
         }
 
-        // THEN ADD THE OWNERS & UNITS OF EACH PROVINCE
         List<Power> powers = (this.agent2 == null)? this.agent.game.getPowers():this.agent2.getGame().getPowers();
         for (Power pow : powers) {
             for (Province p : pow.getOwnedSCs()) {
-                // Get the correspondent province builder and add the current owner of the province
-                ProtoMessage.ProvinceData.Builder provinceDataBuilder = nameToProvinceDataBuilder.get(p.getName());
-                provinceDataBuilder.setOwner(powerNameToInt.get(pow.getName()));
+                for (Region r : p.getRegions()) {
+                    ProtoMessage.ProvinceData.Builder provinceDataBuilder = nameToProvinceDataBuilder.get(r.getName());
+                    provinceDataBuilder.setOwner(powerNameToInt.get(pow.getName()));
+                }
             }
 
             for (Region r : pow.getControlledRegions()) {
-                Province p = r.getProvince();
-                ProtoMessage.ProvinceData.Builder provinceDataBuilder = nameToProvinceDataBuilder.get(p.getName());
+                ProtoMessage.ProvinceData.Builder provinceDataBuilder = nameToProvinceDataBuilder.get(r.getName());
                 provinceDataBuilder.setOwner(powerNameToInt.get(pow.getName()));
                 provinceDataBuilder.setUnit(powerNameToInt.get(pow.getName()));
             }
         }
 
-        // ADD CREATED PROVINCES TO OBSERVATION
         for (Map.Entry<String, ProtoMessage.ProvinceData.Builder> entry : nameToProvinceDataBuilder.entrySet()) {
             observationDataBuilder.addProvinces(entry.getValue().build());
         }
@@ -247,7 +249,7 @@ public class OpenAIAdapter {
             String agent_name = (this.agent2 == null)? this.agent.me.getName() : this.agent2.getMe().getName();
             if (agent_name.equals(this.winner)) {
                 this.reward += SC_WIN;
-            } else {
+            } else if (!this.winner.equals("draw")){
                 this.reward -= SC_WIN;
             }
         } else {
@@ -259,8 +261,6 @@ public class OpenAIAdapter {
         List<DMZ> dmzs = new ArrayList<>();
         List<OrderCommitment> ocs = new ArrayList<>();
 
-
-        // Add MY order commitment
         Province ourStartProvince = this.agent.game.getProvinces().get(dealData.getOurMove().getStartProvince());
         Province ourDestinationProvince = this.agent.game.getProvinces().get(dealData.getOurMove().getDestinationProvince());
 
@@ -303,24 +303,14 @@ public class OpenAIAdapter {
     private List<Order> generateOrders(ProtoMessage.OrdersData ordersData) {
         List<Order> orders = new ArrayList<>();
         List<ProtoMessage.OrderData> support_orders = new ArrayList<>();
-        List<Province> game_provinces = this.agent2.getGame().getProvinces();
         List<Region> game_regions = this.agent2.getGame().getRegions();
 
         for (ProtoMessage.OrderData order : ordersData.getOrdersList()) {
             if (order.getStart() == -1){
                 break;
             }
-            Province start_province = game_provinces.get(order.getStart());
-            Province destination_province = game_provinces.get(order.getDestination());
-
-            Region start = game_regions.stream()
-                .filter(r -> r.getProvince().getName().equals(start_province.getName()))
-                .findAny()
-                .orElse(null);
-            Region destination = game_regions.stream()
-                .filter(r -> r.getProvince().getName().equals(destination_province.getName()))
-                .findAny()
-                .orElse(null);
+            Region start = game_regions.get(order.getStart());
+            Region destination = game_regions.get(order.getDestination());
 
             if (order.getAction() == 0) {
                 orders.add(new HLDOrder(this.agent2.getMe(), start));
@@ -331,8 +321,6 @@ public class OpenAIAdapter {
                     support_orders.add(order);
                 }
             } else {
-                //System.err.println("WRONG BORDER: For order of type " + order.getAction() + ", the destination " + destination + " is not a border with current province " + start);
-                //this.addReward(INVALID_DEAL_REWARD);
                 orders.add(new HLDOrder(this.agent2.getMe(), start));
             }
         }
@@ -345,8 +333,6 @@ public class OpenAIAdapter {
                 .findAny()
                 .orElse(null);
             if (order_to_support == null) {
-                //System.err.println("ORDER TO SUPPORT NOT FOUND");
-                //this.addReward(INVALID_DEAL_REWARD);
                 orders.add(new HLDOrder(this.agent2.getMe(), start));
             } else if (order_to_support instanceof MTOOrder) {
                 orders.add(new SUPMTOOrder(this.agent2.getMe(), start, (MTOOrder) order_to_support));

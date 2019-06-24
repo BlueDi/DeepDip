@@ -25,8 +25,12 @@ logger = logging.getLogger(__name__)
 
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
-NUMBER_OF_PLAYERS = 2
-NUMBER_OF_PROVINCES = 19#8#75
+MAPS = ['mini', 'small', 'three', 'standard']
+CURRENT_MAP = MAPS[2]
+PLAYERS = {'mini':2, 'small':2, 'three':3, 'standard':7}
+NUMBER_OF_PLAYERS = PLAYERS[CURRENT_MAP]
+REGIONS = {'mini':10, 'small':19, 'three':37, 'standard':121}
+NUMBER_OF_PROVINCES = REGIONS[CURRENT_MAP]
 
 
 def observation_data_to_observation(observation_data: proto_message_pb2.ObservationData) -> np.array:
@@ -57,6 +61,9 @@ def observation_data_to_observation(observation_data: proto_message_pb2.Observat
     reward = observation_data.reward
     done = observation_data.done
     info = {}
+
+    if len(get_player_units(observation)) < 1:
+        done = True
 
     return observation, reward, done, info
 

@@ -16,6 +16,7 @@ public class DeepDip extends DumbBot {
     // The OpenAI Adapter contains the necessary functions and fields to make the connection to the Open AI environment
     private OpenAIAdapter openAIAdapter;
     private Logger logger = new Logger();
+    private String winner = null;
 
     private DeepDip(String name, int finalYear, String logPath) {
         super(name, finalYear, logPath);
@@ -195,6 +196,7 @@ public class DeepDip extends DumbBot {
 
     @Override
     public void handleSlo(String winner) {
+        this.winner = winner;
         this.openAIAdapter.setWinner(winner);
         if (this.me.getName().equals(winner)) {
             System.out.println("GAME RESULT: " + this.me + " won with a solo victory.");
@@ -207,10 +209,17 @@ public class DeepDip extends DumbBot {
     @Override
     public void handleSMR(String[] message) {
         GameResult gameResult = new GameResult(message, 2);
+
+        if (this.me.getControlledRegions().size() < 1) {
+            this.openAIAdapter.setWinner("eliminated");
+        } else if (this.winner == null) {
+            this.openAIAdapter.setWinner("draw");
+        }
         this.openAIAdapter.endOfGame(gameResult);
 
         System.out.println("END GAME: " + Arrays.toString(message));
         super.handleSMR(message);
+        this.winner = null;
     }
 
     public Logger getLogger() {
