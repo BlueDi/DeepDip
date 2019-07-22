@@ -29,7 +29,7 @@ public class OpenAIAdapter {
     public static final int INVALID_DEAL_REWARD = -10;
 
     /** Reward given for winning the game. */
-    public static final int SC_WIN = 8;
+    public static final int SC_WIN = 18;
 
     /** The OpenAINegotiator instance to which this adapter is connected. */
     public OpenAINegotiator agent;

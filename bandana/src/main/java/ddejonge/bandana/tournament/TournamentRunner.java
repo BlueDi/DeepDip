@@ -10,7 +10,7 @@ import ddejonge.bandana.tools.Logger;
 public class TournamentRunner {
     final static boolean MODE = false;  //Strategy/false vs Negotiation/true
 	final static int REMOTE_DEBUG = 0;	//Set whether I want to remote debug the OpenAI jar or not
-    private final static String GAME_MAP = "three"; //Game map can be 'standard', or 'mini', or 'small', or 'three'
+    private final static String GAME_MAP = "standard"; //Game map can be 'standard', or 'mini', or 'small', or 'three'
     private final static String FINAL_YEAR = "2000"; //The year after which the agents in each game are supposed to propose a draw to each other.
 
     // Using a custom map to define how many players are there on each custom map
