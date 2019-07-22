@@ -25,10 +25,9 @@ logger = logging.getLogger(__name__)
 gym_env_id = 'Diplomacy_Strategy-v0'
 algorithm = 'ppo2'
 total_timesteps = 1e6
-saving_interval = 8 #1 interval = 128 steps
-steps_to_calculate_mean = saving_interval * 128
+saving_interval = 20
 evaluate_timesteps = 1e4
-best_mean_reward, n_steps = 0, 0
+best_mean_reward, n_episodes = 0, 0
 
 current_time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 log_dir = "./deepdip-results/"
@@ -128,13 +127,13 @@ def callback(_locals, _globals):
     :param _locals: (dict)
     :param _globals: (dict)
     """
-    global best_mean_reward, n_steps, saving_interval
+    global best_mean_reward, n_episodes, saving_interval
 
-    n_steps += 1
-    if n_steps % saving_interval == 0:
-        x, y = ts2xy(load_results(log_dir), 'timesteps')
+    n_episodes += 1
+    if n_episodes % saving_interval == 0:
+        x, y = ts2xy(load_results(log_dir), 'episodes')
         if len(x) > 0:
-            mean_reward = np.mean(y[-steps_to_calculate_mean:])
+            mean_reward = np.mean(y[-int(saving_interval):])
             logger.info("{}: Best mean reward: {:.2f} - Last mean reward per episode: {:.2f}\n".format(x[-1], best_mean_reward, mean_reward))
 
             with open("mean_reward.txt", "a") as text_file:
@@ -149,7 +148,7 @@ def callback(_locals, _globals):
     return True
 
 
-def evaluate(env, num_steps=1e3):
+def evaluate(env, num_steps=1e4):
     """
     Evaluate a RL agent
     :param model: (BaseRLModel object) the RL Agent
@@ -191,14 +190,13 @@ def plot_results(log_folder, title='Learning Curve'):
     :param log_folder: (str) the save location of the results to plot
     :param title: (str) the title of the task to plot
     """
-    x, y = ts2xy(load_results(log_folder), 'timesteps')
+    x, y = ts2xy(load_results(log_folder), 'episodes')
     y = moving_average(y, window=1)
-    # Truncate x
     x = x[len(x) - len(y):]
 
     fig = plt.figure(title)
     plt.plot(x, y)
-    plt.xlabel('Number of Timesteps')
+    plt.xlabel('Number of Episodes')
     plt.ylabel('Rewards')
     plt.title(title + " Smoothed")
     plt.show()
@@ -215,7 +213,7 @@ def plot_rewards():
             steps.append(float(step))
             rewards.append(float(reward))
 
-    plt.plot(steps, rewards, label='y=3^x')
+    plt.plot(steps, rewards)
     plt.xlabel('Number of Timesteps')
     plt.ylabel('Rewards')
     plt.title("Learning Curve")
@@ -226,9 +224,9 @@ def plot_rewards():
 
 if __name__ == '__main__':
     env = make_env(gym_env_id)
-    train(env, total_timesteps)
-    evaluate(env, evaluate_timesteps)
-    plot_results(log_dir)
+    #train(env, total_timesteps)
+    #evaluate(env, evaluate_timesteps)
+    #plot_results(log_dir)
     plot_rewards()
     env.close()
 
