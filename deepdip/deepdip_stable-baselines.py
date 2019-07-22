@@ -224,9 +224,9 @@ def plot_rewards():
 
 if __name__ == '__main__':
     env = make_env(gym_env_id)
-    #train(env, total_timesteps)
-    #evaluate(env, evaluate_timesteps)
-    #plot_results(log_dir)
+    train(env, total_timesteps)
+    evaluate(env, evaluate_timesteps)
+    plot_results(log_dir)
     plot_rewards()
     env.close()
 

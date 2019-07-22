@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 ### CONSTANTS
 NUMBER_OF_ACTIONS = 3
 MAPS = ['mini', 'small', 'three', 'standard']
-CURRENT_MAP = MAPS[3]
+CURRENT_MAP = MAPS[2]
 PLAYERS = {'mini':2, 'small':2, 'three':3, 'standard':7}
 NUMBER_OF_PLAYERS = PLAYERS[CURRENT_MAP]
 REGIONS = {'mini':10, 'small':19, 'three':37, 'standard':121}
